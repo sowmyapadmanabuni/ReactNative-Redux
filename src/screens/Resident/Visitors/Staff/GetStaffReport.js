@@ -148,9 +148,7 @@ class GetStaffReport extends React.Component {
             await Share.open(shareOptions).then((res) => {
                 console.log("Share options", res)
             })
-                .done((res) => {
-                    console.log("Share done", res)
-                });
+            .catch(err => console.log("SHARE ERROR::", err));
             await RNFS.unlink(file.filePath);
 
         } else {
