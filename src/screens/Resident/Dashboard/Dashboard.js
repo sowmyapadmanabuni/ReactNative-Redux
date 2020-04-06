@@ -192,8 +192,11 @@ class Dashboard extends React.Component {
         self.listenRoleChange();
         self.setState({ isLoading: false })
        // self.props.navigation.navigate('CreateOrJoinScreen');
-
       }
+
+      // setInterval(()=>{
+      //   self.listenForNotif()
+      // },500)
     })
 
     console.log("this.props.dropdown.length:111111111", self.props.dropdown.length, self.props.dropdown)
@@ -394,46 +397,7 @@ class Dashboard extends React.Component {
       dropdown
     } = this.props;
     console.log("Dashboard reducer Data in Request Notification Permission:", this.props.dashBoardReducer, receiveNotifications);
-    dropdown.map(units => {
-      if (receiveNotifications) {
-        console.log("Listening to firebase:", units)
-        let unitArr = units.unit;
-        for (let i in unitArr) {
-          console.log("Listening to firebase Unit:", unitArr[i]);
-          firebase
-            .messaging()
-            .subscribeToTopic(
-              '' + MyAccountID + unitArr[i].unUnitID + 'usernotif'
-            );
-        }
-        console.log('date_asAssnID', units.associationId);
-        console.log("UNSUBSCRIBING_FROM: " + MyAccountID + 'admin')
-        firebase
-          .messaging()
-          .unsubscribeFromTopic(MyAccountID + 'admin');
-        firebase
-          .messaging()
-          .unsubscribeFromTopic('14948admin');
-        firebase.messaging().subscribeToTopic(MyAccountID + 'admin');
-
-        firebase
-          .messaging()
-          .subscribeToTopic(units.associationId + 'Announcement');
-
-        if (units.roleId === 2 || units.roleId === 3) {
-        } else if (units.roleId === 1) {
-          console.log("Listening to firebase Subscribing to:", units.associationId + 'admin')
-          firebase.messaging().subscribeToTopic(units.associationId + 'admin');
-          // if (units.meIsActive) {
-
-          //   firebase.messaging().subscribeToTopic(units.associationId + 'admin');
-          //  }
-        }
-      } else if (!receiveNotifications) {
-        firebase.messaging().unsubscribeFromTopic(MyAccountID + 'admin');
-        firebase.messaging().unsubscribeFromTopic(units.associationId + 'admin');
-      }
-    });
+    
     firebase
       .messaging()
       .hasPermission()
@@ -457,6 +421,48 @@ class Dashboard extends React.Component {
         }
       });
 
+      dropdown.map(units => {
+        if (receiveNotifications) {
+          console.log("Listening to firebase:", units)
+          let unitArr = units.unit;
+          for (let i in unitArr) {
+            console.log("Listening to firebase Unit:", unitArr[i]);
+            firebase
+              .messaging()
+              .subscribeToTopic(
+                '' + MyAccountID + unitArr[i].unUnitID + 'usernotif'
+              );
+          }
+          console.log('date_asAssnID', units.associationId);
+          console.log("UNSUBSCRIBING_FROM: " + MyAccountID + 'admin')
+          firebase
+            .messaging()
+            .unsubscribeFromTopic(MyAccountID + 'admin');
+          firebase
+            .messaging()
+            .unsubscribeFromTopic('14948admin');
+          firebase.messaging().subscribeToTopic(MyAccountID + 'admin').then((response)=>console.log('11111111111111111111111111111111111112233343:',response)).catch(err=>console.log('jsghkfjhgksjfhgkjhgkjghfk',err));
+          
+  
+          firebase
+            .messaging()
+            .subscribeToTopic(units.associationId + 'Announcement');
+  
+          if (units.roleId === 2 || units.roleId === 3) {
+          } else if (units.roleId === 1) {
+            console.log("Listening to firebase Subscribing to:", units.associationId + 'admin')
+            firebase.messaging().subscribeToTopic(units.associationId + 'admin');
+            // if (units.meIsActive) {
+  
+            //   firebase.messaging().subscribeToTopic(units.associationId + 'admin');
+            //  }
+          }
+        } else if (!receiveNotifications) {
+          firebase.messaging().unsubscribeFromTopic(MyAccountID + 'admin');
+          firebase.messaging().unsubscribeFromTopic(units.associationId + 'admin');
+        }
+      });
+
 
     this.roleCheckForAdmin()
   };
@@ -470,35 +476,47 @@ class Dashboard extends React.Component {
         firebase.notifications.Android.Importance.Max
 
 
-      ).setDescription('Oyespace channel')
-        .setSound('oye_msg_tone.mp3');
+      )
       channel.enableLights(true);
       firebase.notifications().android.createChannel(channel);
-
-
-
 
       const notificationBuild = new firebase.notifications.Notification({
         show_in_foreground: true,
         show_in_background: true,
+        sound: 'default',
+        title:notification._title,
+        body:notification._body,
+        data:notification._data,
       })
-        .setTitle(notification._title)
-        .setBody(notification._body)
-        .setNotificationId(notification._notificationId)
-        .setSound('oye_msg_tone.mp3')
-        .setData({
-          ...notification._data,
-          foreground: true
-        })
-        .android.setAutoCancel(true)
-        .android.setColor('#FF9100')
-        .android.setLargeIcon('ic_notif')
-        .android.setSmallIcon('ic_stat_ic_notification')
-        .android.setChannelId(channel.channelId)
-        .android.setVibrate([1000, 1000])
-        .android.setPriority(firebase.notifications.Android.Priority.Max);
+      // notificationBuild
+      //   .setTitle(notification._title)
+      //   .setBody(notification._body)
+      //   .setNotificationId(notification._notificationId)
+      //   //.setSound('oye_msg_tone.mp3')
+      //   .setData({
+      //     ...notification._data,
+      //    // foreground: true
+      //   })
+      //   .android.setAutoCancel(true)
+      //   .android.setColor('#FF9100')
+      //   .android.setLargeIcon('ic_notif')
+      //   .android.setSmallIcon('ic_stat_ic_notification')
+      //   .android.setChannelId('channel_id')
+      //   .android.setVibrate([1000, 1000])
+      //   .android.setPriority(firebase.notifications.Android.Priority.Max);
 
-      firebase.notifications().displayNotification(notificationBuild);
+      if(Platform.OS === 'android'){
+        notificationBuild.android
+          .setPriority(firebase.notifications.Android.Priority.Max)
+          .android.setChannelId('channel_id')
+          .android.setVibrate([1000, 1000])
+          .android.setAutoCancel(true)
+          .android.setColor('#FF9100')
+          .android.setLargeIcon('ic_notif')
+          .android.setSmallIcon('ic_stat_ic_notification')
+      }
+
+      firebase.notifications().displayNotification(notificationBuild).then((response=>console.log('1111Display:',response))).catch(error => alert(error));
       // const {updateNotificationData} = this.props;
       // updateNotificationData(true);
       this.setState({ foregroundNotif: notification._data });
@@ -509,12 +527,11 @@ class Dashboard extends React.Component {
 
 
   listenForNotif = async () => {
-    console.log('HEY IT IS GOING HERE IN GATE APP NOTIFICATION2222222', Notification.permission, this.notificationDisplayedListener);
 
-    if (
-      this.notificationDisplayedListener == undefined ||
-      this.notificationDisplayedListener == null
-    ) {
+    // if (
+    //   this.notificationDisplayedListener == undefined ||
+    //   this.notificationDisplayedListener == null
+    // ) {
       let navigationInstance = this.props.navigation;
 
       this.notificationDisplayedListener = firebase
@@ -544,14 +561,14 @@ class Dashboard extends React.Component {
           console.log('HEY IT IS GOING HERE IN GATE APP NOTIFICATION111111')
           const { MyAccountID, SelectedAssociationID } = this.props.userReducer;
           const { oyeURL } = this.props.oyespaceReducer;
-          
+          this.showLocalNotification(notification);
           const { fetchAssociationByAccountId } = this.props;
           fetchAssociationByAccountId(this.props.oyeURL, this.props.MyAccountID, () => {
             this.onAssociationChange(this.state.dropdownIndex, this.state.unitDropdownIndex);
           });
           this.props.getNotifications(oyeURL, MyAccountID);
           this.getPopUpNotifications();
-          this.showLocalNotification(notification);
+          
         });
 
       firebase.notifications().onNotificationOpened(notificationOpen => {
@@ -585,7 +602,7 @@ class Dashboard extends React.Component {
         this.getPopUpNotifications();
         firebase.notifications().removeAllDeliveredNotifications();
       });
-    }
+   // }
   };
 
   handleConnectivityChange = isConnected => {
