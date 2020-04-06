@@ -69,6 +69,7 @@ class StaffLeaveWithVendor extends Component {
       isModalOpen:false,
       isRecord:false,
       isPlay:true,
+      isAudioPMGranted:false
     };
 
   }
@@ -141,10 +142,15 @@ class StaffLeaveWithVendor extends Component {
                 'The permission has not been requested / is denied but requestable'
             );
             break;
-          case RESULTS.GRANTED:
+          case RESULTS.GRANTED: 
             console.log('The permission is granted');
-            break;
+            this.setState({
+              isAudioPMGranted: true
+            })
+            break; 
           case RESULTS.BLOCKED:
+            //this.requestPermission();
+            Alert.alert('Permissions blocked so Please allow from the settings')
             console.log('The permission is denied and not requestable anymore');
             break;
         }
@@ -168,6 +174,7 @@ class StaffLeaveWithVendor extends Component {
             console.log('The permission is granted');
             break;
           case RESULTS.BLOCKED:
+            //this.requestPermission();
             console.log('The permission is denied and not requestable anymore');
             break;
         }
@@ -180,13 +187,19 @@ class StaffLeaveWithVendor extends Component {
     if (Platform.OS === 'ios') {
       request(PERMISSIONS.IOS.MICROPHONE).then(result => {});
     } else {
-      request(PERMISSIONS.ANDROID.RECORD_AUDIO).then(result => {});
+      request(PERMISSIONS.ANDROID.RECORD_AUDIO).then(result => {
+        console.log('GetThePERMISSIONRESULTS',result)
+        this.setState({
+          isAudioPMGranted:result =="denied" || result == "blocked" || result == "unavailable" ? false : true
+        })
+      });
     }
   };
 
 
 
   render() {
+    console.log("APPPERMISSIONSGIVEN@@@@@",this.state.isAudioPMGranted)
     return(
     <View style={{height:'100%',width:'100%',backgroundColor:base.theme.colors.white}}>
       <KeyboardAwareScrollView>
@@ -253,7 +266,8 @@ class StaffLeaveWithVendor extends Component {
             </View>
             <View style={{flexDirection:'row',alignItems:'space-between',marginTop:35,marginLeft:5,marginRight:5,marginBottom:20}}>
               {!this.state.isRecord ?
-                  <TouchableOpacity style={{alignItems:'center',justifyContent:'center'}} onPress={() =>this.start()}>
+                  <TouchableOpacity style={{alignItems:'center',justifyContent:'center'}} onPress={() =>
+                    this.state.isAudioPMGranted? this.start(): this.checkPermission()}>
                     <Image borderStyle
                            style={{height:40,width:40}}
                            source={require('../../../../../icons/leave_vender_record.png')}
@@ -494,7 +508,9 @@ class StaffLeaveWithVendor extends Component {
     ImagePicker.showImagePicker(options, (response) => {
       if (response.didCancel) {
       } else if (response.error) {
+        console.log('IssueHere',response.error)
       } else if (response.customButton) {
+        console.log('IssueHere11111',response.error)
       } else {
         console.log('ImagePicker : ', response);
         let img = self.state.vendorImages;
@@ -546,6 +562,7 @@ class StaffLeaveWithVendor extends Component {
 
   start = async () => {
     AudioRecord.init(options);
+  
     AudioRecord.start();
     this.setState({isRecord:true})
     this.timeStamp();

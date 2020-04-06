@@ -188,9 +188,11 @@ class NotificationScreen extends PureComponent {
 
     onPressAnnouncement = (item, index) => {
         const {notifications, savedNoifId, oyeURL} = this.props;
+
+        console.log('GETTHEANNOUCMENTET NOTIFICATION',item,index)
         
             this.props.navigation.navigate('NotificationAnnouncementDetailScreen', {
-                notifyid: item.acNotifyID,
+                notifyid: item.ntid,
                 associationid: item.asAssnID,
                 accountid: item.acAccntID,
                 index,
