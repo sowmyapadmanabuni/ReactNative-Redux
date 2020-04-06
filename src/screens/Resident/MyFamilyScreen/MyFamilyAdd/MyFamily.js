@@ -21,6 +21,7 @@ import {connect} from "react-redux";
 import ContactsWrapper from "react-native-contacts-wrapper"
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import Style from './Style'
+import * as fb from 'firebase';
 
 const RNFS = require('react-native-fs');
 
@@ -636,7 +637,13 @@ class MyFamily extends Component {
          fb.database().ref(mobilePath).set({
             isMobUpdating
         }).then((data) => {
-            console.log('Data:', data);
+            fb.database().ref(mobilePath).remove().then((response)=>{
+                let receivedData = response.val();
+                console.log("Response!!!!!!!",receivedData)
+
+            }).catch((error)=>{
+                console.log('Response!!!!!!!',error.response)
+            });
         }).catch(error => {
             console.log("Error:", error);
         })
@@ -683,9 +690,9 @@ class MyFamily extends Component {
                             self.deleteImage()
                         }
                     }
-
+                 self.updateFirebase(mobNum)
                     Alert.alert('Family member added to your list');
-                   // self.updateFirebase(mobNum)
+                   
                    // self.updateFirebase(self.props.dashBoardReducer.assId)
                     self.props.navigation.navigate('MyFamilyList');
                     this.setState({
