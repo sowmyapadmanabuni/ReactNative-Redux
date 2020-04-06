@@ -521,8 +521,8 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    width: wp('34%'),
-    height: hp('18%')
+    // width: wp('34%'),
+    // height: hp('18%')
   },
   button1: {
     width: hp('40%'),

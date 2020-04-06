@@ -585,7 +585,7 @@ class MyGuests extends Component {
                                 }}
                             >
                                 <CardItem bordered>
-                                    <Icon color="#ff8c00" name="share" size={hp('2.5%')} />
+                                    <Icon color="#B51414" name="share" size={hp('2.5%')} />
                                 </CardItem>
                             </TouchableOpacity>
                         </Card>
@@ -600,7 +600,7 @@ class MyGuests extends Component {
                                 }}
                             >
                                 <CardItem bordered>
-                                    <Icon color="#ff8c00" name="call" size={hp('2.5%')} />
+                                    <Icon color="#B51414" name="call" size={hp('2.5%')} />
                                     {/*  */}
                                 </CardItem>
                             </TouchableOpacity>
@@ -687,7 +687,7 @@ class MyGuests extends Component {
                             onChangeText={this.searchFilterFunction}
                         />
                         <Icon
-                            color="#ff8c00"
+                            color="#B51414"
                             size={hp('2.6%')}
                             style={{ marginRight: hp('1.2%') }}
                             name="search"
@@ -728,7 +728,7 @@ class MyGuests extends Component {
 
                                 <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
                                     <Icon
-                                        color="#ff8c00"
+                                        color="#B51414"
                                         size={hp('2%')}
                                         style={{ marginRight: hp('0.5') }}
                                         name="cal"
@@ -753,7 +753,7 @@ class MyGuests extends Component {
                                 />
                                 <TouchableOpacity onPress={this.onDOBPress1.bind(this)}>
                                     <Icon
-                                        color="#ff8c00"
+                                        color="#B51414"
                                         size={hp('2%')}
                                         style={{ marginRight: hp('0.5%') }}
                                         name="cal"

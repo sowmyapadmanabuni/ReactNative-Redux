@@ -386,7 +386,7 @@ class Resident extends React.Component {
                                     round
                                     onChangeText={(text) => this.handleSearch(text)}
                                 />
-                                <Icon color="#ff8c00" size={hp('2.6%')}
+                                <Icon color="#B51414" size={hp('2.6%')}
                                       style={{marginRight: hp('1.2%'), marginTop: hp('2%')}} name="search"/>
                                 {/* <Image
                                     style={{top:10}}
@@ -413,9 +413,9 @@ class Resident extends React.Component {
                                         height: hp("3%"),
                                         borderRadius: hp("3%"),
                                         width: hp('8%'),
-                                        backgroundColor: base.theme.colors.grey
+                                        backgroundColor: base.theme.colors.themeColor
                                     }}>
-                                        <Text>Update</Text>
+                                        <Text style={{color:'white'}}>Update</Text>
                                     </View>}
                             </View>
                         </View>
@@ -503,7 +503,7 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         marginTop: hp("2%"),
         marginBottom: hp("1%"),
-        color: 'orange'
+        // color: 'orange'
     },
     viewDetails: {
         flexDirection: "column",
@@ -556,8 +556,8 @@ const styles = StyleSheet.create({
         position: "relative"
     },
     image1: {
-        width: wp("34%"),
-        height: hp("18%"),
+        // width: wp("34%"),
+        // height: hp("18%"),
         marginRight: hp("3%")
     },
 

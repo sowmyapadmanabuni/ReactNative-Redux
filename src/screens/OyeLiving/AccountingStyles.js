@@ -47,8 +47,8 @@ const AccountingStyles = StyleSheet.create({
     // marginLeft: 10
   },
   image1: {
-    width: wp('34%'),
-    height: hp('18%'),
+    // width: wp('34%'),
+    // height: hp('18%'),
     marginRight: hp('3%')
   },
   titleOfScreen: {

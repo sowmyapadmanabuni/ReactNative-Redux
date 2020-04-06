@@ -1211,8 +1211,8 @@ const styles = StyleSheet.create({
     // marginLeft: 10
   },
   image: {
-    width: wp('34%'),
-    height: hp('18%')
+    // width: wp('34%'),
+    // height: hp('18%')
   },
 
   buttonContainer: {

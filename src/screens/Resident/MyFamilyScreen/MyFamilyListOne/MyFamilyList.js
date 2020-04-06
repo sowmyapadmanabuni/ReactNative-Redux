@@ -14,18 +14,18 @@ import {
     View
 } from 'react-native';
 
-import {NavigationEvents} from 'react-navigation';
+import { NavigationEvents } from 'react-navigation';
 
-import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
-import {Input, Item} from 'native-base';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { Input, Item } from 'native-base';
 
 import ZoomImage from 'react-native-zoom-image';
 import Style from './Style';
 import base from '../../../../base';
-import {connect} from 'react-redux';
-import {updateIdDashboard} from '../../../../actions';
+import { connect } from 'react-redux';
+import { updateIdDashboard } from '../../../../actions';
 
-import {createIconSetFromIcoMoon} from 'react-native-vector-icons';
+import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import IcoMoonConfig from '../../../../assets/selection.json';
 import FloatingButton from "../../../../components/FloatingButton";
 
@@ -62,7 +62,7 @@ class MyFamilyList extends React.Component {
 
         return (
             <TouchableHighlight onPress={() => this.deleteData(item.id)}>
-                //some code
+            //some code
             </TouchableHighlight>
         );
     }
@@ -116,50 +116,50 @@ class MyFamilyList extends React.Component {
     };
 
     async myFamilyListGetData() {
-        this.setState({loading: true});
-        console.log('GET THE FAMILY MEMBER DATA',this.props)
+        this.setState({ loading: true });
+        console.log('GET THE FAMILY MEMBER DATA', this.props)
 
         let myFamilyList = await base.services.OyeSafeApiFamily.myFamilyList(
             this.props.dashBoardReducer.uniID,
             this.props.dashBoardReducer.assId,
             this.props.userReducer.MyAccountID
         );
-        this.setState({isLoading: false, loading: false});
-        console.log('GET THE FAMILY MEMBER DATA',myFamilyList)
+        this.setState({ isLoading: false, loading: false });
+        console.log('GET THE FAMILY MEMBER DATA', myFamilyList)
         try {
             if (myFamilyList.success && myFamilyList.data) {
 
-                let familyData=myFamilyList.data.familyMembers
-                let reqData=[]
-                for(let i=0;i<familyData.length;i++){
-                    if(familyData[i].acAccntID!==this.props.userReducer.MyAccountID){
+                let familyData = myFamilyList.data.familyMembers
+                let reqData = []
+                for (let i = 0; i < familyData.length; i++) {
+                    if (familyData[i].acAccntID !== this.props.userReducer.MyAccountID) {
                         reqData.push(familyData[i])
                     }
 
                 }
-                console.log('REQDATA',reqData)
+                console.log('REQDATA', reqData)
 
                 this.setState({
                     myfamily11: reqData.sort((a, b) =>
                         a.fmName > b.fmName ? 1 : -1
                     ),
-                    clonedList:reqData.sort((a, b) =>
+                    clonedList: reqData.sort((a, b) =>
                         a.fmName > b.fmName ? 1 : -1
                     )
                 });
-                const {updateIdDashboard} = this.props;
+                const { updateIdDashboard } = this.props;
                 updateIdDashboard({
                     prop: 'familyMemberCount',
                     value: familyData.length
                 });
-                this.setState({familyData: reqData});
+                this.setState({ familyData: reqData });
             } else {
-               // this.showAlert(myFamilyList.error.message, true);
+                // this.showAlert(myFamilyList.error.message, true);
             }
         } catch (error) {
             base.utils.logger.log(error);
-            this.setState({error, loading: false});
-            const {updateIdDashboard} = this.props;
+            this.setState({ error, loading: false });
+            const { updateIdDashboard } = this.props;
             updateIdDashboard({
                 prop: 'familyMemberCount',
                 value: 0
@@ -180,7 +180,7 @@ class MyFamilyList extends React.Component {
             {
                 text: btn,
                 onPress: () => {
-                    self.setState({isLoading: false});
+                    self.setState({ isLoading: false });
                     callback();
                 }
             }
@@ -213,14 +213,14 @@ class MyFamilyList extends React.Component {
         return true;
     }
 
-    renderItem = ({item, index}) => {
+    renderItem = ({ item, index }) => {
         let itemID = item.id;
-        console.log('ITEM>>>>>>>>>>>>>', item, index,this.props.MyAccountID);
+        console.log('ITEM>>>>>>>>>>>>>', item, index, this.props.MyAccountID);
         return (
             <View
                 style={[
                     Style.tableView,
-                    {marginBottom: index === this.state.myfamily11.length - 1 ? 270 : 0}
+                    { marginBottom: index === this.state.myfamily11.length - 1 ? 270 : 0 }
                 ]}
             >
                 <View style={Style.cellView}>
@@ -228,7 +228,7 @@ class MyFamilyList extends React.Component {
                         {item.fmImgName == '' ? (
                             <ZoomImage
                                 source={{
-                                    
+
                                     uri:
                                         'https://mediaupload.oyespace.com/' +
                                         base.utils.strings.noImageCapturedPlaceholder
@@ -239,35 +239,29 @@ class MyFamilyList extends React.Component {
                                 easingFunc={Easing.bounce}
                             />
                         ) : (
-                            <ZoomImage
-                                source={{
-                                    uri:'data:image/png;base64,'+item.fmImgName
-                                   // uri: 'https://mediaupload.oyespace.com/' + item.fmImgName
-                                }}
-                                imgStyle={Style.placeholderImage}
-                                duration={300}
-                                enableScaling={true}
-                                easingFunc={Easing.bounce}
-                            />
-                        )}
+                                <ZoomImage
+                                    source={{
+                                        uri: 'data:image/png;base64,' + item.fmImgName
+                                        // uri: 'https://mediaupload.oyespace.com/' + item.fmImgName
+                                    }}
+                                    imgStyle={Style.placeholderImage}
+                                    duration={300}
+                                    enableScaling={true}
+                                    easingFunc={Easing.bounce}
+                                />
+                            )}
                     </View>
                     <View style={Style.middleFlexBlockForMemberDetailsViewContainer}>
                         <Text style={Style.familyMemberNameTextStyle}>{item.fmName}</Text>
                         <View style={Style.memberDetailFlexViewStyle}>
-                            <Icon color="#ff8c00" size={wp('3.4%')} name="user"/>
-                            {/* <Image
-                    style={Style.memberDetailIconImageStyle}
-                    source={require("../../../../../icons/user.png")}
-                /> */}
+                            <Icon color="#B51414" size={wp('3.4%')} name="user"/>
+                            
                             <Text style={Style.memberDetailsTextStyle}>{item.fmRltn}</Text>
                         </View>
 
                         <View style={Style.memberDetailFlexViewStyle}>
-                            <Icon color="#ff8c00" size={wp('3.4%')} name="call"/>
-                            {/* <Image
-                    style={Style.memberDetailIconImageStyle}
-                    source={require("../../../../../icons/call.png")}
-                /> */}
+                            <Icon color="#B51414" size={wp('3.4%')} name="call"/>
+                           
                             <Text style={Style.memberDetailsTextStyle}>{item.fmMobile}</Text>
                         </View>
                     </View>
@@ -292,17 +286,18 @@ class MyFamilyList extends React.Component {
                                         fmlName: item.fmlName,
                                         meMemID: item.meMemID,
                                         unUnitID: item.unUnitID,
-                                        isView:item.pAccntID !== this.props.MyAccountID
+                                        isView: item.pAccntID !== this.props.MyAccountID
                                     });
                                 }}
                             >
-                                {item.pAccntID===this.props.MyAccountID ?
-                                <Icon color="#ff8c00" size={wp('5%')} name="edit"/>
-                                :
+                                {item.pAccntID === this.props.MyAccountID ?
+                                    <Icon color="#B51414" size={wp('5%')} name="edit"/>
+                                   
+                                    :
                                     <Image
                                         style={Style.editAndCallButtonIconImageStyle}
                                         source={require("../../../../../icons/eye.png")}
-                                    /> }
+                                    />}
                                 {/* <Image
                   style={Style.editAndCallButtonIconImageStyle}
                   source={require("../../../../../icons/edit.png")}
@@ -320,7 +315,7 @@ class MyFamilyList extends React.Component {
                                     }
                                 }}
                             >
-                                <Icon color="#ff8c00" size={wp('5%')} name="call"/>
+                                <Icon color="#B51414" size={wp('5%')} name="call" />
                                 {/* <Image
                   style={Style.editAndCallButtonIconImageStyle}
                   source={require("../../../../../icons/call.png")}
@@ -328,25 +323,25 @@ class MyFamilyList extends React.Component {
                             </TouchableOpacity>
                         </View>
 
-                        
-                            {item.pAccntID===this.props.MyAccountID ?
+
+                        {item.pAccntID === this.props.MyAccountID ?
 
                             <TouchableOpacity style={[Style.threeBtnStyle]} onPress={() => this.deleteData(item.fmid)}>
-                                <Icon color="#ff8c00" size={wp('5%')} name="delete"/>
-                               
+                                <Icon color="#B51414" size={wp('5%')} name="delete" />
+
                             </TouchableOpacity>
-                                :
-                                <View/>
-                            }
-                     </View>
+                            :
+                            <View />
+                        }
+                    </View>
                 </View>
-                <View style={Style.lineAboveAndBelowFlatList}/>
+                <View style={Style.lineAboveAndBelowFlatList} />
             </View>
         );
     };
 
     handleSearch(text) {
-        this.setState({searchText: text});
+        this.setState({ searchText: text });
         console.log('Text', text);
         let sortList = this.state.clonedList;
         let filteredArray = [];
@@ -370,7 +365,7 @@ class MyFamilyList extends React.Component {
 
     render() {
         console.log("Family")
-        const {navigate} = this.props.navigation;
+        const { navigate } = this.props.navigation;
 
         console.log('Item issue', this.props);
 
@@ -379,8 +374,8 @@ class MyFamilyList extends React.Component {
                 <View style={Style.mainView}>
                     {/* <Header /> */}
 
-                    <SafeAreaView style={{backgroundColor: '#ff8c00'}}>
-                        <View style={[Style.viewStyle1, {flexDirection: 'row'}]}>
+                    <SafeAreaView style={{ backgroundColor: '#ff8c00' }}>
+                        <View style={[Style.viewStyle1, { flexDirection: 'row' }]}>
                             <View style={Style.viewDetails1}>
                                 <TouchableOpacity
                                     onPress={() => {
@@ -415,11 +410,11 @@ class MyFamilyList extends React.Component {
                                     source={require('../../../../../icons/OyespaceSafe.png')}
                                 />
                             </View>
-                            <View style={{flex: 0.2}}>
+                            <View style={{ flex: 0.2 }}>
                                 {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
                             </View>
                         </View>
-                        <View style={{borderWidth: 1, borderColor: '#ff8c00'}}/>
+                        <View style={{ borderWidth: 1, borderColor: '#ff8c00' }} />
                     </SafeAreaView>
 
                     <View style={Style.progressViewStyle}>
@@ -435,7 +430,7 @@ class MyFamilyList extends React.Component {
                 <SafeAreaView style={{
                     backgroundColor: '#ff8c00'
                 }}>
-                    <View style={[Style.viewStyle1, {flexDirection: 'row'}]}>
+                    <View style={[Style.viewStyle1, { flexDirection: 'row' }]}>
                         <View style={Style.viewDetails1}>
                             <TouchableOpacity
                                 onPress={() => {
@@ -470,11 +465,11 @@ class MyFamilyList extends React.Component {
                                 source={require('../../../../../icons/OyespaceSafe.png')}
                             />
                         </View>
-                        <View style={{flex: 0.2}}>
+                        <View style={{ flex: 0.2 }}>
                             {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
                         </View>
                     </View>
-                    <View style={{borderWidth: 1, borderColor: '#FFFFFF'}}/>
+                    <View style={{ borderWidth: 1, borderColor: '#FFFFFF' }} />
                 </SafeAreaView>
 
                 <NavigationEvents
@@ -484,7 +479,7 @@ class MyFamilyList extends React.Component {
                 <View style={Style.containerViewStyle}>
                     <Text style={Style.titleOfScreenStyle}>Family Members</Text>
 
-                    <View style={{flexDirection: 'row'}}>
+                    <View style={{ flexDirection: 'row' }}>
                         <Item style={Style.inputItem}>
                             <Input
                                 marginBottom={hp('-1%')}
@@ -493,7 +488,7 @@ class MyFamilyList extends React.Component {
                                 onChangeText={text => this.handleSearch(text)}
                             />
                             <Icon
-                                color="#ff8c00"
+                                color="#B51414"
                                 name="search"
                                 size={hp('3%')}
                                 style={Style.icon}
@@ -502,45 +497,45 @@ class MyFamilyList extends React.Component {
                     </View>
 
 
-                        <FlatList
-                            contentContainerStyle={this.state.myfamily11.length === 0 && Style.centerEmptySet}
-                            style={{marginTop: hp('2%')}}
-                            // data={this.state.dataSource.sort((a, b) =>
-                            //   a.fmName.localeCompare(b.fmName)
-                            // )}
-                            data={this.state.myfamily11}
-                            extraData={this.state}
-                            renderItem={this.renderItem}
-                            keyExtractor={(item, index) => item.fmid.toString()}
-                            ListEmptyComponent={
-                                <View
-                            style={{
-                                flex: 1,
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                backgroundColor: 'white'
-                            }}
-                        >
-
-                            <Icon
-                                size={hp('10%')}
-                                style={{margin: hp('1%')}}
-                                name="family-group-of-three"
-                            />
-                            {/* <Image source={require('../../../../../icons/family-group-of-three.png')} style={{width:hp('10%'), height:hp('10%'), margin:hp('1%')}}/> */}
-                            <Text
+                    <FlatList
+                        contentContainerStyle={this.state.myfamily11.length === 0 && Style.centerEmptySet}
+                        style={{ marginTop: hp('2%') }}
+                        // data={this.state.dataSource.sort((a, b) =>
+                        //   a.fmName.localeCompare(b.fmName)
+                        // )}
+                        data={this.state.myfamily11}
+                        extraData={this.state}
+                        renderItem={this.renderItem}
+                        keyExtractor={(item, index) => item.fmid.toString()}
+                        ListEmptyComponent={
+                            <View
                                 style={{
-                                    backgroundColor: 'white',
+                                    flex: 1,
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    fontSize: hp('1.6%')
+                                    backgroundColor: 'white'
                                 }}
                             >
-                                Add your family details
+
+                                <Icon
+                                    size={hp('10%')}
+                                    style={{ margin: hp('1%') }}
+                                    name="family-group-of-three"
+                                />
+                                {/* <Image source={require('../../../../../icons/family-group-of-three.png')} style={{width:hp('10%'), height:hp('10%'), margin:hp('1%')}}/> */}
+                                <Text
+                                    style={{
+                                        backgroundColor: 'white',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        fontSize: hp('1.6%')
+                                    }}
+                                >
+                                    Add your family details
                             </Text>
-                        </View>
-                            }
-                        />
+                            </View>
+                        }
+                    />
 
                     <View style={{
                         alignItems: 'center',
@@ -550,7 +545,7 @@ class MyFamilyList extends React.Component {
                         right: hp('3.5%'),
                         height: hp('6.5%'),
                     }}>
-                        <FloatingButton marginTop={hp('80')} onBtnClick={() => this.changePage()}/>
+                        <FloatingButton marginTop={hp('80')} onBtnClick={() => this.changePage()} />
 
                     </View>
                     {/*<TouchableOpacity
@@ -568,7 +563,7 @@ class MyFamilyList extends React.Component {
             </View>
         );
     }
-    changePage(){
+    changePage() {
         this.props.navigation.navigate('MyFamily')
     }
 }
@@ -582,13 +577,13 @@ const mapStateToProps = state => {
         dashBoardReducer: state.DashboardReducer,
         userReducer: state.UserReducer,
         MyAccountID: state.UserReducer.MyAccountID,
-        assId:state.DashboardReducer.assId ,
-    uniID: state.DashboardReducer.uniID,
+        assId: state.DashboardReducer.assId,
+        uniID: state.DashboardReducer.uniID,
 
     };
 };
 
 export default connect(
     mapStateToProps,
-    {updateIdDashboard}
+    { updateIdDashboard }
 )(MyFamilyList);

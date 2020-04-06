@@ -328,7 +328,8 @@ class AddVehicle extends Component {
                             selectedIndex={0}
                             onSelect={(index, value) => this.onSelect(index, value)}
                         >
-                            <RadioButton value={'Two Wheeler'}>
+                            <RadioButton value={'Two Wheeler'}
+                            >
                                 <Text>Two Wheeler</Text>
                             </RadioButton>
                             <RadioButton value={'Four Wheeler'}>
@@ -454,8 +455,8 @@ const styles = StyleSheet.create({
         position: 'relative'
     },
     image1: {
-        width: wp('34%'),
-        height: hp('18%')
+        // width: wp('34%'),
+        // height: hp('18%')
     },
 
     viewDetails1: {

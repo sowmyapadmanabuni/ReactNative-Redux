@@ -784,8 +784,8 @@ const styles = StyleSheet.create({
         position: "relative"
     },
     image: {
-        width: wp("34%"),
-        height: hp("18%")
+        // width: wp("34%"),
+        // height: hp("18%")
     },
     emptyViewStyle: {
         flex: 1

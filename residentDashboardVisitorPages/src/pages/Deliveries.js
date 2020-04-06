@@ -304,7 +304,7 @@ class App extends React.Component {
           <View style={{}}>
             <Text
               style={{
-                color: '#ff8c00',
+                color: 'black',
                 fontSize: hp('1.6%'),
                 marginRight: hp('1%'),
                 marginTop: hp('1%')
@@ -351,7 +351,7 @@ class App extends React.Component {
               <View style={{ flexDirection: 'row', marginBottom: hp('0.3%') }}>
                 <View style={{ flexDirection: 'row' }}>
                   {/* user */}
-                  <Icon color="#ff8c00" size={hp('2%')} name="user" />
+                  <Icon color="#B51414" size={hp('2%')} name="user" />
                   <Text>{'  '}</Text>
                 </View>
                 <View>
@@ -361,7 +361,7 @@ class App extends React.Component {
               <View style={{ flexDirection: 'row', marginBottom: hp('0.3%') }}>
                 <View style={{ flexDirection: 'row' }}>
                   {/* entry_time */}
-                  <Icon color="#ff8c00" size={hp('2%')} name="entry_time" />
+                  <Icon color="#B51414" size={hp('2%')} name="entry_time" />
                   <Text>{'  '}</Text>
                 </View>
                 <View>
@@ -391,7 +391,7 @@ class App extends React.Component {
               <View style={{ flexDirection: 'row' }}>
                 <View style={{ flexDirection: 'row' }}>
                   {/* location */}
-                  <Icon color="#ff8c00" size={hp('2%')} name="location" />
+                  <Icon color="#B51414" size={hp('2%')} name="location" />
                   <Text>{'  '}</Text>
                 </View>
                 <View>
@@ -442,7 +442,7 @@ class App extends React.Component {
                 }}
               >
                 <CardItem bordered>
-                  <Icon color="#ff8c00" style={styles.image0} name="call" />
+                  <Icon color="#B51414" style={styles.image0} name="call" />
                 </CardItem>
 
               </TouchableOpacity>
@@ -471,10 +471,10 @@ class App extends React.Component {
                 <View />
               ) : (
                 <View style={{ flexDirection: 'row' }}>
-                  <Text style={{ color: '#ff8c00', marginRight: hp('1%') }}>
+                  <Text style={{ color: '#B51414', marginRight: hp('1%') }}>
                     More
                   </Text>
-                  <Icon color="#ff8c00" size={hp('1.8%')} name="show_more" />
+                  <Icon color="#B51414" size={hp('1.8%')} name="show_more" />
                 </View>
               )}
             </View>
@@ -572,10 +572,10 @@ class App extends React.Component {
                       alignItems: 'center'
                     }}
                   >
-                    <Text style={{ color: '#ff8c00', marginRight: hp('1%') }}>
+                    <Text style={{ color: '#B51414', marginRight: hp('1%') }}>
                       Less
                     </Text>
-                    <Icon color="#ff8c00" size={hp('1.8%')} name="show_less" />
+                    <Icon color="#B51414" size={hp('1.8%')} name="show_less" />
                   </View>
                 )}
               </View>
@@ -616,7 +616,7 @@ class App extends React.Component {
               onChangeText={this.searchFilterFunction}
             />
             <Icon
-              color="#ff8c00"
+              color="#B51414"
               size={hp('2.6%')}
               style={{ marginRight: hp('1.2%') }}
               name="search"
@@ -650,7 +650,7 @@ class App extends React.Component {
 
                 <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
                   <Icon
-                    color="#ff8c00"
+                    color="#B51414"
                     size={hp('2%')}
                     style={{ marginRight: hp('0.5') }}
                     name="cal"
@@ -675,7 +675,7 @@ class App extends React.Component {
                 />
                 <TouchableOpacity onPress={this.onDOBPress1.bind(this)}>
                   <Icon
-                    color="#ff8c00"
+                    color="#B51414"
                     size={hp('2%')}
                     style={{ marginRight: hp('0.5') }}
                     name="cal"
@@ -740,6 +740,7 @@ class App extends React.Component {
               >
                 {/* delivery-man */}
                 <Icon
+                color="#B51414"
                   size={hp('10%')}
                   style={{ margin: hp('1%') }}
                   name="delivery-man"

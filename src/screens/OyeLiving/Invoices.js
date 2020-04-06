@@ -449,7 +449,7 @@ class Invoices extends React.Component {
                             style={{
                                 height: 20,
                                 width: 20,
-                                tintColor: base.theme.colors.primary,
+                                // tintColor: base.theme.colors.primary,
                                 alignSelf: 'center',
                                 marginBottom: 5
                             }}
@@ -466,7 +466,7 @@ class Invoices extends React.Component {
                         extraData={this.state}
                         /> :
                     <View style={{ height: hp('70'), width: wp('100'), justifyContent: 'center', alignItems: 'center' }}>
-                        <Text style={{ color: base.theme.colors.primary, fontSize: hp('2'), fontFamily: base.theme.fonts.medium }}>No Invoices to display</Text>
+                        <Text style={{ color: base.theme.colors.black, fontSize: hp('2'), fontFamily: base.theme.fonts.medium }}>No Invoices to display</Text>
                     </View>}
                 {this.state.isModalVisible ?
                     <View style={{
@@ -1523,8 +1523,8 @@ class Invoices extends React.Component {
                         >
                             <Image
                                 style={{
-                                    width: wp('34%'),
-                                    height: hp('18%'),
+                                    // width: wp('34%'),
+                                    // height: hp('18%'),
                                     marginRight: hp('3%')
                                 }}
                                 source={require('../../../icons/OyespaceSafe.png')}
@@ -1946,7 +1946,7 @@ class Invoices extends React.Component {
                         <Text style={{ fontFamily: base.theme.fonts.bold, fontSize: hp('2') }}>{invoiceDetail.inNumber}</Text>
                         <Text style={{ fontFamily: base.theme.fonts.light, fontSize: hp('2'), marginTop: hp('1') }}>Current Invoice Amount:₹<Text style={{ fontFamily: base.theme.fonts.bold, fontSize: hp('2') }}>{invoiceDetail.inTotVal}</Text></Text>
                         <Text style={{ fontFamily: base.theme.fonts.light, fontSize: hp('2') }}>Invoice Date: <Text style={{ fontFamily: base.theme.fonts.bold, fontSize: hp('2') }}>{moment(invoiceDetail.inGenDate).format("DD-MM-YYYY")}</Text></Text>
-                        <Text style={{ fontFamily: base.theme.fonts.light, fontSize: hp('2') }}>Invoice Paid: <Text style={{ fontFamily: base.theme.fonts.bold, fontSize: hp('2'), color: invoiceDetail.ineSent ? base.theme.colors.black : base.theme.colors.red }}>{invoiceDetail.ineSent ? "Yes" : "No"}</Text></Text>
+                        <Text style={{ fontFamily: base.theme.fonts.light, fontSize: hp('2') }}>Invoice Paid: <Text style={{ fontFamily: base.theme.fonts.bold, fontSize: hp('2'), color: invoiceDetail.ineSent ? base.theme.colors.green : base.theme.colors.red }}>{invoiceDetail.ineSent ? "Yes" : "No"}</Text></Text>
                         <Text style={{ fontFamily: base.theme.fonts.light, fontSize: hp('2') }}>Due Date: <Text style={{ fontFamily: base.theme.fonts.light, fontSize: hp('2') }}>{moment(invoiceDetail.toDate).format(("DD-MM-YYYY"))}</Text></Text>
                     </View>
                     <View style={{ flexDirection: 'column', borderWidth: 0 ,right:15}}>
@@ -2312,8 +2312,8 @@ const styles = StyleSheet.create({
         position: 'relative'
     },
     image1: {
-        width: wp('34%'),
-        height: hp('18%'),
+        // width: wp('34%'),
+        // height: hp('18%'),
         marginRight: hp('3%')
     },
 

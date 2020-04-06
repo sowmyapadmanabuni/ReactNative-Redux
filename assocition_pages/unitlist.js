@@ -1255,8 +1255,8 @@ const styles = StyleSheet.create({
         position: "relative"
     },
     image1: {
-        width: wp("34%"),
-        height: hp("18%"),
+        // width: wp("34%"),
+        // height: hp("18%"),
         marginRight: hp("3%")
     },
 

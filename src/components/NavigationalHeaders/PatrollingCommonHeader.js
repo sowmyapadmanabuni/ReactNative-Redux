@@ -94,7 +94,7 @@ class PatrollingCommonHeader extends React.Component {
                     }}
                   >
                     <Image
-                      style={[styles.image1]}
+                      // style={[styles.image1]}
                       source={require('../../../icons/OyespaceSafe.png')}
                     />
                   </View>

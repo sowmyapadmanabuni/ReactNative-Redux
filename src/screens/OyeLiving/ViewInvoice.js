@@ -253,8 +253,8 @@ class ViewInvoice extends React.Component {
                         >
                             <Image
                                 style={{
-                                    width: wp('34%'),
-                                    height: hp('18%'),
+                                    // width: wp('34%'),
+                                    // height: hp('18%'),
                                     marginRight: hp('3%')
                                 }}
                                 source={require('../../../icons/OyespaceSafe.png')}

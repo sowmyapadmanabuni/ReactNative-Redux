@@ -439,7 +439,7 @@ class App extends React.Component {
                                 multiline={false}
                                 onChangeText={this.searchFilterFunction}
                             />
-                            <Icon color="#ff8c00" size={hp('2.6%')} style={{marginRight: hp('1.2%')}} name="search"/>
+                            <Icon color="#B51414" size={hp('2.6%')} style={{marginRight: hp('1.2%')}} name="search"/>
                         </Item>
                     </Form>
 
@@ -570,7 +570,7 @@ class App extends React.Component {
                             }}
                         >
                             <Image
-                                style={[styles.image1]}
+                                // style={[styles.image1]}
                                 source={require("../icons/OyespaceSafe.png")}
                             />
                         </View>
@@ -601,7 +601,7 @@ class App extends React.Component {
                                 multiline={false}
                                 onChangeText={this.searchFilterFunction}
                             />
-                            <Icon color="#ff8c00" size={hp('2.6%')} style={{marginRight: hp('1.2%')}} name="search"/>
+                            <Icon color="#B51414" size={hp('2.6%')} style={{marginRight: hp('1.2%')}} name="search"/>
                         </Item>
                     </Form>
 
@@ -630,7 +630,7 @@ class App extends React.Component {
                                     />
 
                                     <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
-                                        <Icon color="#ff8c00" size={hp('2%')} style={{marginRight: hp('0.5')}}
+                                        <Icon color="#B51414" size={hp('2%')} style={{marginRight: hp('0.5')}}
                                               name="cal"/>
                                     </TouchableOpacity>
                                 </View>
@@ -651,7 +651,7 @@ class App extends React.Component {
                                         onDatePicked={this.onDOBDatePicked1.bind(this)}
                                     />
                                     <TouchableOpacity onPress={this.onDOBPress1.bind(this)}>
-                                        <Icon color="#ff8c00" size={hp('2%')} style={{marginRight: hp('0.5')}}
+                                        <Icon color="#B51414" size={hp('2%')} style={{marginRight: hp('0.5')}}
                                               name="cal"/>
                                     </TouchableOpacity>
                                 </View>
@@ -905,8 +905,8 @@ const styles = StyleSheet.create({
         position: "relative"
     },
     image1: {
-        width: wp("34%"),
-        height: hp("18%")
+        // width: wp("34%"),
+        // height: hp("18%")
     },
 
     viewDetails1: {

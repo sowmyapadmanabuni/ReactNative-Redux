@@ -201,7 +201,7 @@ class MyFamily extends Component {
                         />
                         <View style={Style.textInputView}>
                             <Text style={{fontSize: 14, color: base.theme.colors.black, textAlign: 'left'}}>First Name
-                                <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                <Text style={{color: base.theme.colors.themeColor, fontSize: 14}}>*</Text></Text>
                             <TextInput
                                 style={{height: 50, borderBottomWidth: 1, borderColor: base.theme.colors.lightgrey}}
                                 onChangeText={(text) => this.setState({firstName: text})}
@@ -213,7 +213,7 @@ class MyFamily extends Component {
                         </View>
                         <View style={Style.textInputView}>
                             <Text style={{fontSize: 14, color: base.theme.colors.black, textAlign: 'left'}}>Last Name
-                                <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                <Text style={{color: base.theme.colors.themeColor, fontSize: 14}}>*</Text></Text>
                             <TextInput
                                 style={{height: 50, borderBottomWidth: 1, borderColor: base.theme.colors.lightgrey}}
                                 onChangeText={(text) => this.setState({lastName: text})}
@@ -274,7 +274,7 @@ class MyFamily extends Component {
                             <View style={Style.textInputView}>
                                 <Text style={{fontSize: 14, color: base.theme.colors.black, textAlign: 'left'}}>Guardian's
                                     Name
-                                    <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                    <Text style={{color: base.theme.colors.themeColor, fontSize: 14}}>*</Text></Text>
                                 <TextInput
                                     style={{height: 50, borderBottomWidth: 1, borderColor: base.theme.colors.lightgrey}}
                                     onChangeText={(text) => this.setState({guardianName: text})}
@@ -296,7 +296,7 @@ class MyFamily extends Component {
                                 color: base.theme.colors.black,
                                 textAlign: 'left'
                             }}>{mobPlaceHolder}
-                                <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                <Text style={{color: base.theme.colors.themeColor, fontSize: 14}}>*</Text></Text>
                             <View style={Style.mobNumView}>
                                 <TextInput
                                     style={{height: 50, width: '80%',}}

@@ -154,7 +154,7 @@ const Style = StyleSheet.create({
   },
   memberDetailsTextStyle: {
     fontSize: hp('1.8%'),
-    color: '#909091',
+    // color: '#909091',
     marginLeft: wp('2%')
   },
   editAndCallIconsFlexStyle: {
@@ -210,8 +210,8 @@ const Style = StyleSheet.create({
     position: 'relative'
   },
   image1: {
-    width: wp('34%'),
-    height: hp('18%'),
+    // width: wp('34%'),
+    // height: hp('18%'),
     marginRight: hp('3%')
   },
 

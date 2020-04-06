@@ -302,7 +302,7 @@ class VehicleList extends Component {
                                 });
                             }}
                         >
-                            <Icon size={hp('3%')} color="#ff8c00" name="edit" />
+                            <Icon size={hp('3%')} color="#B51414" name="edit" />
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={{
@@ -310,7 +310,7 @@ class VehicleList extends Component {
                             }}
                             onPress={() => this.deleteVehicle(item.veid)}
                         >
-                            <Icon size={hp('3%')} color="#ff8c00" name="delete" />
+                            <Icon size={hp('3%')} color="#B51414" name="delete" />
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -623,8 +623,8 @@ const styles = StyleSheet.create({
         position: 'relative'
     },
     image1: {
-        width: wp('34%'),
-        height: hp('18%'),
+        // width: wp('34%'),
+        // height: hp('18%'),
         marginRight: hp('3%')
     },
 

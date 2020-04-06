@@ -794,7 +794,7 @@ class Expenses extends React.Component {
                                 style={{
                                     height: 20,
                                     width: 20,
-                                    tintColor: base.theme.colors.primary,
+                                    // tintColor: base.theme.colors.primary,
                                     alignSelf: 'center',
                                     marginBottom: 5
                                 }}
@@ -3032,8 +3032,8 @@ const styles = StyleSheet.create({
         position: 'relative'
     },
     image1: {
-        width: wp('34%'),
-        height: hp('18%'),
+        // width: wp('34%'),
+        // height: hp('18%'),
         marginRight: hp('3%')
     },
 

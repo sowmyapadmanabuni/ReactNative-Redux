@@ -118,7 +118,7 @@ export default class City extends Component {
                             }}
                         >
                             <Image
-                                style={[styles.image]}
+                                // style={[styles.image]}
                                 source={require('../icons/OyespaceSafe.png')}
                             />
                         </View>
