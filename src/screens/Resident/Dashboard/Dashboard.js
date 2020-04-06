@@ -514,6 +514,7 @@ class Dashboard extends React.Component {
           .android.setColor('#FF9100')
           .android.setLargeIcon('ic_notif')
           .android.setSmallIcon('ic_stat_ic_notification')
+          .android.setSound('oye_msg_tone.mp3')
       }
 
       firebase.notifications().displayNotification(notificationBuild).then((response=>console.log('1111Display:',response))).catch(error => alert(error));
