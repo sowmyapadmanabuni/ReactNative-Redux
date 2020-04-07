@@ -156,7 +156,7 @@ class MobileValid extends Component {
                                         >
                                             <Text
                                                 style={{
-                                                    color: "#ff8c00",
+                                                    // color: "#ff8c00",
                                                     fontSize: hp("2.5%"),
                                                     marginTop: hp("1.5%"),
                                                     marginBottom: hp("1.5%")
@@ -292,7 +292,7 @@ class MobileValid extends Component {
                                             >
                                                 I have read and accepted the{" "}
                                                 <Text
-                                                    style={{ fontSize: hp("1.45%") }}
+                                                    style={{ fontSize: hp("1.45%"),color:base.theme.colors.green }}
                                                     onPress={() => {
                                                         this.props.navigation.navigate("privacyPolicy")
                                                         /*Linking.openURL(
@@ -304,7 +304,7 @@ class MobileValid extends Component {
                                                 </Text>
                                                 and
                                                 <Text
-                                                    style={{ fontSize: hp("1.45%") }}
+                                                    style={{ fontSize: hp("1.45%"),color:base.theme.colors.green }}
                                                     onPress={() => {
                                                         this.props.navigation.navigate("termsAndConditions")
 

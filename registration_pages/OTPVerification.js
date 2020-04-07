@@ -395,7 +395,7 @@ class OTPVerification extends Component {
                             {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
                         </View>
                     </View>
-                    <View style={{borderWidth: 1, borderColor: "#ff8c00"}}/>
+                    <View style={{borderWidth: 1, borderColor: "#FFFFFF"}}/>
                 </SafeAreaView>
 
                 <KeyboardAwareScrollView>
@@ -403,7 +403,7 @@ class OTPVerification extends Component {
                         <View style={{justifyContent: "center", alignItems: "center"}}>
                             <Text
                                 style={{
-                                    color: "#ff8c00",
+                                    // color: "#ff8c00",
                                     fontSize: hp("2.5%"),
                                     marginTop: hp("1.5%"),
                                     marginBottom: hp("1.5%")

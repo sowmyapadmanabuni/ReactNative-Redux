@@ -26,7 +26,7 @@ const CreateSOSStyles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 15,
     // fontFamily: base.theme.fonts.medium,
-    color: base.theme.colors.primary
+    color: base.theme.colors.black
   },
   mapBox: {
     alignSelf: 'center',
@@ -64,7 +64,7 @@ const CreateSOSStyles = StyleSheet.create({
   },
   guardHeadingView: { height: 30 },
   guardHeading: {
-    color: base.theme.colors.primary
+    color: base.theme.colors.themeColor
     // fontFamily: base.theme.fonts.medium
   },
   emergencyDetailBox: {
@@ -80,7 +80,7 @@ const CreateSOSStyles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 15,
     // fontFamily: base.theme.fonts.medium,
-    color: base.theme.colors.primary
+    color: base.theme.colors.themeColor
   },
   cardView: {
     height: '80%',
@@ -139,7 +139,7 @@ const CreateSOSStyles = StyleSheet.create({
     height: heightPercentageToDP('4%'),
     width: widthPercentageToDP('30%'),
     borderRadius: heightPercentageToDP('10%'),
-    backgroundColor: base.theme.colors.red,
+    backgroundColor: base.theme.colors.themeColor,
     justifyContent: 'center',
     alignItems: 'center'
   },
