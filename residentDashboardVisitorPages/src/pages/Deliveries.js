@@ -285,6 +285,7 @@ class App extends React.Component {
       <View
         style={{
           flexDirection: 'column',
+          height:300,
           marginBottom: index === this.state.dataSource.length - 1 ? 80 : 0
         }}
       >

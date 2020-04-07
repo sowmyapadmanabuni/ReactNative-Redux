@@ -254,10 +254,11 @@ class App extends React.Component {
                             //   source={require("./src/components/images/profile_img@png.png")}
                             // />
                             <ZoomImage
-                                source={{
-                                    uri:
-                                        `${this.props.mediaupload}` + item.vlEntryImg
-                                }}
+                               source={{uri: 'data:image/png;base64,'+ item.vlEntryImg}}
+                                // source={{
+                                //     uri:
+                                //         `${this.props.mediaupload}` + item.vlEntryImg
+                                // }}
                                 imgStyle={{
                                     height: wp("15%"),
                                     width: wp("15%"),

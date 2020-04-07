@@ -776,6 +776,8 @@ class Announcement extends Component {
                     false,
                     this.props.userReducer.MyAccountID,
                     this.props.userReducer.MyISDCode+this.props.userReducer.MyMobileNumber,
+                    "",
+                    "",
                     announcement, 
                     );
                 });
