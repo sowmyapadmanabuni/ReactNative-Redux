@@ -124,7 +124,7 @@ class Dashboard extends React.Component {
         self.getVehicleList();
         self.listenToFirebase(self.props.dropdown);
         self.setState({ isLoading: false });
-       //  self.getPopUpNotifications();
+        self.getPopUpNotifications();
         self.createTopicListener(self.props.dropdown, true)
       }
       else {
@@ -169,6 +169,7 @@ class Dashboard extends React.Component {
         self.setState({ isLoading: false });
         self.createTopicListener(self.props.dropdown, true);
         self.readFBRTB(true);
+        self.getPopUpNotifications();
          firebase.notifications().getInitialNotification().then((notificationOpen: NotificationOpen) => {
           console.log("self.getPopUpNotifications();self.getPopUpNotifications();:",notificationOpen);
           if(notificationOpen){
@@ -225,7 +226,6 @@ class Dashboard extends React.Component {
     let options = {
       method: "get",
       url: ` http://apiuat.oyespace.com/oyesafe/api/v1/Notification/GetNotificationsAsPopup/${MyAccountID}`,
-      //url:` http://apiuat.oyespace.com/oyesafe/api/v1/Notification/GetNotificationsAsPopup/6437`,
       headers: {
         "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
       }
@@ -476,48 +476,35 @@ class Dashboard extends React.Component {
         firebase.notifications.Android.Importance.Max
 
 
-      )
+      ).setDescription('Oyespace channel')
+        .setSound('oye_msg_tone.mp3');
       channel.enableLights(true);
       firebase.notifications().android.createChannel(channel);
+
+
+
 
       const notificationBuild = new firebase.notifications.Notification({
         show_in_foreground: true,
         show_in_background: true,
-        sound: 'default',
-        title:notification._title,
-        body:notification._body,
-        data:notification._data,
       })
-      // notificationBuild
-      //   .setTitle(notification._title)
-      //   .setBody(notification._body)
-      //   .setNotificationId(notification._notificationId)
-      //   //.setSound('oye_msg_tone.mp3')
-      //   .setData({
-      //     ...notification._data,
-      //    // foreground: true
-      //   })
-      //   .android.setAutoCancel(true)
-      //   .android.setColor('#FF9100')
-      //   .android.setLargeIcon('ic_notif')
-      //   .android.setSmallIcon('ic_stat_ic_notification')
-      //   .android.setChannelId('channel_id')
-      //   .android.setVibrate([1000, 1000])
-      //   .android.setPriority(firebase.notifications.Android.Priority.Max);
+        .setTitle(notification._title)
+        .setBody(notification._body)
+        .setNotificationId(notification._notificationId)
+        .setSound('oye_msg_tone.mp3')
+        .setData({
+          ...notification._data,
+          foreground: true
+        })
+        .android.setAutoCancel(true)
+        .android.setColor('#FF9100')
+        .android.setLargeIcon('ic_notif')
+        .android.setSmallIcon('ic_stat_ic_notification')
+        .android.setChannelId('channel_id')
+        .android.setVibrate([1000, 1000])
+        .android.setPriority(firebase.notifications.Android.Priority.Max);
 
-      if(Platform.OS === 'android'){
-        notificationBuild.android
-          .setPriority(firebase.notifications.Android.Priority.Max)
-          .android.setChannelId('channel_id')
-          .android.setVibrate([1000, 1000])
-          .android.setAutoCancel(true)
-          .android.setColor('#FF9100')
-          .android.setLargeIcon('ic_notif')
-          .android.setSmallIcon('ic_stat_ic_notification')
-          .android.setSound('oye_msg_tone.mp3')
-      }
-
-      firebase.notifications().displayNotification(notificationBuild).then((response=>console.log('1111Display:',response))).catch(error => alert(error));
+      firebase.notifications().displayNotification(notificationBuild);
       // const {updateNotificationData} = this.props;
       // updateNotificationData(true);
       this.setState({ foregroundNotif: notification._data });
