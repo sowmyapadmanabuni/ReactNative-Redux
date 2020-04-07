@@ -649,6 +649,8 @@ class MyFamily extends Component {
         })
     }
 
+   
+
     async addRelativeDetails(title, message) {
 
         console.log('Props**', this.props, this.state);
@@ -720,6 +722,7 @@ class MyFamily extends Component {
             }
         }
     }
+
 
 }
 

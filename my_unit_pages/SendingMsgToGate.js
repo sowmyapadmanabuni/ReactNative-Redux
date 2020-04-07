@@ -114,6 +114,7 @@ class SendingMsgToGate extends Component {
       currentTime: '',
       timestamp: '',
       isPause:true,
+      isAudioPMGranted:false,
     };
     // this.audioRecorderPlayer = new AudioRecorderPlayer();
     // this.audioRecorderPlayer.setSubscriptionDuration(0.09); // optional. Default is 0.1
@@ -165,10 +166,14 @@ class SendingMsgToGate extends Component {
               'The permission has not been requested / is denied but requestable'
             );
             break;
-          case RESULTS.GRANTED:
-            console.log('The permission is granted');
-            break;
+            case RESULTS.GRANTED:
+              console.log('The permission is granted');
+              this.setState({
+                isAudioPMGranted:true
+              })
+              break; 
           case RESULTS.BLOCKED:
+            Alert.alert('Permissions blocked so Please allow from the settings')
             console.log('The permission is denied and not requestable anymore');
             break;
         }
@@ -204,7 +209,12 @@ class SendingMsgToGate extends Component {
     if (Platform.OS === 'ios') {
       request(PERMISSIONS.IOS.MICROPHONE).then(result => {});
     } else {
-      request(PERMISSIONS.ANDROID.RECORD_AUDIO).then(result => {});
+      request(PERMISSIONS.ANDROID.RECORD_AUDIO).then(result => {
+        console.log('GetThePERMISSIONRESULTS1111',result)
+        this.setState({
+          isAudioPMGranted:result =="denied" || result == "blocked" || result == "unavailable" ? false : true
+        })
+      });
     }
   };
 
@@ -1362,7 +1372,8 @@ class SendingMsgToGate extends Component {
                 }}
               >
                 {this.state.buttonId === 1 ? (
-                  <TouchableOpacity onPress={() => this.start()}>
+                  <TouchableOpacity onPress={() => 
+                    this.state.isAudioPMGranted? this.start(): this.checkPermission()}>
                     <View
                       style={{
                         width: hp('8%'),
