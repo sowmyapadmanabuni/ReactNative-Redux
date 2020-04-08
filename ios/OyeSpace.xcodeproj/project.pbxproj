@@ -5,10 +5,8 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		049386FB225DFA370033CF63 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 049386FA225DFA370033CF63 /* GoogleService-Info.plist */; };
-		0BDB4F93EFAC4269A833DD35 /* libRNImageToPdf.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A7832287E1BF4467918A6AC3 /* libRNImageToPdf.a */; };
 		0EB496CCBD65402CB6101409 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 861BE436359B40A5B710E1BB /* Entypo.ttf */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
@@ -43,11 +41,12 @@
 		88305F283D3446768C4E5EEB /* Fontisto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D38559AC8C4E410B80C49269 /* Fontisto.ttf */; };
 		901C36D877D94F1C89E7C19B /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 42ADC5C735BF4620B8B82E63 /* FontAwesome5_Solid.ttf */; };
 		930F1F01B8FD42468E78DF39 /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 441D6DC191CD45E0BF4AE4F9 /* FontAwesome5_Regular.ttf */; };
-		93B2C390242A931E00AF3788 /* libRNHTMLtoPDF.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 93B2C38D242A930D00AF3788 /* libRNHTMLtoPDF.a */; };
+		93FFE62F243C856200F60BA9 /* Oyespace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93FFE62E243C856200F60BA9 /* Oyespace.swift */; };
+		93FFE632243C923000F60BA9 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 93FFE631243C922400F60BA9 /* libc++.tbd */; };
+		93FFE634243C924100F60BA9 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93FFE633243C924100F60BA9 /* StoreKit.framework */; };
 		967B8AB0A6A94F16A283D204 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5D8FED1A448A4B69B4222891 /* MaterialIcons.ttf */; };
 		9ACD5F978E8A4EDA8684B0EC /* Helvetica Neu Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 227E4A1F1A5B44F68D79F8D0 /* Helvetica Neu Bold.ttf */; };
 		9F06026C22C4FF5200DA17C8 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F06026B22C4FF5200DA17C8 /* MapKit.framework */; };
-		9F69818423B1DC11009D1E50 /* OyeSoace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F69818323B1DC11009D1E50 /* OyeSoace.swift */; };
 		9F69818623B1DC25009D1E50 /* oye_msg_tone.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9F69818523B1DC25009D1E50 /* oye_msg_tone.mp3 */; };
 		9FB793932355CA3700D8145E /* sound_1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9FB793922355CA3700D8145E /* sound_1.mp3 */; };
 		9FCBB88622FB068200C2E0AF /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FCBB88522FB068100C2E0AF /* Social.framework */; };
@@ -74,23 +73,6 @@
 		FD735809232914EC005D887E /* icomoon.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FD7357D0232914AB005D887E /* icomoon.ttf */; };
 		FDBD6B97222AF41B00D8C8DA /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FDBD6B96222AF41B00D8C8DA /* JavaScriptCore.framework */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		93B2C38C242A930D00AF3788 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 93B2C387242A930D00AF3788 /* RNHTMLtoPDF.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 117405EF1B9954BF004425E1;
-			remoteInfo = RNHTMLtoPDF;
-		};
-		93B2C38E242A930D00AF3788 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 93B2C387242A930D00AF3788 /* RNHTMLtoPDF.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 117405FA1B9954BF004425E1;
-			remoteInfo = RNHTMLtoPDFTests;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		FD8A82B82235298900D04468 /* Embed Frameworks */ = {
@@ -123,6 +105,7 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = OyeSpace/main.m; sourceTree = "<group>"; };
 		15D244A9D5F44951A3FE136F /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
 		1E43B78223A8B7550034BB1C /* oye_msg_tone.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = oye_msg_tone.mp3; path = ../src/screens/Resident/Dashboard/oye_msg_tone.mp3; sourceTree = "<group>"; };
+		21F05F765BD544B8A3757910 /* libRCTContactsWrapper.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTContactsWrapper.a; sourceTree = "<group>"; };
 		227E4A1F1A5B44F68D79F8D0 /* Helvetica Neu Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Helvetica Neu Bold.ttf"; path = "../fonts/Helvetica Neu Bold.ttf"; sourceTree = "<group>"; };
 		22FE5082DA494D888B11412A /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/native-base/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		2328DDF9544647CC922A4556 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
@@ -161,14 +144,15 @@
 		8AD047C5D38B43898404DC1A /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		92A6A3934A9C4F1B9F512202 /* libRCTRestart.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTRestart.a; sourceTree = "<group>"; };
 		92FFB1D38E4C7094907CF41B /* libPods-OyeSpace-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OyeSpace-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		93B2C387242A930D00AF3788 /* RNHTMLtoPDF.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNHTMLtoPDF.xcodeproj; path = "../node_modules/react-native-html-to-pdf/ios/RNHTMLtoPDF.xcodeproj"; sourceTree = "<group>"; };
+		93FFE62E243C856200F60BA9 /* Oyespace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Oyespace.swift; sourceTree = "<group>"; };
+		93FFE630243C873300F60BA9 /* OyeSpace-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OyeSpace-Bridging-Header.h"; sourceTree = "<group>"; };
+		93FFE631243C922400F60BA9 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		93FFE633243C924100F60BA9 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		94DEC93270D64A4FADE3CBA7 /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
 		962DB82BDD1249AB8E425B06 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/native-base/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		9829F0B4AFED38BA79B920FC /* Pods-OyeSpaceTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OyeSpaceTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-OyeSpaceTests/Pods-OyeSpaceTests.release.xcconfig"; sourceTree = "<group>"; };
 		9F06026B22C4FF5200DA17C8 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
-		9F69818323B1DC11009D1E50 /* OyeSoace.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OyeSoace.swift; sourceTree = "<group>"; };
 		9F69818523B1DC25009D1E50 /* oye_msg_tone.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = oye_msg_tone.mp3; sourceTree = "<group>"; };
-		9F69818723B1DDDA009D1E50 /* OyeSpace-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "OyeSpace-Bridging-Header.h"; path = "../../../../../../Downloads/OyeSpace-Bridging-Header.h"; sourceTree = "<group>"; };
 		9FB793922355CA3700D8145E /* sound_1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sound_1.mp3; sourceTree = "<group>"; };
 		9FCBB88522FB068100C2E0AF /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		9FCBB88722FB068F00C2E0AF /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
@@ -209,6 +193,7 @@
 		FDA791AB233B6F630034094B /* sound_1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = sound_1.mp3; path = ../../../sound_1.mp3; sourceTree = "<group>"; };
 		FDBD6B96222AF41B00D8C8DA /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		FDDD9F7D233B36C700F1EBCE /* libRNAudioRecorderPlayer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNAudioRecorderPlayer.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		9EC80D90DD774E168D504FE1 /* ContactsWrapper.xcodeproj */ = {isa = PBXFileReference; name = "ContactsWrapper.xcodeproj"; path = "../node_modules/react-native-contacts-wrapper/ios/ContactsWrapper.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -216,15 +201,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				93B2C390242A931E00AF3788 /* libRNHTMLtoPDF.a in Frameworks */,
+				93FFE634243C924100F60BA9 /* StoreKit.framework in Frameworks */,
 				9FCBB88822FB068F00C2E0AF /* MessageUI.framework in Frameworks */,
 				9FCBB88622FB068200C2E0AF /* Social.framework in Frameworks */,
+				93FFE632243C923000F60BA9 /* libc++.tbd in Frameworks */,
 				FDBD6B97222AF41B00D8C8DA /* JavaScriptCore.framework in Frameworks */,
 				A1E6D76021DF2331006FE22F /* libsqlite3.0.tbd in Frameworks */,
 				A1E6D75E21DF2328006FE22F /* libsqlite3.tbd in Frameworks */,
 				9F06026C22C4FF5200DA17C8 /* MapKit.framework in Frameworks */,
 				F0D76AD689F1208DBD46DFD1 /* libPods-OyeSpace.a in Frameworks */,
-				0BDB4F93EFAC4269A833DD35 /* libRNImageToPdf.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -322,6 +307,8 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				93FFE633243C924100F60BA9 /* StoreKit.framework */,
+				93FFE631243C922400F60BA9 /* libc++.tbd */,
 				FDDD9F7D233B36C700F1EBCE /* libRNAudioRecorderPlayer.a */,
 				FD9A75D72339146D000680E6 /* libRNAudioRecorderPlayer.a */,
 				9FCBB88722FB068F00C2E0AF /* MessageUI.framework */,
@@ -362,7 +349,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				93B2C387242A930D00AF3788 /* RNHTMLtoPDF.xcodeproj */,
+				9EC80D90DD774E168D504FE1 /* ContactsWrapper.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -370,9 +357,9 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				9F69818723B1DDDA009D1E50 /* OyeSpace-Bridging-Header.h */,
+				93FFE630243C873300F60BA9 /* OyeSpace-Bridging-Header.h */,
+				93FFE62E243C856200F60BA9 /* Oyespace.swift */,
 				9F69818523B1DC25009D1E50 /* oye_msg_tone.mp3 */,
-				9F69818323B1DC11009D1E50 /* OyeSoace.swift */,
 				9FB793922355CA3700D8145E /* sound_1.mp3 */,
 				13B07FAE1A68108700A75B9A /* OyeSpace */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -396,15 +383,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		93B2C388242A930D00AF3788 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				93B2C38D242A930D00AF3788 /* libRNHTMLtoPDF.a */,
-				93B2C38F242A930D00AF3788 /* RNHTMLtoPDFTests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		A1E6D78721E0DCB1006FE22F /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
@@ -420,6 +398,7 @@
 				A7832287E1BF4467918A6AC3 /* libRNImageToPdf.a */,
 				26BC40904E4A4FEAB7D5712E /* libRNLocationSatellites.a */,
 				1E43B78223A8B7550034BB1C /* oye_msg_tone.mp3 */,
+				21F05F765BD544B8A3757910 /* libRCTContactsWrapper.a */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -495,35 +474,12 @@
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 93B2C388242A930D00AF3788 /* Products */;
-					ProjectRef = 93B2C387242A930D00AF3788 /* RNHTMLtoPDF.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* OyeSpace */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		93B2C38D242A930D00AF3788 /* libRNHTMLtoPDF.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRNHTMLtoPDF.a;
-			remoteRef = 93B2C38C242A930D00AF3788 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		93B2C38F242A930D00AF3788 /* RNHTMLtoPDFTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = RNHTMLtoPDFTests.xctest;
-			remoteRef = 93B2C38E242A930D00AF3788 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		13B07F8E1A680F5B00A75B9A /* Resources */ = {
@@ -706,9 +662,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9F69818423B1DC11009D1E50 /* OyeSoace.swift in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				93FFE62F243C856200F60BA9 /* Oyespace.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -757,6 +713,8 @@
 					"$(SRCROOT)/../node_modules/react-native-restart/ios/RCTRestart",
 					"$(SRCROOT)/../node_modules/react-native-image-to-pdf/ios",
 					"$(SRCROOT)/../node_modules/react-native-location-satellites/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-contacts-wrapper/ios/RCTContactsWrapper",
+					"$(SRCROOT)/../node_modules/react-native-contacts-wrapper/ios/RCTContactsWrapper",
 				);
 				INFOPLIST_FILE = OyeSpace/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -766,6 +724,8 @@
 					"$(PROJECT_DIR)",
 					"\"$(SRCROOT)/OyeSpace\"",
 					"\"$(SRCROOT)/OyeSpace\"",
+					"\"$(SRCROOT)/OyeSpace\"",
+					"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)",
 					"\"$(SRCROOT)/OyeSpace\"",
 				);
 				MARKETING_VERSION = 10.23;
@@ -813,6 +773,8 @@
 					"$(SRCROOT)/../node_modules/react-native-restart/ios/RCTRestart",
 					"$(SRCROOT)/../node_modules/react-native-image-to-pdf/ios",
 					"$(SRCROOT)/../node_modules/react-native-location-satellites/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-contacts-wrapper/ios/RCTContactsWrapper",
+					"$(SRCROOT)/../node_modules/react-native-contacts-wrapper/ios/RCTContactsWrapper",
 				);
 				INFOPLIST_FILE = OyeSpace/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -822,6 +784,8 @@
 					"$(PROJECT_DIR)",
 					"\"$(SRCROOT)/OyeSpace\"",
 					"\"$(SRCROOT)/OyeSpace\"",
+					"\"$(SRCROOT)/OyeSpace\"",
+					"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)",
 					"\"$(SRCROOT)/OyeSpace\"",
 				);
 				MARKETING_VERSION = 10.23;

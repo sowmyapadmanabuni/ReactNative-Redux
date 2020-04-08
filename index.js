@@ -7,25 +7,8 @@ import store from './src/store';
 import { name as appName } from './app.json';
 import $ from 'logdecor';
 import CheckInternet from './src/base/services/CheckInternet';
-//firebase.initializeApp(config);
 import { StatusBarPlaceHolder } from './src/components/StatusBar';
 import NotificationPopUp from './src/base/services/NotificationPopUp';
-// import firebase from 'firebase';
-// import {firebaseDetails} from './constant';
-
-// let config = {
-//     databaseURL: firebaseDetails.databaseURL,
-//     projectID: firebaseDetails.projectID
-// };
-// var firebaseConfig = {
-//   apiKey: "AIzaSyAHw662K_LOVs6DW76D1HRu05PxjpOgyQw",
-//   authDomain: "oyespace-b7e2d.firebaseapp.com",
-//   databaseURL: "https://oyespace-b7e2d.firebaseio.com",
-//   projectId: "oyespace-b7e2d",
-//   storageBucket: "oyespace-b7e2d.appspot.com",
-//   messagingSenderId: "194451632723",
-//   appId: "1:194451632723:web:55842a54e3f70d54"
-// };
 
 var Fabric = require('react-native-fabric');
 

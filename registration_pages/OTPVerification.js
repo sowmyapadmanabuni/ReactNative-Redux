@@ -1,28 +1,15 @@
-import React, {Component} from "react";
-import {
-    Alert,
-    BackHandler,
-    Dimensions,
-    Image,
-    SafeAreaView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
-    ActivityIndicator
-} from "react-native";
 import moment from "moment";
-import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
-// import Header from "./Header.js";
-import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 // import OTPInputView from 'react-native-otp-input';
-import {Button} from "native-base";
-import {connect} from "react-redux";
-import {updateUserInfo} from "../src/actions";
-import base from "../src/base";
+import { Button } from "native-base";
+import React, { Component } from "react";
+import { Alert, BackHandler, Dimensions, Image, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+// import Header from "./Header.js";
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
+import { connect } from "react-redux";
 import ProgressLoader from 'rn-progress-loader';
-import {NavigationActions, StackActions} from "react-navigation";
+import { updateUserInfo } from "../src/actions";
+import base from "../src/base";
 
 class OTPVerification extends Component {
     static navigationOptions = {
