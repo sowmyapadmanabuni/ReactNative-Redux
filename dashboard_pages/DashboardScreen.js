@@ -1040,7 +1040,7 @@ class MainScreen extends Component {
                                     <ProgressBarAnimated
                                         width={barWidth}
                                         value={(this.state.units_occupied_count / this.state.units_tot_count) * 100}
-                                        backgroundColorOnComplete="orange"
+                                        backgroundColorOnComplete={base.theme.colors.themeColor}
                                     />
                                     <View style={{marginLeft: 5}}>
                                         <Text>{((this.state.units_occupied_count / this.state.units_tot_count) * 100).toFixed(0)}%</Text>

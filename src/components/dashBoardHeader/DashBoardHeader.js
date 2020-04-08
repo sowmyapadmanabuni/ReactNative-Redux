@@ -127,7 +127,7 @@ class DashBoardHeader extends React.Component {
             <TouchableOpacity onPress={()=>this.openDrawer()}>
             <Image
                   style={{height:24,width:24,alignSelf:'center'}}
-                  source={require('../../../icons/menu_drawer.png')}
+                  source={require('../../../icons/drawer.png')}
                 />
             </TouchableOpacity>
             {/* <TouchableOpacity

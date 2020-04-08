@@ -73,7 +73,7 @@ class CheckInternet extends PureComponent {
 
 const styles = StyleSheet.create({
     offlineContainer: {
-        backgroundColor: base.theme.colors.primary,
+        backgroundColor: base.theme.colors.themeColor,
         height: 30,
         justifyContent: 'center',
         alignItems: 'center',

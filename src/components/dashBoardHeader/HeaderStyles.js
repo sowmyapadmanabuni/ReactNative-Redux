@@ -69,8 +69,8 @@ const HeaderStyles = StyleSheet.create({
     color: base.theme.colors.mediumGrey
   },
   appLogoStyles: {
-    width: wp('34%'),
-    height: hp('18%'),
+    // width: wp('34%'),
+    // height: hp('18%'),
     // height: 80,
     // width: 80,
     alignSelf: 'center'

@@ -464,7 +464,7 @@ class AddBlock extends Component {
                         </View>
                         <View style={styles.emptyViewStyle}/>
                     </View>
-                    <View style={{borderWidth: 1, borderColor: "orange"}}/>
+                    <View style={{borderWidth: 1, borderColor: "#EBECED"}}/>
                 </SafeAreaView>
                 {/* <Header /> */}
 

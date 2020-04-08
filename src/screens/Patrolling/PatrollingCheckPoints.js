@@ -378,7 +378,7 @@ class PatrollingCheckPoints extends React.Component {
                 <View style={PatrollingCheckPointsStyles.checkPoint}>
                     <CheckBox
                         style={PatrollingCheckPointsStyles.checkBoxStyle}
-                        checkedCheckBoxColor={base.theme.colors.blue}
+                        checkedCheckBoxColor={base.theme.colors.green}
                         onClick={() => {
                             this.setCheckVal(data)
                         }}

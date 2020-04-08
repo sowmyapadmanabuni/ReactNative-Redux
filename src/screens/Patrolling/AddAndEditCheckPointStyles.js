@@ -20,7 +20,7 @@ const AddAndEditCheckPointStyles = StyleSheet.create({
     headerText: {
         fontSize: 15,
         fontFamily: base.theme.fonts.medium,
-        color: base.theme.colors.primary
+        color: base.theme.colors.black
     },
     mapBox: {
         height: hp('50%'),

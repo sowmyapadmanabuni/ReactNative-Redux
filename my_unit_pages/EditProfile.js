@@ -427,7 +427,7 @@ class EditProfile extends Component {
                                 >
                                     <Image
                                         resizeMode="contain"
-                                        source={require("../icons/backBtn.png")}
+                                        source={require("../icons/back.png")}
                                         style={styles.viewDetails2}
                                     />
                                 </TouchableOpacity>
@@ -447,7 +447,7 @@ class EditProfile extends Component {
                             </View>
                             <View style={styles.emptyViewStyle}/>
                         </View>
-                        <View style={{borderWidth: 1, borderColor: "#ff8c00"}}/>
+                        <View style={{borderWidth: 1, borderColor: "#EBECED"}}/>
                     </SafeAreaView>
 
                     <KeyboardAwareScrollView>
@@ -784,8 +784,8 @@ const styles = StyleSheet.create({
         position: "relative"
     },
     image: {
-        width: wp("34%"),
-        height: hp("18%")
+        // width: wp("34%"),
+        // height: hp("18%")
     },
     emptyViewStyle: {
         flex: 1
@@ -818,7 +818,7 @@ const styles = StyleSheet.create({
         textAlign: "center",
         fontSize: hp("2.5%"),
         fontWeight: "500",
-        color: "#ff8c00"
+        // color: "#ff8c00"
     },
 
     containerView_ForProfilePicViewStyle: {
@@ -890,8 +890,8 @@ const styles = StyleSheet.create({
         height: Platform.OS === 'ios'? hp("4.5%") : hp("4%"),
         borderRadius: hp("2.5%"),
         borderWidth: hp("0.2%"),
-        borderColor: "#EF3939",
-        backgroundColor: "#EF3939",
+        borderColor: "#909091",
+        backgroundColor: "#909091",
         justifyContent: "center",
         //alignItems:'center'
     },
@@ -905,8 +905,8 @@ const styles = StyleSheet.create({
         height:Platform.OS === 'ios'?hp("4.5%"): hp("4%"),
         borderRadius: hp("2.5%"),
         borderWidth: hp("0.2%"),
-        borderColor: "orange",
-        backgroundColor: "orange",
+        borderColor: "#B51414",
+        backgroundColor: "#B51414",
         justifyContent: "center"
     },
     itemTextValues1: {
@@ -941,8 +941,8 @@ const styles = StyleSheet.create({
     viewDetails2: {
         alignItems: "flex-start",
         justifyContent: "center",
-        width: hp("2.5%"),
-        height: hp("2.5%"),
+        // width: hp("2.5%"),
+        // height: hp("2.5%"),
         marginTop: 5
         // marginLeft: 10
     }

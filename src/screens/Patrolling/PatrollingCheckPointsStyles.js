@@ -20,7 +20,7 @@ const PatrollingCheckPointsStyles = StyleSheet.create({
     headerText: {
         fontSize: 15,
         fontFamily: base.theme.fonts.medium,
-        color: base.theme.colors.primary
+        color: base.theme.colors.black
     },
     flatListView: {
         height: hp('75%'),
@@ -116,7 +116,7 @@ const PatrollingCheckPointsStyles = StyleSheet.create({
     },
     modalText: {
         alignSelf: 'center',
-        color: base.theme.colors.primary,
+        color: base.theme.colors.themeColor,
         fontFamily: base.theme.fonts.medium
     },
     marker: {

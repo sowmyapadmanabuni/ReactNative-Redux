@@ -1299,7 +1299,7 @@ class Dashboard extends React.Component {
                             width: hp('4%'),
                             height: hp('4%'),
                           }}
-                          source={require('../../../../icons/my_unit.png')}
+                          source={require('../../../../icons/buil.png')}
                         />
                         <Text allowFontScaling={false}>My Unit</Text>
 
@@ -1396,7 +1396,7 @@ class Dashboard extends React.Component {
               isHUD={true}
               isModal={true}
               visible={this.props.isLoading}
-              color={base.theme.colors.primary}
+              color={base.theme.colors.themeColor}
               hudColor={'#FFFFFF'}
             />
           </View>
@@ -1408,7 +1408,7 @@ class Dashboard extends React.Component {
               isHUD={true}
               isModal={true}
               visible={this.props.isLoading}
-              color={base.theme.colors.primary}
+              color={base.theme.colors.themeColor}
               hudColor={'#FFFFFF'}
             />
       )
@@ -1783,7 +1783,7 @@ class Dashboard extends React.Component {
             cardText={'Accounting'}
             iconWidth={Platform.OS === 'ios' ? 40 : 25}
             iconHeight={Platform.OS === 'ios' ? 40 : 20}
-            cardIcon={require('../../../../icons/vehicle.png')}
+            cardIcon={require('../../../../icons/wallet.png')}
             marginTop={20}
             backgroundColor={base.theme.colors.cardBackground}
             onCardClick={() => this.props.navigation.navigate('Accounting')}

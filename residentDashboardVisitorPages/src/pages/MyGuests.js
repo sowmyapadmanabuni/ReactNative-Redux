@@ -22,14 +22,14 @@ export default class MyGuests extends Component {
             Invited: {
                 screen: Invited,
                 navigationOptions: {
-                    tabBarLabel: <Text style={{textTransform: 'capitalize', fontSize: hp('2.2%'),}}>Invitation
+                    tabBarLabel: <Text style={{textTransform: 'capitalize', fontSize: hp('2.2%'),color:'#32A76D'}}>Invitation
                         Details</Text>,
                 }
             },
             visited: {
                 screen: visited,
                 navigationOptions: {
-                    tabBarLabel: <Text style={{textTransform: 'capitalize', fontSize: hp('2.2%')}}>visited</Text>,
+                    tabBarLabel: <Text style={{textTransform: 'capitalize', fontSize: hp('2.2%'),color:'#32A76D'}}>visited</Text>,
 
                     //   tabBarIcon: ({ tintColor }) => (
                     //     <View>

@@ -464,7 +464,7 @@ let dummyData={
                                 Validity:</Text>
                             <View style={{flexDirection: 'row', marginTop: hp('1%')}}>
                                 <Text
-                                    style={{color: '#ff8c00', marginRight: hp('1%'), fontSize: hp('1.8%')}}>From</Text>
+                                    style={{color: '#B51414', marginRight: hp('1%'), fontSize: hp('1.8%')}}>From</Text>
                                 <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
                                     <View style={styles.datePickerBox}>
                                         <Text style={styles.datePickerText}>{this.state.dobText}</Text>
@@ -487,7 +487,7 @@ let dummyData={
                             </View>
                             <View style={{flexDirection: 'row', marginTop: 3}}>
                                 <Text style={{
-                                    color: '#ff8c00',
+                                    color: '#B51414',
                                     marginRight: hp('2.5%'),
                                     fontSize: hp('1.8%')
                                 }}>Till</Text>
@@ -518,7 +518,7 @@ let dummyData={
                             marginTop: 14,
                             marginLeft: hp('1.7%')
                         }}>
-                            <Text style={{color: '#25CCF7', fontSize: hp('1.8%'),}}>Multiple Entries</Text>
+                            <Text style={{color: '#32A76D', fontSize: hp('1.8%'),}}>Multiple Entries</Text>
                             <View style={{flex: 1, alignItems: 'flex-end'}}>
                                 <SwitchExample style={{justifyContent: 'flex-end',}}
                                                toggleSwitch1={this.toggleSwitch}
@@ -548,17 +548,17 @@ let dummyData={
                                             <Text style={{
                                                 fontWeight: 'bold',
                                                 fontSize: hp('2.5%'),
-                                                color: '#25CCF7',
+                                                color: '#32A76D',
                                             }}>-</Text>
                                         </TouchableOpacity>
                                     }
-                                    <Text style={{fontSize: hp('2.5%'), color: '#25CCF7',}}
+                                    <Text style={{fontSize: hp('2.5%'), color: '#32A76D',}}
                                           value={this.state.count}>{this.state.count}</Text>
                                     <TouchableOpacity onPress={this.incrementCount} underlayColor='#fff'>
                                         <Text style={{
                                             fontWeight: 'bold',
                                             fontSize: hp('2.5%'),
-                                            color: '#25CCF7',
+                                            color: '#32A76D',
                                         }}>+</Text>
                                     </TouchableOpacity>
                                 </View>
@@ -576,7 +576,7 @@ let dummyData={
                                 onPress={() => this.props.navigation.goBack()}>
                             <Text style={{color: 'white', fontSize: hp('2%'), fontWeight: '500'}}>Cancel</Text>
                         </Button>
-                        <Button bordered warning style={[styles.button, {backgroundColor: 'orange'}]}
+                        <Button bordered warning style={[styles.button, {backgroundColor: '#B51414'}]}
                             //onPress={() => this.sendInvitation()}
                                 onPress={() => {
                                     this.sendInvitation()
@@ -592,7 +592,7 @@ let dummyData={
                     isHUD={true}
                     isModal={true}
                     visible={this.state.isLoading}
-                    color={base.theme.colors.primary}
+                    color={base.theme.colors.themeColor}
                     hudColor={"#FFFFFF"}
                 />
             </View>
@@ -613,7 +613,7 @@ const styles = StyleSheet.create({
         fontSize: hp('2.4%'),
         fontWeight: 'bold',
         marginBottom: hp('1.5%'),
-        color: '#ff8c00',
+        // color: '#ff8c00',
         justifyContent: 'center',
         alignItems: 'center',
     },

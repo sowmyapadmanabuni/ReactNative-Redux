@@ -472,7 +472,7 @@ class ReportScreen extends React.Component {
                         }
                     </Table> :
                     <View style={{justifyContent: 'center', alignItems: 'center', height: hp('70%')}}>
-                        <Text style={{color: base.theme.colors.primary}}>Report not available for this patrol...</Text>
+                        <Text style={{color: base.theme.colors.themeColor}}>Report not available for this patrol...</Text>
                     </View>}
             </View>
         );

@@ -78,7 +78,7 @@ const Style = StyleSheet.create({
     },
     famText: {
         fontSize: 16,
-        color: base.theme.colors.primary
+        color: base.theme.colors.themeColor
     },
     subMainView: {
         height: '64%',
@@ -102,7 +102,7 @@ const Style = StyleSheet.create({
         textAlign: 'center',
         fontSize: hp('2%'),
         fontWeight: 'bold',
-        color: '#ff8c00',
+        // color: '#B51414',
         marginBottom: hp('1.6%')
     },
     viewStyle1: {
@@ -116,8 +116,8 @@ const Style = StyleSheet.create({
         position: 'relative'
     },
     image1: {
-        width: wp('34%'),
-        height: hp('18%'),
+        // width: wp('34%'),
+        // height: hp('18%'),
         marginRight: hp('3%')
     },
 
@@ -131,8 +131,8 @@ const Style = StyleSheet.create({
     viewDetails2: {
         alignItems: 'flex-start',
         justifyContent: 'center',
-        width: hp('3%'),
-        height: hp('3%'),
+        // width: hp('3%'),
+        // height: hp('3%'),
         marginTop: 5
         // marginLeft: 10
     }

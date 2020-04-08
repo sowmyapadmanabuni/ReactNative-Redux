@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
     ActivityIndicator,
     Alert,
@@ -12,14 +12,14 @@ import {
     TouchableOpacity,
     View
 } from 'react-native';
-import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
-import {NavigationEvents} from 'react-navigation';
-import {connect} from 'react-redux';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { NavigationEvents } from 'react-navigation';
+import { connect } from 'react-redux';
 import base from '../src/base';
-import {updateIdDashboard} from '../src/actions';
+import { updateIdDashboard } from '../src/actions';
 import axios from 'axios';
 
-import {createIconSetFromIcoMoon} from 'react-native-vector-icons';
+import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import IcoMoonConfig from '../src/assets/selection.json';
 import FloatingButton from "../src/components/FloatingButton";
 
@@ -82,63 +82,63 @@ class VehicleList extends Component {
 
     processBackPress() {
         console.log("Part");
-        const {goBack} = this.props.navigation;
+        const { goBack } = this.props.navigation;
         goBack(null);
         return true;
     }
 
-   async getVehicleList () {
-        console.log('props in vehicle list:', this.props,this.props.assId,this.props.uniID,this.props.userReducer.MyAccountID);
+    async getVehicleList() {
+        console.log('props in vehicle list:', this.props, this.props.assId, this.props.uniID, this.props.userReducer.MyAccountID);
         let myVehicleList = await base.services.OyeLivingApi.myVehicleListAPI(
             this.props.dashBoardReducer.assId,
             this.props.dashBoardReducer.uniID,
             this.props.userReducer.MyAccountID
         );
-       console.log('GETTING DATA IN VEHICLES',myVehicleList)
-       this.setState({
-           isLoading:false
-       })
-       if(myVehicleList.success && myVehicleList.data.vehicleListByUnitID.length !==0){
-
-        let vehicleList=myVehicleList.data.vehicleListByUnitID
-        console.log('GETTING DATA IN VEHICLES111111',myVehicleList,vehicleList)
-
+        console.log('GETTING DATA IN VEHICLES', myVehicleList)
         this.setState({
-            isLoading: false,
-            dataSource: vehicleList,
-            listLength: vehicleList.length,
-        });
-       
-        const {updateIdDashboard} = this.props;
-        updateIdDashboard({
-            prop: 'vehiclesCount',
-            value: vehicleList.length
-        });
-        console.log("responseJson.data ",responseJson.data)
-       }
-       else{
-        console.log('GETTING DATA IN VEHICLES111111',myVehicleList)
-        this.setState({dataSource:[]});
-        const {updateIdDashboard} = this.props;
-        updateIdDashboard({
-            prop: 'vehiclesCount',
-            value: 0
-        });
-       }
+            isLoading: false
+        })
+        if (myVehicleList.success && myVehicleList.data.vehicleListByUnitID.length !== 0) {
+
+            let vehicleList = myVehicleList.data.vehicleListByUnitID
+            console.log('GETTING DATA IN VEHICLES111111', myVehicleList, vehicleList)
+
+            this.setState({
+                isLoading: false,
+                dataSource: vehicleList,
+                listLength: vehicleList.length,
+            });
+
+            const { updateIdDashboard } = this.props;
+            updateIdDashboard({
+                prop: 'vehiclesCount',
+                value: vehicleList.length
+            });
+            console.log("responseJson.data ", responseJson.data)
+        }
+        else {
+            console.log('GETTING DATA IN VEHICLES111111', myVehicleList)
+            this.setState({ dataSource: [] });
+            const { updateIdDashboard } = this.props;
+            updateIdDashboard({
+                prop: 'vehiclesCount',
+                value: 0
+            });
+        }
     }
-    
-    
 
-        
 
-    renderItem = ({item, index}) => {
+
+
+
+    renderItem = ({ item, index }) => {
         const swipeSettings = {
             autoClose: true,
             onClose: (secId, rowId, direction) => {
-                this.setState({activeRowKey: null});
+                this.setState({ activeRowKey: null });
             },
             onOpen: (secId, rowId, direction) => {
-                this.setState({activeRowKey: item.key});
+                this.setState({ activeRowKey: item.key });
             },
             right: [
                 {
@@ -171,20 +171,20 @@ class VehicleList extends Component {
             rowId: this.props.index,
             section: 1
         };
-        console.log("item ",item, index);
+        console.log("item ", item, index);
         return (
             // <Swipeout {...swipeSettings} style={{backgroundColor:'#fff'}}>
-            <View style={[styles.maincolumn ,{
-                marginBottom: index == (this.state.listLength-1) ? 70 : 0
+            <View style={[styles.maincolumn, {
+                marginBottom: index == (this.state.listLength - 1) ? 70 : 0
             }]}>
-                <View style={styles.divider}/>
+                <View style={styles.divider} />
                 <View style={styles.firstRow}>
-                    <View style={{justifyContent: 'center', alignItems: 'flex-start'}}>
+                    <View style={{ justifyContent: 'center', alignItems: 'flex-start' }}>
                         {item.veType == 'Two Wheeler' ? (
-                            <Icon size={hp('5%')} name="wheeler"/>
+                            <Icon size={hp('5%')} name="wheeler" />
                         ) : (
-                            <Icon size={hp('5%')} name="wheeler1"/>
-                        )}
+                                <Icon size={hp('5%')} name="wheeler1" />
+                            )}
                     </View>
                     <View
                         style={{
@@ -194,13 +194,13 @@ class VehicleList extends Component {
                             marginLeft: hp('1%')
                         }}
                     >
-                        <Text style={{fontSize: wp('4%'), fontWeight: 'bold'}}>
+                        <Text style={{ fontSize: wp('4%'), fontWeight: 'bold' }}>
                             {item.veMakeMdl}
                         </Text>
                     </View>
-                    <View style={{justifyContent: 'center'}}>
+                    <View style={{ justifyContent: 'center' }}>
                         <View style={styles.vehType}>
-                            <Text style={{color: '#909091', fontSize: hp('1.7%')}}>
+                            <Text style={{ color: '#909091', fontSize: hp('1.7%') }}>
                                 {item.veType}
                             </Text>
                         </View>
@@ -208,7 +208,7 @@ class VehicleList extends Component {
                 </View>
                 <View style={styles.secondRow}>
                     <View style={styles.firstBox}>
-                        <View style={{margin: hp('0.1%')}}>
+                        <View style={{ margin: hp('0.1%') }}>
                             <Text
                                 style={{
                                     fontSize: hp('1.5%'),
@@ -219,12 +219,13 @@ class VehicleList extends Component {
                                 Vehicle Number
                             </Text>
                         </View>
-                        <View style={{margin: hp('0.1%')}}>
+                        <View style={{ margin: hp('0.1%') }}>
                             <Text
                                 style={{
                                     fontSize: hp('1.5%'),
                                     marginLeft: wp('0.5%'),
-                                    marginRight: wp('0.5%')
+                                    marginRight: wp('0.5%'),
+                                    color: base.theme.colors.green
                                 }}
                             >
                                 {item.veRegNo}
@@ -232,7 +233,7 @@ class VehicleList extends Component {
                         </View>
                     </View>
                     <View style={styles.secondBox}>
-                        <View style={{margin: hp('0.1%')}}>
+                        <View style={{ margin: hp('0.1%') }}>
                             <Text
                                 style={{
                                     fontSize: hp('1.5%'),
@@ -243,12 +244,14 @@ class VehicleList extends Component {
                                 Vehicle Sticker Number
                             </Text>
                         </View>
-                        <View style={{margin: hp('0.1%')}}>
+                        <View style={{ margin: hp('0.1%') }}>
                             <Text
                                 style={{
                                     fontSize: hp('1.5%'),
                                     marginLeft: wp('0.5%'),
-                                    marginRight: wp('0.5%')
+                                    marginRight: wp('0.5%'),
+                                    color: base.theme.colors.green
+
                                 }}
                             >
                                 {item.veStickNo}
@@ -256,7 +259,7 @@ class VehicleList extends Component {
                         </View>
                     </View>
                     <View style={styles.thirdBox}>
-                        <View style={{margin: hp('0.1%')}}>
+                        <View style={{ margin: hp('0.1%') }}>
                             <Text
                                 style={{
                                     fontSize: hp('1.5%'),
@@ -267,12 +270,14 @@ class VehicleList extends Component {
                                 Parking Slot Number
                             </Text>
                         </View>
-                        <View style={{margin: hp('0.1%')}}>
+                        <View style={{ margin: hp('0.1%') }}>
                             <Text
                                 style={{
                                     fontSize: hp('1.5%'),
                                     marginLeft: wp('0.5%'),
-                                    marginRight: wp('0.5%')
+                                    marginRight: wp('0.5%'),
+                                    color: base.theme.colors.green
+
                                 }}
                             >
                                 {item.uplNum}
@@ -281,7 +286,7 @@ class VehicleList extends Component {
                     </View>
                 </View>
                 <View style={styles.thirdRow}>
-                    <View style={{flexDirection: 'row'}}>
+                    <View style={{ flexDirection: 'row' }}>
                         <TouchableOpacity
                             style={{
                                 right: 15
@@ -297,7 +302,7 @@ class VehicleList extends Component {
                                 });
                             }}
                         >
-                            <Icon size={hp('3%')} color="#ff8c00" name="edit"/>
+                            <Icon size={hp('3%')} color="#B51414" name="edit" />
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={{
@@ -305,11 +310,11 @@ class VehicleList extends Component {
                             }}
                             onPress={() => this.deleteVehicle(item.veid)}
                         >
-                            <Icon size={hp('3%')} color="#ff8c00" name="delete"/>
+                            <Icon size={hp('3%')} color="#B51414" name="delete" />
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View style={styles.divider}/>
+                <View style={styles.divider} />
             </View>
             // </Swipeout>
         );
@@ -345,8 +350,8 @@ class VehicleList extends Component {
                 <View style={styles.container}>
                     {/* <Header/> */}
 
-                    <SafeAreaView style={{backgroundColor: '#ff8c00'}}>
-                        <View style={[styles.viewStyle1, {flexDirection: 'row'}]}>
+                    <SafeAreaView style={{ backgroundColor: '#ff8c00' }}>
+                        <View style={[styles.viewStyle1, { flexDirection: 'row' }]}>
                             <View style={styles.viewDetails1}>
                                 <TouchableOpacity
                                     onPress={() => {
@@ -381,27 +386,27 @@ class VehicleList extends Component {
                                     source={require('../icons/OyespaceSafe.png')}
                                 />
                             </View>
-                            <View style={{flex: 0.2}}>
+                            <View style={{ flex: 0.2 }}>
                                 {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
                             </View>
                         </View>
-                        <View style={{borderWidth: 1, borderColor: 'orange'}}/>
+                        <View style={{ borderWidth: 1, borderColor: '#EBECED' }} />
                     </SafeAreaView>
 
                     <Text style={styles.titleOfScreen}>Vehicles</Text>
 
                     <View style={styles.progress}>
-                        <ActivityIndicator size="large" color="#F3B431"/>
+                        <ActivityIndicator size="large" color="#B51414" />
                     </View>
                 </View>
             );
-        }else{
+        } else {
             return (
                 <View style={styles.container}>
                     {/* <Header/> */}
 
-                    <SafeAreaView style={{backgroundColor: '#ff8c00'}}>
-                        <View style={[styles.viewStyle1, {flexDirection: 'row'}]}>
+                    <SafeAreaView style={{ backgroundColor: '#ff8c00' }}>
+                        <View style={[styles.viewStyle1, { flexDirection: 'row' }]}>
                             <View style={styles.viewDetails1}>
                                 <TouchableOpacity
                                     onPress={() => {
@@ -436,11 +441,11 @@ class VehicleList extends Component {
                                     source={require('../icons/OyespaceSafe.png')}
                                 />
                             </View>
-                            <View style={{flex: 0.2}}>
+                            <View style={{ flex: 0.2 }}>
                                 {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
                             </View>
                         </View>
-                        <View style={{borderWidth: 1, borderColor: 'orange'}}/>
+                        <View style={{ borderWidth: 1, borderColor: '#EBECED' }} />
                     </SafeAreaView>
 
                     <NavigationEvents
@@ -451,7 +456,7 @@ class VehicleList extends Component {
                     {this.state.dataSource.length !== 0 ?
                         <FlatList
                             contentContainerStyle={this.state.dataSource.length === 0 && styles.centerEmptySet}
-                            style={{marginTop: 15,}}
+                            style={{ marginTop: 15, }}
                             data={this.state.dataSource}
                             renderItem={this.renderItem}
                             keyExtractor={(item, index) => item.veid.toString()}
@@ -466,7 +471,7 @@ class VehicleList extends Component {
 
                             }}
                         >
-                            <Icon size={hp('10%')} name="wheeler1"/>
+                            <Icon size={hp('10%')} name="wheeler1" />
                             <Text
                                 style={{
                                     backgroundColor: 'white',
@@ -475,11 +480,11 @@ class VehicleList extends Component {
                                     fontSize: hp('1.6%')
                                 }}
                             >
-                                Add your vehicle details
+                                Add your vehicle details...
                             </Text>
                         </View>
                     }
-                    <View style={{height: hp('7%')}}></View>
+                    <View style={{ height: hp('7%') }}></View>
 
                     <View style={{
                         alignItems: 'center',
@@ -489,14 +494,14 @@ class VehicleList extends Component {
                         right: hp('3.5%'),
                         height: hp('6.5%'),
                     }}>
-                        <FloatingButton marginTop={hp('80')} onBtnClick={() => this.changePage()}/>
+                        <FloatingButton marginTop={hp('80')} onBtnClick={() => this.changePage()} />
                     </View>
                 </View>
             );
         }
 
     }
-    changePage(){
+    changePage() {
         this.props.navigation.navigate('AddVehiclesScreen')
     }
 }
@@ -517,7 +522,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: hp('2%'),
         fontWeight: 'bold',
-        color: '#ff8c00',
+        // color: '#ff8c00',
         marginBottom: hp('1.6%')
     },
     centerEmptySet: { justifyContent: 'center', alignItems: 'center', height: '100%' },
@@ -591,14 +596,14 @@ const styles = StyleSheet.create({
         borderRadius: hp('4.5%'),
         // shadowColor: '#000000',
         shadowOffset: {
-          width: 0,
-          height: 3
+            width: 0,
+            height: 3
         },
         shadowRadius: 3,
         shadowOpacity: 0.6
-      },
+    },
 
-      plusTextStyle: {
+    plusTextStyle: {
         fontSize: hp('4%'),
         color: '#fff',
         fontWeight: 'bold',
@@ -606,20 +611,20 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         alignSelf: 'center',
         marginBottom: hp('0.5%')
-      },
+    },
     viewStyle1: {
         backgroundColor: '#fff',
         height: hp('7%'),
         width: Dimensions.get('screen').width,
         shadowColor: '#000',
-        shadowOffset: {width: 0, height: 2},
+        shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
         elevation: 2,
         position: 'relative'
     },
     image1: {
-        width: wp('34%'),
-        height: hp('18%'),
+        // width: wp('34%'),
+        // height: hp('18%'),
         marginRight: hp('3%')
     },
 
@@ -633,8 +638,8 @@ const styles = StyleSheet.create({
     viewDetails2: {
         alignItems: 'flex-start',
         justifyContent: 'center',
-        width: hp('3%'),
-        height: hp('3%'),
+        // width: hp('3%'),
+        // height: hp('3%'),
         marginTop: 5
         // marginLeft: 10
     }
@@ -645,7 +650,7 @@ const mapStateToProps = state => {
         dashBoardReducer: state.DashboardReducer,
         oyeURL: state.OyespaceReducer.oyeURL,
         userReducer: state.UserReducer,
-        assId:state.DashboardReducer.assId ,
+        assId: state.DashboardReducer.assId,
         uniID: state.DashboardReducer.uniID,
 
     };
@@ -653,5 +658,5 @@ const mapStateToProps = state => {
 
 export default connect(
     mapStateToProps,
-    {updateIdDashboard}
+    { updateIdDashboard }
 )(VehicleList);

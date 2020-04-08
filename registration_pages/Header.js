@@ -13,12 +13,12 @@ const Header = props => {
           style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
         >
           <Image
-            style={[styles.image]}
+            // style={[styles.image]}
             source={require('../icons/OyespaceSafe.png')}
           />
         </View>
       </View>
-      <View style={{ borderWidth: 1, borderColor: '#ff8c00' }} />
+      <View style={{ borderWidth: 1, borderColor: '#EBECED' }} />
     </SafeAreaView>
   );
 };

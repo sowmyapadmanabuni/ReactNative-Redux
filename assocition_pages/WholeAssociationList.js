@@ -351,13 +351,13 @@ class WholeAssociationList extends React.Component {
                 {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
               </View>
             </View>
-            <View style={{ borderWidth: 1, borderColor: '#ff8c00' }} />
+            <View style={{ borderWidth: 1, borderColor: '#EBECED' }} />
           </SafeAreaView>
 
           <Text style={styles.titleOfScreenStyle}>Join Association</Text>
 
           <View style={styles.progressViewStyle}>
-            <ActivityIndicator size="large" color="#F3B431" />
+            <ActivityIndicator size="large" color="#B51414" />
           </View>
         </View>
       );
@@ -405,7 +405,7 @@ class WholeAssociationList extends React.Component {
               {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
             </View>
           </View>
-          <View style={{ borderWidth: 1, borderColor: '#ff8c00' }} />
+          <View style={{ borderWidth: 1, borderColor: '#EBECED' }} />
         </SafeAreaView>
 
         <NavigationEvents
@@ -567,7 +567,7 @@ const styles = StyleSheet.create({
     marginBottom: hp('1%')
   },
   icon: {
-    color: '#ff8c00'
+    color: '#B51414'
   },
   inputItem: {
     marginTop: wp('1%'),
@@ -587,8 +587,8 @@ const styles = StyleSheet.create({
     position: 'relative'
   },
   image1: {
-    width: wp('34%'),
-    height: hp('18%'),
+    // width: wp('34%'),
+    // height: hp('18%'),
     marginRight: hp('3%')
   },
 
@@ -602,8 +602,8 @@ const styles = StyleSheet.create({
   viewDetails2: {
     alignItems: 'flex-start',
     justifyContent: 'center',
-    width: hp('3%'),
-    height: hp('3%'),
+    // width: hp('3%'),
+    // height: hp('3%'),
     marginTop: 5
     // marginLeft: 10
   },
@@ -622,7 +622,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: hp('2.3%'),
     fontWeight: '500',
-    color: '#FF8C00'
+    // color: '#FF8C00'
   },
 
   lineAboveAndBelowFlatList: {
@@ -740,12 +740,12 @@ const styles = StyleSheet.create({
     height: hp('3.6%'),
     borderRadius: hp('2%'),
     //borderWidth: hp("0.2%"),
-    borderColor: '#ff8c00',
-    backgroundColor: '#ff8c00',
+    borderColor: '#B51414',
+    // backgroundColor: '#B51414',
     justifyContent: 'center'
   },
   addUnitText: {
-    color: 'white',
+    color: '#B51414',
     fontWeight: '700',
     fontSize: hp('1.6%')
   },

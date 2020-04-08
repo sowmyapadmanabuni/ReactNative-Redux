@@ -382,7 +382,7 @@ class OTPVerification extends Component {
                             {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
                         </View>
                     </View>
-                    <View style={{borderWidth: 1, borderColor: "#ff8c00"}}/>
+                    <View style={{borderWidth: 1, borderColor: "#EBECED"}}/>
                 </SafeAreaView>
 
                 <KeyboardAwareScrollView>
@@ -390,7 +390,7 @@ class OTPVerification extends Component {
                         <View style={{justifyContent: "center", alignItems: "center"}}>
                             <Text
                                 style={{
-                                    color: "#ff8c00",
+                                    // color: "#ff8c00",
                                     fontSize: hp("2.5%"),
                                     marginTop: hp("1.5%"),
                                     marginBottom: hp("1.5%")
@@ -434,7 +434,7 @@ class OTPVerification extends Component {
                                         height: hp("4.8%"),
                                         justifyContent: "center",
                                         alignItems: "center",
-                                        backgroundColor: "#ff8c00"
+                                        backgroundColor: "#B51414"
                                     }}
                                     rounded
                                 >
@@ -470,7 +470,7 @@ class OTPVerification extends Component {
                                     height: hp("5%"),
                                     justifyContent: "center",
                                     alignItems: "center",
-                                    backgroundColor: this.state.timer === 1 && this.state.isSmsLimit ? base.theme.colors.primary : base.theme.colors.grey,
+                                    backgroundColor: this.state.timer === 1 && this.state.isSmsLimit ? base.theme.colors.themeColor : base.theme.colors.themeColor,
                                 }}
                                 rounded
                             >
@@ -488,7 +488,7 @@ class OTPVerification extends Component {
                                     height: hp("5%"),
                                     justifyContent: "center",
                                     alignItems: "center",
-                                    backgroundColor: this.state.timer === 1 && this.state.isCallLimit ? base.theme.colors.primary : base.theme.colors.grey,
+                                    backgroundColor: this.state.timer === 1 && this.state.isCallLimit ? base.theme.colors.themeColor : base.theme.colors.themeColor,
                                 }}
                                 rounded
                             >
@@ -520,7 +520,7 @@ class OTPVerification extends Component {
                                     isHUD={true}
                                     isModal={true}
                                     visible={this.state.isLoading}
-                                    color={base.theme.colors.primary}
+                                    color={base.theme.colors.themeColor}
                                     hudColor={"#FFFFFF"}
                                 />
             </View>
@@ -683,8 +683,8 @@ const styles = StyleSheet.create({
         position: "relative"
     },
     image1: {
-        width: wp("26%"),
-        height: hp("18%"),
+        // width: wp("26%"),
+        // height: hp("18%"),
         marginRight: hp("3%")
     },
 
@@ -699,8 +699,8 @@ const styles = StyleSheet.create({
     viewDetails2: {
         alignItems: "flex-start",
         justifyContent: "center",
-        width: hp("3%"),
-        height: hp("3%"),
+        // width: hp("3%"),
+        // height: hp("3%"),
         marginTop: 5
         // marginLeft: 10
     },

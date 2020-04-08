@@ -743,7 +743,7 @@ class Expenses extends React.Component {
                 <TouchableOpacity style={{width:'100%',justifyContent:'flex-end',alignItems:'flex-end',height:25,paddingRight:15,alignSelf:'flex-end',}} onPress={() => {
                     this.state.expenseListByIds.length===0? Alert.alert('Please select expense to generate invoice'): this.generateInvoicesByExpIds()
                 }}>
-                    <Text style={{color:base.theme.colors.blue}}>Generate Invoice</Text>
+                    <Text style={{color:base.theme.colors.themeColor}}>Generate Invoice</Text>
                 </TouchableOpacity>
                     :
                     <View/>}
@@ -794,7 +794,7 @@ class Expenses extends React.Component {
                                 style={{
                                     height: 20,
                                     width: 20,
-                                    tintColor: base.theme.colors.primary,
+                                    // tintColor: base.theme.colors.primary,
                                     alignSelf: 'center',
                                     marginBottom: 5
                                 }}
@@ -817,7 +817,7 @@ class Expenses extends React.Component {
                     }}
                                       onPress={() => this.getSelectedInvoices(0, this.state.expensesAllList)}
                     >
-                        <Text style={{fontSize: 14, color: base.theme.colors.blue}}>Invoiced</Text>
+                        <Text style={{fontSize: 14, color: base.theme.colors.green}}>Invoiced</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={{
                         width: '33.35%',
@@ -827,7 +827,7 @@ class Expenses extends React.Component {
                     }}
                                       onPress={() => this.getSelectedInvoices(1, this.state.expensesAllList)}
                     >
-                        <Text style={{fontSize: 14, color: base.theme.colors.blue}}>Uninvoiced</Text>
+                        <Text style={{fontSize: 14, color: base.theme.colors.green}}>Uninvoiced</Text>
 
                     </TouchableOpacity>
                     <TouchableOpacity style={{
@@ -838,7 +838,7 @@ class Expenses extends React.Component {
                     }}
                                       onPress={() => this.getSelectedInvoices(2, this.state.expensesAllList)}
                     >
-                        <Text style={{fontSize: 14, color: base.theme.colors.blue}}>All</Text>
+                        <Text style={{fontSize: 14, color: base.theme.colors.green}}>All</Text>
                     </TouchableOpacity>
                 </View>
                 <ScrollView style={{height: '90%'}}>
@@ -1101,7 +1101,7 @@ class Expenses extends React.Component {
                                                 <Image
                                                 resizeMode={'contain'}
                                                 style={{height: hp('6'), width: wp('6'), left: wp('5')}}
-                                                source={require('../../../icons/cal.png')}
+                                                source={require('../../../icons/calender.png')}
                                             />
                                         </View>
                                     </TouchableOpacity>
@@ -1125,7 +1125,7 @@ class Expenses extends React.Component {
                                             <Image
                                                 resizeMode={'contain'}
                                                 style={{ height: hp('6'), width: wp('6'), left: wp('5') }}
-                                                source={require('../../../icons/cal.png')}
+                                                source={require('../../../icons/calender.png')}
                                             />
                                         </View>
                                     </TouchableOpacity>
@@ -1149,7 +1149,7 @@ class Expenses extends React.Component {
                     isHUD={true}
                     isModal={true}
                     visible={this.state.isLoading}
-                    color={base.theme.colors.primary}
+                    color={base.theme.colors.themeColor}
                     hudColor={"#FFFFFF"}
                 />
 
@@ -1299,7 +1299,7 @@ class Expenses extends React.Component {
                                         textAlign: 'left',
                                         paddingTop: 5,
                                     }}>Select Block
-                                        <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                        <Text style={{color: base.theme.colors.themeColor, fontSize: 14}}>*</Text></Text>
                                     <Dropdown
                                         value={this.state.selectedBlockAdd} //Select Block *
                                         labelFontSize={18}
@@ -1333,7 +1333,7 @@ class Expenses extends React.Component {
                                         textAlign: 'left',
                                         paddingTop: 5,
                                     }}>PO Number
-                                        <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                        <Text style={{color: base.theme.colors.themeColor, fontSize: 14}}>*</Text></Text>
                                     <View style={{width: '100%'}}>
                                         <Dropdown
                                             value={'PO Number'} //this.state.selectedPoNum
@@ -1364,7 +1364,7 @@ class Expenses extends React.Component {
                                             style={{fontSize: 14, color: base.theme.colors.black, textAlign: 'left',}}>Budget
                                             Projection Identifier
                                             <Text
-                                                style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                                style={{color: base.theme.colors.themeColor, fontSize: 14}}>*</Text></Text>
                                         <TextInput
                                             style={{
                                                 height: 30,
@@ -1390,7 +1390,7 @@ class Expenses extends React.Component {
                                             paddingTop: 5
                                         }}>Remaining Approved Budget
                                             <Text
-                                                style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                                style={{color: base.theme.colors.themeColor, fontSize: 14}}>*</Text></Text>
                                         <TextInput
                                             style={{
                                                 height: 30,
@@ -1415,7 +1415,7 @@ class Expenses extends React.Component {
                                             paddingTop: 5,
                                         }}>Vendor Name
                                             <Text
-                                                style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                                style={{color: base.theme.colors.themeColor, fontSize: 14}}>*</Text></Text>
                                         <TextInput
                                             style={{
                                                 height: 30,
@@ -1440,7 +1440,7 @@ class Expenses extends React.Component {
                                             paddingTop: 5,
                                         }}>PO Value
                                             <Text
-                                                style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                                style={{color: base.theme.colors.themeColor, fontSize: 14}}>*</Text></Text>
                                         <TextInput
                                             style={{
                                                 height: 30,
@@ -1465,7 +1465,7 @@ class Expenses extends React.Component {
                                         textAlign: 'left',
                                         paddingTop: 5,
                                     }}>Expense Head
-                                        <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                        <Text style={{color: base.theme.colors.themeColor, fontSize: 14}}>*</Text></Text>
                                     <TextInput
                                         style={{
                                             height: 30,
@@ -1496,7 +1496,7 @@ class Expenses extends React.Component {
                                         textAlign: 'left',
                                         paddingTop: 5,
                                     }}>Expense Description
-                                        <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                        <Text style={{color: base.theme.colors.themeColor, fontSize: 14}}>*</Text></Text>
                                     <TextInput
                                         style={{
                                             height: 30,
@@ -1527,7 +1527,7 @@ class Expenses extends React.Component {
                                         textAlign: 'left',
                                         paddingTop: 5,
                                     }}>Expense Recurrence Type
-                                        <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                        <Text style={{color: base.theme.colors.themeColor, fontSize: 14}}>*</Text></Text>
                                     <Dropdown
                                         value={this.state.selectedExpRecType} //'Expense Recurrence Type *'
                                         labelFontSize={18}
@@ -1559,7 +1559,7 @@ class Expenses extends React.Component {
                                         textAlign: 'left',
                                         paddingTop: 5,
                                     }}>Applicable to Unit
-                                        <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                        <Text style={{color: base.theme.colors.themeColor, fontSize: 14}}>*</Text></Text>
                                     <Dropdown
                                         value={this.state.selectedAppList} // 'Applicable to Unit *'
                                         labelFontSize={18}
@@ -1597,7 +1597,7 @@ class Expenses extends React.Component {
                                         textAlign: 'left',
                                         paddingTop: 5,
                                     }}>Unit List
-                                        <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                        <Text style={{color: base.theme.colors.themeColor, fontSize: 14}}>*</Text></Text>
                                     <Dropdown
                                         value={this.state.unitName} // 'Applicable to Unit *'
                                         labelFontSize={18}
@@ -1632,7 +1632,7 @@ class Expenses extends React.Component {
                                             textAlign: 'left',
                                             paddingTop: 5,
                                         }}>Expense Type
-                                            <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                            <Text style={{color: base.theme.colors.themeColor, fontSize: 14}}>*</Text></Text>
                                     <Dropdown
                                         value={this.state.selectedExpType} // 'Expense Type *'
                                         labelFontSize={18}
@@ -1665,7 +1665,7 @@ class Expenses extends React.Component {
                                             paddingTop: 5,
                                         }}>Amount Paid
                                             <Text
-                                                style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                                style={{color: base.theme.colors.themeColor, fontSize: 14}}>*</Text></Text>
                                         <TextInput
                                             style={{
                                                 height: 30,
@@ -1700,7 +1700,7 @@ class Expenses extends React.Component {
                                         textAlign: 'left',
                                         paddingTop: 5,
                                     }}>Select Distribution Type
-                                        <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                        <Text style={{color: base.theme.colors.themeColor, fontSize: 14}}>*</Text></Text>
                                     <Dropdown
                                         value={this.state.selDistribution} // 'Select Distribution Type *'
                                         labelFontSize={18}
@@ -1734,7 +1734,7 @@ class Expenses extends React.Component {
                                         textAlign: 'left',
                                         paddingTop: 5,
                                     }}>Select Bank
-                                        <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                        <Text style={{color: base.theme.colors.themeColor, fontSize: 14}}>*</Text></Text>
                                     <Dropdown
                                         value={this.state.selectedBank} // 'Select Bank *'
                                         labelFontSize={18}
@@ -1767,7 +1767,7 @@ class Expenses extends React.Component {
                                             textAlign: 'left',
                                             paddingTop: 5,
                                         }}>Select Payment Method
-                                            <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                            <Text style={{color: base.theme.colors.themeColor, fontSize: 14}}>*</Text></Text>
                                         <Dropdown
                                             value={this.state.selPayMethod} // 'Select Payment Method *'
                                             labelFontSize={18}
@@ -1812,7 +1812,7 @@ class Expenses extends React.Component {
                                         textAlign: 'left',
                                         paddingTop: 5,
                                     }}>Payee Name
-                                        <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                        <Text style={{color: base.theme.colors.themeColor, fontSize: 14}}>*</Text></Text>
                                     <TextInput
                                         style={{
                                             height: 30,
@@ -1844,7 +1844,7 @@ class Expenses extends React.Component {
                                         textAlign: 'left',
                                         paddingTop: 5,
                                     }}>Cheque Number
-                                        <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                        <Text style={{color: base.theme.colors.themeColor, fontSize: 14}}>*</Text></Text>
                                     <TextInput
                                         style={{
                                             height: 30,
@@ -1883,7 +1883,7 @@ class Expenses extends React.Component {
                                                 paddingTop: 5,
                                             }}>Cheque Date
                                                 <Text
-                                                    style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                                    style={{color: base.theme.colors.themeColor, fontSize: 14}}>*</Text></Text>
                                             <TextInput
                                                 style={{
                                                     height: 30,
@@ -1913,7 +1913,7 @@ class Expenses extends React.Component {
                                         textAlign: 'left',
                                         paddingTop: 5,
                                     }}>DD Number
-                                        <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                        <Text style={{color: base.theme.colors.themeColor, fontSize: 14}}>*</Text></Text>
                                     <TextInput
                                         style={{
                                             height: 30,
@@ -1953,7 +1953,7 @@ class Expenses extends React.Component {
                                                 paddingTop: 5,
                                             }}>DD Date
                                                 <Text
-                                                    style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                                    style={{color: base.theme.colors.themeColor, fontSize: 14}}>*</Text></Text>
                                             <TextInput
                                                 style={{
                                                     height: 30,
@@ -1983,7 +1983,7 @@ class Expenses extends React.Component {
                                             textAlign: 'left',
                                             paddingTop: 5,
                                         }}>Voucher Number
-                                            <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                            <Text style={{color: base.theme.colors.themeColor, fontSize: 14}}>*</Text></Text>
                                         <TextInput
                                             style={{
                                                 height: 30,
@@ -2014,7 +2014,7 @@ class Expenses extends React.Component {
                                         textAlign: 'left',
                                         paddingTop: 5,
                                     }}>Payee Bank Name
-                                        <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                        <Text style={{color: base.theme.colors.themeColor, fontSize: 14}}>*</Text></Text>
                                     <Dropdown
                                         value={this.state.selPayeeBank} // 'Payee Bank Name *'
                                         labelFontSize={18}
@@ -2054,7 +2054,7 @@ class Expenses extends React.Component {
                                             paddingTop: 5,
                                         }}>Expenditure Date
                                             <Text
-                                                style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                                style={{color: base.theme.colors.themeColor, fontSize: 14}}>*</Text></Text>
                                         <TextInput
                                             style={{
                                                 height: 30,
@@ -2175,14 +2175,14 @@ class Expenses extends React.Component {
                                     height={30}
                                     width={'35%'}
                                     borderRadius={20}
-                                    oSBBackground={base.theme.colors.red}
+                                    oSBBackground={base.theme.colors.grey}
                                     oSBText={'Reset'}
                                     onButtonClick={() => this.clearAllFields()}/>
                                 <OSButton
                                     height={30}
                                     width={'50%'}
                                     borderRadius={20}
-                                    oSBBackground={base.theme.colors.primary}
+                                    oSBBackground={base.theme.colors.themeColor}
                                     oSBText={!isEdit ? 'Edit Expense' : 'Add Expense'}
                                     onButtonClick={() => this.createExpenseValidation()}/>
                             </View>
@@ -2555,7 +2555,7 @@ class Expenses extends React.Component {
                     <View style={{marginLeft:5}}>
                         <Image
                             style={{height: 25, width: 25,}}
-                            source={require('../../../icons/OyeLiving.png')}
+                            source={require('../../../icons/wallet.png')}
                         />
                     </View>
                     <View style={{marginLeft:10, marginRight: 5,width:'45%'}}>
@@ -2566,7 +2566,7 @@ class Expenses extends React.Component {
                         </Text>
                         <Text style={{fontSize: 13, color: base.theme.colors.black, paddingBottom: 3}}>Status:
                             <Text
-                                style={{color: selectedExpense.exStatus == "Review Rejected" ? base.theme.colors.red : base.theme.colors.blue}}>{' '}{selectedExpense.exStatus}</Text></Text>
+                                style={{color: selectedExpense.exStatus == "Review Rejected" ? base.theme.colors.red : base.theme.colors.black}}>{' '}{selectedExpense.exStatus}</Text></Text>
                         <Text style={{fontSize: 13, color: base.theme.colors.black, paddingBottom: 3}}>Amount: <Text
                             style={{fontWeight: 'bold'}}>{base.utils.strings.rupeeIconCode}{selectedExpense.expAmnt}</Text></Text>
                         <Collapsible duration={100} collapsed={!item.item.open}>
@@ -3032,8 +3032,8 @@ const styles = StyleSheet.create({
         position: 'relative'
     },
     image1: {
-        width: wp('34%'),
-        height: hp('18%'),
+        // width: wp('34%'),
+        // height: hp('18%'),
         marginRight: hp('3%')
     },
 
@@ -3047,8 +3047,8 @@ const styles = StyleSheet.create({
     viewDetails2: {
         alignItems: 'flex-start',
         justifyContent: 'center',
-        width: hp('3%'),
-        height: hp('3%'),
+        // width: hp('3%'),
+        // height: hp('3%'),
         marginTop: 5
         // marginLeft: 10
     },

@@ -993,7 +993,7 @@ class Announcement extends Component {
               }}
             >
               <Image
-                style={[styles.image]}
+                // style={[styles.image]}
                 source={require('../icons/OyespaceSafe.png')}
               />
             </View>
@@ -1001,14 +1001,14 @@ class Announcement extends Component {
               {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
             </View>
           </View>
-          <View style={{ borderWidth: 1, borderColor: 'orange' }} />
+          <View style={{ borderWidth: 1, borderColor: '#EBECED' }} />
         </SafeAreaView>
 
         <View style={styles.viewForMyProfileText}>
           <Text
             style={{
               fontSize: hp('2.5%'),
-              color: base.theme.colors.primary,
+              color: base.theme.colors.black,
               textAlign: 'center'
             }}
           >
@@ -1698,7 +1698,7 @@ class Announcement extends Component {
             </View>
             <View
               style={{
-                borderColor: base.theme.colors.primary,
+                borderColor: base.theme.colors.themeColor,
                 borderWidth: hp('0.1%'),
                 borderRadius: hp('1%'),
                 height: hp('12%'),
@@ -1760,7 +1760,7 @@ class Announcement extends Component {
           isHUD={true}
           isModal={true}
           visible={this.state.isLoading}
-          color={base.theme.colors.primary}
+          color={base.theme.colors.themeColor}
           hudColor={base.theme.colors.white}
         />
       </View>
@@ -1804,8 +1804,8 @@ const styles = StyleSheet.create({
   viewDetails2: {
     alignItems: 'flex-start',
     justifyContent: 'center',
-    width: hp('3%'),
-    height: hp('3%'),
+    // width: hp('3%'),
+    // height: hp('3%'),
     marginTop: 5
     // marginLeft: 10
   },
@@ -1890,12 +1890,11 @@ const styles = StyleSheet.create({
     height: hp('5%'),
     borderRadius: 25,
     borderWidth: 2,
-    //backgroundColor: base.theme.colors.white,
+    backgroundColor: base.theme.colors.themeColor,
     justifyContent: 'center',
     marginLeft: 30,
     marginRight: 30,
-    borderColor: base.theme.colors.white,
+    borderColor: base.theme.colors.themeColor,
     marginBottom: hp('2%'),
-    backgroundColor: base.theme.colors.primary
   }
 });

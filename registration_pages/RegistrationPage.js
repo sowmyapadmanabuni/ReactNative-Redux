@@ -244,7 +244,7 @@ class AddRegularVisitor extends Component {
                         />
                     </View>
                     <View style={{flexDirection:'column',height:'7%',alignItems:'center',}}>
-                     <Text style={{fontSize:20,color:base.theme.colors.primary}}> Registration</Text>
+                     <Text style={{fontSize:20,color:base.theme.colors.black}}> Registration</Text>
                   </View>
                     <KeyboardAwareScrollView>
                         <View style={{ height: '22%',
@@ -266,7 +266,7 @@ class AddRegularVisitor extends Component {
                             width: '90%',
                             marginTop: 20,alignSelf:'center',}}>
                             <Text style={{fontSize: 14, color: base.theme.colors.gray, textAlign: 'left'}}>First Name
-                                <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                <Text style={{color: base.theme.colors.themeColor, fontSize: 14}}>*</Text></Text>
                             <TextInput
                                 style={{height: 40, borderBottomWidth: 1, borderColor: base.theme.colors.gray}}
                                 onChangeText={(text) => this.setState({firstName: text})}
@@ -280,7 +280,7 @@ class AddRegularVisitor extends Component {
                             width: '90%',
                             marginTop: 20,alignSelf:'center',}}>
                             <Text style={{fontSize: 14, color: base.theme.colors.gray, textAlign: 'left'}}>Last Name
-                                <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                <Text style={{color: base.theme.colors.themeColor, fontSize: 14}}>*</Text></Text>
                             <TextInput
                                 style={{height: 40, borderBottomWidth: 1, borderColor: base.theme.colors.gray}}
                                 onChangeText={(text) => this.setState({lastName: text})}
@@ -310,7 +310,7 @@ class AddRegularVisitor extends Component {
                             width: '90%',
                             marginTop: 20,alignSelf:'center',}}>
                             <Text style={{fontSize: 14, color: base.theme.colors.gray, textAlign: 'left'}}>Email ID
-                                <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                <Text style={{color: base.theme.colors.themeColor, fontSize: 14}}>*</Text></Text>
                             <TextInput
                                 style={{height: 40, borderBottomWidth: 1, borderColor: base.theme.colors.gray}}
                                 onChangeText={(text) => this.setState({emailAdd: text})}
@@ -325,7 +325,7 @@ class AddRegularVisitor extends Component {
                     <View style={{alignSelf:'center',height:'5%',width:'30%'}}>
                     <OSButton
                         oSBText={'Register'}
-                        oSBBackground={base.theme.colors.primary}
+                        oSBBackground={base.theme.colors.themeColor}
                         height={'100%'}
                     width={'100%'}
                     borderRadius={20}

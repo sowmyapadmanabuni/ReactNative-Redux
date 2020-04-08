@@ -981,7 +981,7 @@ class RegisterMe extends Component {
                             {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
                         </View>
                     </View>
-                    <View style={{ borderWidth: 1, borderColor: '#ff8c00' }} />
+                    <View style={{ borderWidth: 1, borderColor: '#EBECED' }} />
                 </SafeAreaView>
 
                 <Text style={styles.titleOfScreen}>Register Me</Text>
@@ -1003,7 +1003,7 @@ class RegisterMe extends Component {
                                         <View style={styles.calView}>
                                             <Image
                                                 style={styles.viewDatePickerImageStyle}
-                                                source={require('../icons/cal.png')}
+                                                source={require('../icons/calender.png')}
                                             />
                                         </View>
 
@@ -1031,7 +1031,7 @@ class RegisterMe extends Component {
                                                 alignItems: 'center'
                                             }}
                                         >
-                                            <Text style={{ fontSize: hp('2%') }}>Join As Owner</Text>
+                                            <Text style={{ fontSize: hp('2%'),color:'white' }}>Join As Owner</Text>
                                         </View>
                                     </Card>
                                 </TouchableOpacity>
@@ -1047,7 +1047,7 @@ class RegisterMe extends Component {
                                                 alignItems: 'center'
                                             }}
                                         >
-                                            <Text style={{ fontSize: hp('2%') }}>Join As Tenant</Text>
+                                            <Text style={{ fontSize: hp('2%'),color:'white' }}>Join As Tenant</Text>
                                         </View>
                                     </Card>
                                 </TouchableOpacity>
@@ -1069,7 +1069,7 @@ class RegisterMe extends Component {
             </View>
              :
              <View style={styles.container2}>
-                <ActivityIndicator size="large" color="#F3B431" />
+                <ActivityIndicator size="large" color="#B51414" />
                 </View>
                                         
                
@@ -1092,7 +1092,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: hp('2%'),
         fontWeight: 'bold',
-        color: '#ff8c00',
+        // color: '#ff8c00',
         marginBottom: hp('1.6%')
     },
     viewStyle1: {
@@ -1106,8 +1106,8 @@ const styles = StyleSheet.create({
         position: 'relative'
     },
     image1: {
-        width: wp('34%'),
-        height: hp('18%'),
+        // width: wp('34%'),
+        // height: hp('18%'),
         marginRight: hp('3%')
     },
 
@@ -1121,8 +1121,8 @@ const styles = StyleSheet.create({
     viewDetails2: {
         alignItems: 'flex-start',
         justifyContent: 'center',
-        width: hp('3%'),
-        height: hp('3%'),
+        // width: hp('3%'),
+        // height: hp('3%'),
         marginTop: 5
         // marginLeft: 10
     },
@@ -1142,7 +1142,7 @@ const styles = StyleSheet.create({
     Card: {
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#fff',
+        backgroundColor: '#B51414',
         width: hp('30%'),
         height: hp('6%'),
         borderRadius: hp('2%'),

@@ -43,7 +43,7 @@ const Style = StyleSheet.create({
     textAlign: 'center',
     fontSize: hp('2.3%'),
     fontWeight: '500',
-    color: '#FF8C00'
+    // color: '#FF8C00'
   },
   searchTextStyle: {
     height: hp('5.5%'),
@@ -154,7 +154,7 @@ const Style = StyleSheet.create({
   },
   memberDetailsTextStyle: {
     fontSize: hp('1.8%'),
-    color: '#909091',
+    // color: '#909091',
     marginLeft: wp('2%')
   },
   editAndCallIconsFlexStyle: {
@@ -210,8 +210,8 @@ const Style = StyleSheet.create({
     position: 'relative'
   },
   image1: {
-    width: wp('34%'),
-    height: hp('18%'),
+    // width: wp('34%'),
+    // height: hp('18%'),
     marginRight: hp('3%')
   },
 
@@ -230,8 +230,8 @@ const Style = StyleSheet.create({
   viewDetails2: {
     alignItems: 'flex-start',
     justifyContent: 'center',
-    width: hp('3%'),
-    height: hp('3%'),
+    // width: hp('3%'),
+    // height: hp('3%'),
     marginTop: 5
     // marginLeft: 10
   }

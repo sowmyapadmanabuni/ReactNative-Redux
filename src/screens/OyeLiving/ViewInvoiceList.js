@@ -310,8 +310,8 @@ class ViewInvoiceList extends React.Component {
                                         style={{
                                             alignItems: 'flex-start',
                                             justifyContent: 'center',
-                                            width: hp('3%'),
-                                            height: hp('3%'),
+                                            // width: hp('3%'),
+                                            // height: hp('3%'),
                                             marginTop: 5
                                         }}
                                     />
@@ -328,8 +328,8 @@ class ViewInvoiceList extends React.Component {
                         >
                             <Image
                                 style={{
-                                    width: wp('34%'),
-                                    height: hp('18%'),
+                                    // width: wp('34%'),
+                                    // height: hp('18%'),
                                     marginRight: hp('3%')
                                 }}
                                 source={require('../../../icons/OyespaceSafe.png')}

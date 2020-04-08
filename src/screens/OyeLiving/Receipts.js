@@ -392,7 +392,7 @@ class Receipts extends React.Component {
                                     style={{
                                         height: 20,
                                         width: 20,
-                                        tintColor: base.theme.colors.primary,
+                                        // tintColor: base.theme.colors.primary,
                                         alignSelf: 'center',
                                         marginBottom: 5
                                     }}
@@ -526,7 +526,7 @@ class Receipts extends React.Component {
                                                     <Image
                                                         resizeMode={'contain'}
                                                         style={{height: hp('6'), width: wp('6'), left: wp('5')}}
-                                                        source={require('../../../icons/cal.png')}
+                                                        source={require('../../../icons/calender.png')}
                                                     />
                                                 </View>
                                             </TouchableOpacity>
@@ -550,7 +550,7 @@ class Receipts extends React.Component {
                                                     <Image
                                                         resizeMode={'contain'}
                                                         style={{ height: hp('6'), width: wp('6'), left: wp('5') }}
-                                                        source={require('../../../icons/cal.png')}
+                                                        source={require('../../../icons/calender.png')}
                                                     />
                                                 </View>
                                             </TouchableOpacity>
@@ -571,7 +571,7 @@ class Receipts extends React.Component {
                         isHUD={true}
                         isModal={true}
                         visible={this.state.isLoading}
-                        color={base.theme.colors.primary}
+                        color={base.theme.colors.themeColor}
                         hudColor={"#FFFFFF"}
                     />
 
@@ -849,7 +849,7 @@ class Receipts extends React.Component {
                         <View style={{flexDirection:'row',width:'100%',height:'20%',}}>
                             <View style={{width:'100%',height:'100%',alignItems:'center',justifyContent:'flex-end',paddingBottom:15,}}>
                                 <TouchableOpacity style={{width:'30%',height:'35%',borderRadius:20,
-                                    backgroundColor:base.theme.colors.primary,alignItems:'center',justifyContent:'center'}}
+                                    backgroundColor:base.theme.colors.themeColor,alignItems:'center',justifyContent:'center'}}
                                                   onPress={this.snapshot("View")}
                                 >
                                     <Text style={{fontSize:14,color:base.theme.colors.white}}>Print Receipt</Text>
@@ -1496,8 +1496,8 @@ const styles = StyleSheet.create({
         position: 'relative'
     },
     image1: {
-        width: wp('34%'),
-        height: hp('18%'),
+        // width: wp('34%'),
+        // height: hp('18%'),
         marginRight: hp('3%')
     },
 
@@ -1511,8 +1511,8 @@ const styles = StyleSheet.create({
     viewDetails2: {
         alignItems: 'flex-start',
         justifyContent: 'center',
-        width: hp('3%'),
-        height: hp('3%'),
+        // width: hp('3%'),
+        // height: hp('3%'),
         marginTop: 5
         // marginLeft: 10
     },

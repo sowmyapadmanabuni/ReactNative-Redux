@@ -417,7 +417,7 @@ class Dashboard extends React.Component {
                                     <CardItem style={{height: hp("10%")}}>
                                         {isLoading ? (
                                             <View style={styles.progress}>
-                                                <ActivityIndicator size="large" color="#fff"/>
+                                                <ActivityIndicator size="large" color="B51414"/>
                                             </View>
                                         ) : (
                                             <Dropdown
@@ -444,7 +444,7 @@ class Dashboard extends React.Component {
 
                             {isLoading ? (
                                 <View style={styles.progress}>
-                                    <ActivityIndicator size="large" color="#F3B431"/>
+                                    <ActivityIndicator size="large" color="#B51414"/>
                                 </View>
                             ) : (
                                 <View style={{flexDirection: "row", height: hp("32%")}}>

@@ -296,7 +296,7 @@ class AddVehicle extends Component {
                             {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
                         </View>
                     </View>
-                    <View style={{borderWidth: 1, borderColor: 'orange'}}/>
+                    <View style={{borderWidth: 1, borderColor: '#EBECED'}}/>
                 </SafeAreaView>
 
                 <Text style={styles.titleOfScreen}>Add Vehicle</Text>
@@ -328,7 +328,8 @@ class AddVehicle extends Component {
                             selectedIndex={0}
                             onSelect={(index, value) => this.onSelect(index, value)}
                         >
-                            <RadioButton value={'Two Wheeler'}>
+                            <RadioButton value={'Two Wheeler'}
+                            >
                                 <Text>Two Wheeler</Text>
                             </RadioButton>
                             <RadioButton value={'Four Wheeler'}>
@@ -429,7 +430,7 @@ class AddVehicle extends Component {
                     isHUD={true}
                     isModal={true}
                     visible={this.state.isLoading}
-                    color={base.theme.colors.primary}
+                    color={base.theme.colors.themeColor}
                     hudColor={'#FFFFFF'}
                 />
             </View>
@@ -454,8 +455,8 @@ const styles = StyleSheet.create({
         position: 'relative'
     },
     image1: {
-        width: wp('34%'),
-        height: hp('18%')
+        // width: wp('34%'),
+        // height: hp('18%')
     },
 
     viewDetails1: {
@@ -468,8 +469,8 @@ const styles = StyleSheet.create({
     viewDetails2: {
         alignItems: 'flex-start',
         justifyContent: 'center',
-        width: hp('3%'),
-        height: hp('3%'),
+        // width: hp('3%'),
+        // height: hp('3%'),
         marginTop: 5
         // marginLeft: 10
     },
@@ -478,7 +479,7 @@ const styles = StyleSheet.create({
         marginTop: hp('1.6%'),
         textAlign: 'center',
         fontSize: 18,
-        color: '#ff8c00',
+        // color: '#ff8c00',
         marginBottom: hp('4%')
     },
     inputItem: {
@@ -498,8 +499,8 @@ const styles = StyleSheet.create({
         height: hp('5%'),
         borderRadius: hp('2.5%'),
         borderWidth: hp('0.2%'),
-        borderColor: '#EF3939',
-        backgroundColor: '#EF3939',
+        borderColor: '#909091',
+        backgroundColor: '#909091',
         justifyContent: 'center'
     },
     textFamilyVehicle: {
@@ -512,8 +513,8 @@ const styles = StyleSheet.create({
         height: hp('5%'),
         borderRadius: hp('2.5%'),
         borderWidth: hp('0.2%'),
-        borderColor: 'orange',
-        backgroundColor: 'orange',
+        borderColor: '#B51414',
+        backgroundColor: '#B51414',
         justifyContent: 'center'
     },
     box1: {

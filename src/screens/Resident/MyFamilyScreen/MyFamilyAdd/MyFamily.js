@@ -157,7 +157,7 @@ class MyFamily extends Component {
                             {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
                         </View>
                     </View>
-                    <View style={{borderWidth: 1, borderColor: "#ff8c00"}}/>
+                    <View style={{borderWidth: 1, borderColor: "#EBECED"}}/>
                 </SafeAreaView>
 
                 <Text style={Style.titleOfScreen}>Add Family Member</Text>
@@ -202,7 +202,7 @@ class MyFamily extends Component {
                         />
                         <View style={Style.textInputView}>
                             <Text style={{fontSize: 14, color: base.theme.colors.black, textAlign: 'left'}}>First Name
-                                <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                <Text style={{color: base.theme.colors.themeColor, fontSize: 14}}>*</Text></Text>
                             <TextInput
                                 style={{height: 50, borderBottomWidth: 1, borderColor: base.theme.colors.lightgrey}}
                                 onChangeText={(text) => this.setState({firstName: text})}
@@ -214,7 +214,7 @@ class MyFamily extends Component {
                         </View>
                         <View style={Style.textInputView}>
                             <Text style={{fontSize: 14, color: base.theme.colors.black, textAlign: 'left'}}>Last Name
-                                <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                <Text style={{color: base.theme.colors.themeColor, fontSize: 14}}>*</Text></Text>
                             <TextInput
                                 style={{height: 50, borderBottomWidth: 1, borderColor: base.theme.colors.lightgrey}}
                                 onChangeText={(text) => this.setState({lastName: text})}
@@ -275,7 +275,7 @@ class MyFamily extends Component {
                             <View style={Style.textInputView}>
                                 <Text style={{fontSize: 14, color: base.theme.colors.black, textAlign: 'left'}}>Guardian's
                                     Name
-                                    <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                    <Text style={{color: base.theme.colors.themeColor, fontSize: 14}}>*</Text></Text>
                                 <TextInput
                                     style={{height: 50, borderBottomWidth: 1, borderColor: base.theme.colors.lightgrey}}
                                     onChangeText={(text) => this.setState({guardianName: text})}
@@ -297,7 +297,7 @@ class MyFamily extends Component {
                                 color: base.theme.colors.black,
                                 textAlign: 'left'
                             }}>{mobPlaceHolder}
-                                <Text style={{color: base.theme.colors.primary, fontSize: 14}}>*</Text></Text>
+                                <Text style={{color: base.theme.colors.themeColor, fontSize: 14}}>*</Text></Text>
                             <View style={Style.mobNumView}>
                                 <TextInput
                                     style={{height: 50, width: '80%',}}
@@ -329,8 +329,8 @@ class MyFamily extends Component {
                                     height: hp("4%"),
                                     borderRadius: hp("2.5%"),
                                     borderWidth: hp("0.2%"),
-                                    borderColor: "#EF3939",
-                                    backgroundColor: "#EF3939",
+                                    borderColor: "#909091",
+                                    backgroundColor: "#909091",
                                     alignItems: 'center',
                                     justifyContent: "center"
                                 }}
@@ -352,8 +352,8 @@ class MyFamily extends Component {
                                     height: hp("4%"),
                                     borderRadius: hp("2.5%"),
                                     borderWidth: hp("0.2%"),
-                                    borderColor: "orange",
-                                    backgroundColor: "orange",
+                                    borderColor: "#B51414",
+                                    backgroundColor: "#B51414",
                                     alignItems: 'center',
                                     justifyContent: "center", marginLeft: 20
                                 }}
@@ -371,7 +371,7 @@ class MyFamily extends Component {
                         isHUD={true}
                         isModal={true}
                         visible={this.state.isLoading}
-                        color={base.theme.colors.primary}
+                        color={base.theme.colors.themeColor}
                         hudColor={"#FFFFFF"}
                     />
                 </KeyboardAwareScrollView>

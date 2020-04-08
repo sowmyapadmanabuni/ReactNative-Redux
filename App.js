@@ -189,7 +189,7 @@ class Loading extends Component {
                 {/* <ActivityIndicator size="large" color="orange" /> */}
                 <Spinner
                   isVisible={true}
-                  color={'#ff8c00'}
+                  color={'#00000029'}
                   size={50}
                   type={'Circle'}
                 />
@@ -199,7 +199,7 @@ class Loading extends Component {
               </View>
               <View style={styles.footerImageContainer}>
                 <Image
-                  source={require('./icons/img4.jpg')}
+                  source={require('./icons/splash_img.png')}
                   style={styles.bottomImage}
                 />
               </View>
@@ -258,14 +258,14 @@ const styles = StyleSheet.create({
   containers: {},
   ImageContainer: {
     //   backgroundColor:'yellow',
-    width: Dimensions.get('screen').width,
-    height: hp('30%'),
+    // width: Dimensions.get('screen').width,
+    // height: hp('25%'),
     alignItems: 'center',
     justifyContent: 'center'
   },
   topImageLogo: {
-    height: hp('20%'),
-    width: wp('60%')
+    // height: hp('50%'),
+    // width: wp('60%')
     // backgroundColor:'yellow'
   },
   activityIndicatorContainer: {
@@ -289,13 +289,17 @@ const styles = StyleSheet.create({
   },
   footerImageContainer: {
     // backgroundColor:'green',
+    flex:1,
     alignItems: 'center',
     justifyContent: 'center',
-    height: hp('40%'),
-    width: Dimensions.get('screen').width
+    resizeMode:'contain'
+
+    // height: hp('40%'),
+    // width: Dimensions.get('screen').width
   },
   bottomImage: {
-    width: Dimensions.get('window').width,
-    height: wp('80%')
+    // width: Dimensions.get('window').width,
+    // height: wp('80%'),
+    resizeMode:'contain'
   }
 });

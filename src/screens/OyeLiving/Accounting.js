@@ -480,8 +480,8 @@ class Accounting extends Component {
                                       index={i.toString()}
                                       isSelected={this.state.isMinorSelected1 === i}
                                       onPress={onPress}
-                                      buttonInnerColor={base.theme.colors.primary}
-                                      buttonOuterColor={base.theme.colors.primary}
+                                      buttonInnerColor={base.theme.colors.themeColor}
+                                      buttonOuterColor={base.theme.colors.themeColor}
                                       buttonSize={10}
                                       buttonStyle={{borderWidth: 0.7}}
                                       buttonWrapStyle={{marginLeft: 40}}
@@ -646,7 +646,7 @@ class Accounting extends Component {
                       }}
                   />
                   <TouchableOpacity style={{alignItems:'center',marginTop:10,height:'10%'}} onPress={() => this.validationForUpdateUnitDetails()}>
-                      <Text style={{color:base.theme.colors.blue,fontSize:16}}>UPDATE</Text>
+                      <Text style={{color:base.theme.colors.green,fontSize:16}}>UPDATE</Text>
                   </TouchableOpacity>
               </View>
               </View>
@@ -656,14 +656,14 @@ class Accounting extends Component {
                       height={30}
                       width={'35%'}
                       borderRadius={20}
-                      oSBBackground={base.theme.colors.red}
+                      oSBBackground={base.theme.colors.grey}
                       oSBText={'Skip'}
                       onButtonClick={() => this.props.navigation.navigate('oyeLiving')}/>
                   <OSButton
                       height={30}
                       width={'50%'}
                       borderRadius={20}
-                      oSBBackground={base.theme.colors.primary}
+                      oSBBackground={base.theme.colors.themeColor}
                       oSBText={'Submit'}
                       onButtonClick={() => this.createAccounting()}/>
               </View>

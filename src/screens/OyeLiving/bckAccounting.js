@@ -133,7 +133,7 @@ export default class HelloWorldApp extends Component {
                         </View>
                         <View style={{ flex: 0.2 }}></View>
                     </View>
-                    <View style={{ borderWidth: 1, borderColor: 'orange' }} />
+                    <View style={{ borderWidth: 1, borderColor: '#EBECED' }} />
                 </SafeAreaView>
 
                 <Text style={Styles.titleOfScreen}>Accounting</Text>
@@ -233,7 +233,7 @@ export default class HelloWorldApp extends Component {
                                     <View style={Styles.calView}>
                                         <Image
                                             style={Styles.viewDatePickerImageStyle}
-                                            source={require('../../../icons/cal.png')}
+                                            source={require('../../../icons/calender.png')}
                                         />
                                     </View>
                                 </View>
@@ -347,7 +347,7 @@ export default class HelloWorldApp extends Component {
                                     <View style={Styles.calView}>
                                         <Image
                                             style={Styles.viewDatePickerImageStyle}
-                                            source={require('../../../icons/cal.png')}
+                                            source={require('../../../icons/calender.png')}
                                         />
                                     </View>
                                 </View>

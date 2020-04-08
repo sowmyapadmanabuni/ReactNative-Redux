@@ -91,7 +91,7 @@ const Style = StyleSheet.create({
     marginTop: 8
   },
   invoiceText: {
-    color: base.theme.colors.primary,
+    color: base.theme.colors.black,
     fontSize: 14
   },
   viewMoreText: {

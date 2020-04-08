@@ -888,7 +888,7 @@ class NotificationDetailScreen extends PureComponent {
                               style={{width:30,height:30}}
                               source={require('../../../icons/allow.png')}
                           />
-                          <Text style={{fontSize:16,color:base.theme.colors.primary,}}>Allow</Text>
+                          <Text style={{fontSize:16,color:base.theme.green.themeColor,}}>Allow</Text>
                       </TouchableOpacity>
                       <TouchableOpacity onPress={() => this.rejectModal(details)
                       }  style={{flexDirection:'row',marginRight:20,alignItems:'center',justifyContent:'space-between'}}>
@@ -896,7 +896,7 @@ class NotificationDetailScreen extends PureComponent {
                               style={{width:30,height:30}}
                               source={require('../../../icons/deny.png')}
                           />
-                          <Text style={{fontSize:16,color:base.theme.colors.red,}}>Deny</Text>
+                          <Text style={{fontSize:16,color:base.theme.colors.themeColor,}}>Deny</Text>
                       </TouchableOpacity>
                   </View>
               </View>
@@ -1144,7 +1144,7 @@ class NotificationDetailScreen extends PureComponent {
               {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
             </View>
           </View>
-          <View style={{ borderWidth: 1, borderColor: 'orange' }} />
+          <View style={{ borderWidth: 1, borderColor: 'EBECED' }} />
         </SafeAreaView>
           <View style={{flexDirection:'row',width:'100%',height:'10%',backgroundColor:base.theme.colors.shadedWhite,marginTop:20}}>
              <View style={{width:'15%',}}>
@@ -1205,14 +1205,14 @@ const styles = StyleSheet.create({
   viewDetails2: {
     alignItems: 'flex-start',
     justifyContent: 'center',
-    width: hp('3%'),
-    height: hp('3%'),
+    // width: hp('3%'),
+    // height: hp('3%'),
     marginTop: 5
     // marginLeft: 10
   },
   image: {
-    width: wp('34%'),
-    height: hp('18%')
+    // width: wp('34%'),
+    // height: hp('18%')
   },
 
   buttonContainer: {
