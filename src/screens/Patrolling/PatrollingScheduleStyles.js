@@ -95,14 +95,14 @@ const PatrollingScheduleStyles = StyleSheet.create({
     },
     alarmText: {
         fontFamily: base.theme.fonts.medium,
-        color: base.theme.colors.black,
+        color: base.theme.colors.grey,
         fontSize: hp('2%'),
         marginLeft: wp('1%')
     },
     marqueeText: {
         width: wp('45%'),
         fontFamily: base.theme.fonts.light,
-        color: base.theme.colors.black,
+        color: base.theme.colors.grey,
         fontSize: hp('2%'),
     },
     mapModal: {
@@ -125,7 +125,7 @@ const PatrollingScheduleStyles = StyleSheet.create({
     },
     closeText: {
         alignSelf: 'center',
-        color: base.theme.colors.primary,
+        color: base.theme.colors.themeColor,
         fontFamily: base.theme.fonts.medium
     },
     slotView: {

@@ -309,12 +309,12 @@ class ViewAllVisitorsList extends Component {
                                 {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
                             </View>
                         </View>
-                        <View style={{borderWidth: 1, borderColor: "orange"}}/>
+                        <View style={{borderWidth: 1, borderColor: "#EBECED"}}/>
                     </SafeAreaView>
                     <Text style={styles.titleOfScreen}> My Visitors </Text>
 
                     <View style={styles.progress}>
-                        <ActivityIndicator size="large" color="#01CBC6"/>
+                        <ActivityIndicator size="large" color="#B51414"/>
 
                     </View>
                 </View>
@@ -363,7 +363,7 @@ class ViewAllVisitorsList extends Component {
                             {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
                         </View>
                     </View>
-                    <View style={{borderWidth: 1, borderColor: "orange"}}/>
+                    <View style={{borderWidth: 1, borderColor: "#EBECED"}}/>
                 </SafeAreaView>
 
                 <Text style={styles.titleOfScreen}>View All Visitors</Text>
@@ -498,8 +498,8 @@ const styles = StyleSheet.create({
     viewDetails2: {
         alignItems: "flex-start",
         justifyContent: "center",
-        width: hp("3%"),
-        height: hp("3%"),
+        // width: hp("3%"),
+        // height: hp("3%"),
         marginTop: 5
         // marginLeft: 10
     },

@@ -335,6 +335,7 @@ class PatrolSchedule extends React.Component {
                     <EmptyView height={10}/>
                     <ElevatedView elevation={0}>
                         <Switch
+                        trackColor={{false: 'red', true: 'green'}}
                             style={{width: Platform.OS === 'ios' ? wp('15%') : wp('10%')}}
                             onValueChange={() => this.changeSnooze(data)}
                             value={data.psSnooze}/>

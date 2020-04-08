@@ -377,7 +377,7 @@ class Staff extends React.Component {
                 </View>
                 :
                 <View style={StaffStyle.activityIndicator}>
-                    <ActivityIndicator size="large" color={base.theme.colors.primary}/>
+                    <ActivityIndicator size="large" color={base.theme.colors.themeColor}/>
                 </View>
         )
     }

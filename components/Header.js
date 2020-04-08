@@ -216,7 +216,7 @@ class Header extends React.Component {
                         </TouchableWithoutFeedback>
                     </View>
                 </View>
-                <View style={{borderWidth: 1, borderColor: "orange"}}/>
+                <View style={{borderWidth: 1, borderColor: "#EBECED"}}/>
             </SafeAreaView>
         );
     }

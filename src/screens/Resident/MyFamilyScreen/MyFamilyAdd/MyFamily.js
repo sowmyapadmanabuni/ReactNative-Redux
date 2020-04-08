@@ -157,7 +157,7 @@ class MyFamily extends Component {
                             {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
                         </View>
                     </View>
-                    <View style={{borderWidth: 1, borderColor: "#FFFFFF"}}/>
+                    <View style={{borderWidth: 1, borderColor: "#EBECED"}}/>
                 </SafeAreaView>
 
                 <Text style={Style.titleOfScreen}>Add Family Member</Text>
@@ -371,7 +371,7 @@ class MyFamily extends Component {
                         isHUD={true}
                         isModal={true}
                         visible={this.state.isLoading}
-                        color={base.theme.colors.primary}
+                        color={base.theme.colors.themeColor}
                         hudColor={"#FFFFFF"}
                     />
                 </KeyboardAwareScrollView>

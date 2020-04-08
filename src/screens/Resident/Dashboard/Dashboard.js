@@ -1396,7 +1396,7 @@ class Dashboard extends React.Component {
               isHUD={true}
               isModal={true}
               visible={this.props.isLoading}
-              color={base.theme.colors.primary}
+              color={base.theme.colors.themeColor}
               hudColor={'#FFFFFF'}
             />
           </View>
@@ -1408,7 +1408,7 @@ class Dashboard extends React.Component {
               isHUD={true}
               isModal={true}
               visible={this.props.isLoading}
-              color={base.theme.colors.primary}
+              color={base.theme.colors.themeColor}
               hudColor={'#FFFFFF'}
             />
       )

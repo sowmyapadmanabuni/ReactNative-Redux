@@ -1940,7 +1940,7 @@ class Invoices extends React.Component {
                         <Image
                             resizeMode={Platform.OS === 'ios'? 'contain':'center'}
                             style={{height:hp('8'),width:wp('8')}}
-                            source={require('../../../icons/documents.png')} />
+                            source={require('../../../icons/receipts.png')} />
                     </View>
                     <View style={{ height: hp('10'), borderWidth: 0, justifyContent: 'center',left: hp('1'), width: wp('80') ,marginTop:20}}>
                         <Text style={{ fontFamily: base.theme.fonts.bold, fontSize: hp('2') }}>{invoiceDetail.inNumber}</Text>
@@ -1966,7 +1966,7 @@ class Invoices extends React.Component {
                                 onPress={() => this.detailViewData(invoiceDetail)}>
                                 <Image
                                     resizeMode={'center'}
-                                    style={{ height: hp('3'), width: hp('3') }}
+                                    // style={{ height: hp('3'), width: hp('3') }}
                                     source={require('../../../icons/eye.png')} />
                             </TouchableOpacity>
                         </ElevatedView>
@@ -2327,8 +2327,8 @@ const styles = StyleSheet.create({
     viewDetails2: {
         alignItems: 'flex-start',
         justifyContent: 'center',
-        width: hp('3%'),
-        height: hp('3%'),
+        // width: hp('3%'),
+        // height: hp('3%'),
         marginTop: 5
         // marginLeft: 10
     },

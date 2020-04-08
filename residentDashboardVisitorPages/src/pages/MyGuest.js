@@ -795,7 +795,7 @@ class MyGuests extends Component {
                 {this.state.isLoading ?
                     <View style={styles.container}>
                         <View style={styles.progress}>
-                            <ActivityIndicator size="large" color="#F3B431" />
+                            <ActivityIndicator size="large" color="#B51414" />
                         </View>
                     </View>
                     :

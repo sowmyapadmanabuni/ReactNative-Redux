@@ -447,7 +447,7 @@ class EditProfile extends Component {
                             </View>
                             <View style={styles.emptyViewStyle}/>
                         </View>
-                        <View style={{borderWidth: 1, borderColor: "#ff8c00"}}/>
+                        <View style={{borderWidth: 1, borderColor: "#EBECED"}}/>
                     </SafeAreaView>
 
                     <KeyboardAwareScrollView>

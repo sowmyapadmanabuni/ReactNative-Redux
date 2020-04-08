@@ -1552,7 +1552,7 @@ class SendingMsgToGate extends Component {
           isHUD={true}
           isModal={true}
           visible={this.state.isLoading}
-          color={base.theme.colors.primary}
+          color={base.theme.colors.themeColor}
           hudColor={base.theme.colors.white}
         />
       </View>

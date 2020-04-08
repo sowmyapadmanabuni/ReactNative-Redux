@@ -276,7 +276,7 @@ class QRCodeGeneration extends Component {
 
           <Text style={styles.titleOfScreen}>QR Code Generation </Text>
           <View style={styles.progress}>
-            <ActivityIndicator size="large" color="#F3B431" />
+            <ActivityIndicator size="large" color="#B51414" />
           </View>
         </View>
       );

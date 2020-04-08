@@ -143,7 +143,7 @@ class QRScreen extends React.Component {
                     <View style={QRScreenStyles.qrView}>
                         <QRCode
                             value={this.state.latLong}
-                            logo={require('../../../icons/headerLogo.png') }
+                            logo={require('../../../icons/qr_logo.png') }
                             color={"grey"}
                             logoBackgroundColor='transparent'
                             // getRef={(c) => (this.qrcode = c)}

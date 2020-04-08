@@ -337,11 +337,11 @@ class UnitDetails extends Component {
                                 {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
                             </View>
                         </View>
-                        <View style={{borderWidth: 1, borderColor: "orange"}}/>
+                        <View style={{borderWidth: 1, borderColor: "#EBECED"}}/>
                     </SafeAreaView>
                     <Text style={styles.residentialListTitle}>Unit Details</Text>
                     <View style={styles.progress}>
-                        <ActivityIndicator size="large" color="#F3B431"/>
+                        <ActivityIndicator size="large" color="#B51414"/>
                         <View
                             style={{
                                 alignItems: "flex-start",
@@ -404,7 +404,7 @@ class UnitDetails extends Component {
                             {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
                         </View>
                     </View>
-                    <View style={{borderWidth: 1, borderColor: "orange"}}/>
+                    <View style={{borderWidth: 1, borderColor: "#EBECED"}}/>
                 </SafeAreaView>
                 <View style={styles.textWrapper}>
                     <Text style={styles.residentialListTitle}>Unit Details</Text>

@@ -414,11 +414,11 @@ class MyFamilyList extends React.Component {
                                 {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
                             </View>
                         </View>
-                        <View style={{ borderWidth: 1, borderColor: '#ff8c00' }} />
+                        <View style={{ borderWidth: 1, borderColor: '#EBECED' }} />
                     </SafeAreaView>
 
                     <View style={Style.progressViewStyle}>
-                        <ActivityIndicator size="large" color="#F3B431" />
+                        <ActivityIndicator size="large" color="#B51414" />
                     </View>
                 </View>
             );
@@ -469,7 +469,7 @@ class MyFamilyList extends React.Component {
                             {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
                         </View>
                     </View>
-                    <View style={{ borderWidth: 1, borderColor: '#FFFFFF' }} />
+                    <View style={{ borderWidth: 1, borderColor: '#EBECED' }} />
                 </SafeAreaView>
 
                 <NavigationEvents

@@ -418,7 +418,7 @@ class NotificationAnnouncementDetailScreen extends Component {
               {/* <Image source={require('../../../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
             </View>
           </View>
-          <View style={{ borderWidth: 1, borderColor: 'orange' }} />
+          <View style={{ borderWidth: 1, borderColor: '#EBECED' }} />
         </SafeAreaView>
         <View style={Styles.mainview}>
           <Text style={Styles.maintext}>{strings.announcement}</Text>
@@ -553,7 +553,7 @@ class NotificationAnnouncementDetailScreen extends Component {
           isHUD={true}
           isModal={true}
           visible={this.state.isLoading}
-          color={base.theme.colors.primary}
+          color={base.theme.colors.themeColor}
           hudColor={base.theme.colors.white}
         />
       </View>

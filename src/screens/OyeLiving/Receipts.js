@@ -571,7 +571,7 @@ class Receipts extends React.Component {
                         isHUD={true}
                         isModal={true}
                         visible={this.state.isLoading}
-                        color={base.theme.colors.primary}
+                        color={base.theme.colors.themeColor}
                         hudColor={"#FFFFFF"}
                     />
 
@@ -1511,8 +1511,8 @@ const styles = StyleSheet.create({
     viewDetails2: {
         alignItems: 'flex-start',
         justifyContent: 'center',
-        width: hp('3%'),
-        height: hp('3%'),
+        // width: hp('3%'),
+        // height: hp('3%'),
         marginTop: 5
         // marginLeft: 10
     },

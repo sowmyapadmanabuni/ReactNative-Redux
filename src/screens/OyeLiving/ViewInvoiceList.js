@@ -310,8 +310,8 @@ class ViewInvoiceList extends React.Component {
                                         style={{
                                             alignItems: 'flex-start',
                                             justifyContent: 'center',
-                                            width: hp('3%'),
-                                            height: hp('3%'),
+                                            // width: hp('3%'),
+                                            // height: hp('3%'),
                                             marginTop: 5
                                         }}
                                     />

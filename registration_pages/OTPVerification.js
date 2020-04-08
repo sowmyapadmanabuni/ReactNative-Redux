@@ -395,7 +395,7 @@ class OTPVerification extends Component {
                             {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
                         </View>
                     </View>
-                    <View style={{borderWidth: 1, borderColor: "#FFFFFF"}}/>
+                    <View style={{borderWidth: 1, borderColor: "#EBECED"}}/>
                 </SafeAreaView>
 
                 <KeyboardAwareScrollView>
@@ -483,7 +483,7 @@ class OTPVerification extends Component {
                                     height: hp("5%"),
                                     justifyContent: "center",
                                     alignItems: "center",
-                                    backgroundColor: this.state.timer === 1 && this.state.isSmsLimit ? base.theme.colors.primary : base.theme.colors.grey,
+                                    backgroundColor: this.state.timer === 1 && this.state.isSmsLimit ? base.theme.colors.themeColor : base.theme.colors.themeColor,
                                 }}
                                 rounded
                             >
@@ -501,7 +501,7 @@ class OTPVerification extends Component {
                                     height: hp("5%"),
                                     justifyContent: "center",
                                     alignItems: "center",
-                                    backgroundColor: this.state.timer === 1 && this.state.isCallLimit ? base.theme.colors.primary : base.theme.colors.grey,
+                                    backgroundColor: this.state.timer === 1 && this.state.isCallLimit ? base.theme.colors.themeColor : base.theme.colors.themeColor,
                                 }}
                                 rounded
                             >
@@ -533,7 +533,7 @@ class OTPVerification extends Component {
                                     isHUD={true}
                                     isModal={true}
                                     visible={this.state.isLoading}
-                                    color={base.theme.colors.primary}
+                                    color={base.theme.colors.themeColor}
                                     hudColor={"#FFFFFF"}
                                 />
             </View>
@@ -712,8 +712,8 @@ const styles = StyleSheet.create({
     viewDetails2: {
         alignItems: "flex-start",
         justifyContent: "center",
-        width: hp("3%"),
-        height: hp("3%"),
+        // width: hp("3%"),
+        // height: hp("3%"),
         marginTop: 5
         // marginLeft: 10
     },

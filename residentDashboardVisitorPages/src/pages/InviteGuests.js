@@ -592,7 +592,7 @@ let dummyData={
                     isHUD={true}
                     isModal={true}
                     visible={this.state.isLoading}
-                    color={base.theme.colors.primary}
+                    color={base.theme.colors.themeColor}
                     hudColor={"#FFFFFF"}
                 />
             </View>

@@ -1149,7 +1149,7 @@ class Expenses extends React.Component {
                     isHUD={true}
                     isModal={true}
                     visible={this.state.isLoading}
-                    color={base.theme.colors.primary}
+                    color={base.theme.colors.themeColor}
                     hudColor={"#FFFFFF"}
                 />
 
@@ -2555,7 +2555,7 @@ class Expenses extends React.Component {
                     <View style={{marginLeft:5}}>
                         <Image
                             style={{height: 25, width: 25,}}
-                            source={require('../../../icons/OyeLiving.png')}
+                            source={require('../../../icons/wallet.png')}
                         />
                     </View>
                     <View style={{marginLeft:10, marginRight: 5,width:'45%'}}>
@@ -2566,7 +2566,7 @@ class Expenses extends React.Component {
                         </Text>
                         <Text style={{fontSize: 13, color: base.theme.colors.black, paddingBottom: 3}}>Status:
                             <Text
-                                style={{color: selectedExpense.exStatus == "Review Rejected" ? base.theme.colors.red : base.theme.colors.blue}}>{' '}{selectedExpense.exStatus}</Text></Text>
+                                style={{color: selectedExpense.exStatus == "Review Rejected" ? base.theme.colors.red : base.theme.colors.black}}>{' '}{selectedExpense.exStatus}</Text></Text>
                         <Text style={{fontSize: 13, color: base.theme.colors.black, paddingBottom: 3}}>Amount: <Text
                             style={{fontWeight: 'bold'}}>{base.utils.strings.rupeeIconCode}{selectedExpense.expAmnt}</Text></Text>
                         <Collapsible duration={100} collapsed={!item.item.open}>
@@ -3047,8 +3047,8 @@ const styles = StyleSheet.create({
     viewDetails2: {
         alignItems: 'flex-start',
         justifyContent: 'center',
-        width: hp('3%'),
-        height: hp('3%'),
+        // width: hp('3%'),
+        // height: hp('3%'),
         marginTop: 5
         // marginLeft: 10
     },

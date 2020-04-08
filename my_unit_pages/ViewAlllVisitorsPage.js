@@ -418,7 +418,7 @@ class App extends React.Component {
                                 {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
                             </View>
                         </View>
-                        <View style={{borderWidth: 1, borderColor: "#ff8c00"}}/>
+                        <View style={{borderWidth: 1, borderColor: "#EBECED"}}/>
                     </SafeAreaView>
 
                     <Text style={styles.titleOfScreen}>Visitors</Text>
@@ -455,7 +455,7 @@ class App extends React.Component {
                             }}
                         >
                             <View>
-                                <Text style={{color: "#38BCDB"}}>From</Text>
+                                <Text>From</Text>
                             </View>
                             {/* <View style={{ borderColor: "black", borderWidth: hp("0.05%") }}> */}
                             <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
@@ -469,7 +469,7 @@ class App extends React.Component {
                                     />
 
                                     <TouchableOpacity onPress={this.onDOBPress.bind(this)}>
-                                        <Icon color="#ff8c00" size={hp('2%')} style={{marginRight: hp('0.5')}}
+                                        <Icon color="#B51414" size={hp('2%')} style={{marginRight: hp('0.5')}}
                                               name="cal"/>
                                     </TouchableOpacity>
                                 </View>
@@ -477,7 +477,7 @@ class App extends React.Component {
 
                             {/* </View> */}
                             <View>
-                                <Text style={{color: "#38BCDB"}}> To </Text>
+                                <Text> To </Text>
                             </View>
                             {/* <View style={{ borderColor: "black", borderWidth: hp("0.05%") }}> */}
                             <TouchableOpacity onPress={this.onDOBPress1.bind(this)}>
@@ -490,7 +490,7 @@ class App extends React.Component {
                                         onDatePicked={this.onDOBDatePicked1.bind(this)}
                                     />
                                     <TouchableOpacity onPress={this.onDOBPress1.bind(this)}>
-                                        <Icon color="#ff8c00" size={hp('2%')} style={{marginRight: hp('0.5')}}
+                                        <Icon color="#B51414" size={hp('2%')} style={{marginRight: hp('0.5')}}
                                               name="cal"/>
 
                                     </TouchableOpacity>
@@ -529,7 +529,7 @@ class App extends React.Component {
                     </View>
 
                     <View style={styles.progress}>
-                        <ActivityIndicator size="large" color="#01CBC6"/>
+                        <ActivityIndicator size="large" color="#B51414"/>
                     </View>
                 </View>
             );
@@ -579,7 +579,7 @@ class App extends React.Component {
                             {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
                         </View>
                     </View>
-                    <View style={{borderWidth: 1, borderColor: "#ff8c00"}}/>
+                    <View style={{borderWidth: 1, borderColor: "#EBECED"}}/>
                 </SafeAreaView>
 
                 <View style={styles.textWrapper}>
@@ -920,8 +920,8 @@ const styles = StyleSheet.create({
     viewDetails2: {
         alignItems: "flex-start",
         justifyContent: "center",
-        width: hp("3%"),
-        height: hp("3%"),
+        // width: hp("3%"),
+        // height: hp("3%"),
         marginTop: 5
         // marginLeft: 10
     }

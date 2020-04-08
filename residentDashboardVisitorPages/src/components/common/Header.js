@@ -44,7 +44,7 @@ const Header = props => {
                     {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
                 </View>
             </View>
-            <View style={{borderWidth: 1, borderColor: "#ff8c00"}}/>
+            <View style={{borderWidth: 1, borderColor: "#EBECED"}}/>
         </SafeAreaView>
 
     );
@@ -79,8 +79,8 @@ const styles = {
     viewDetails2: {
         alignItems: "flex-start",
         justifyContent: "center",
-        width: hp("3%"),
-        height: hp("3%"),
+        // width: hp("3%"),
+        // height: hp("3%"),
         marginTop: 5
         // marginLeft: 10
     },

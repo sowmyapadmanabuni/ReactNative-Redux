@@ -369,7 +369,7 @@ class Resident extends React.Component {
                             {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
                         </View>
                     </View>
-                    <View style={{borderWidth: 1, borderColor: "orange"}}/>
+                    <View style={{borderWidth: 1, borderColor: "#EBECED"}}/>
                 </SafeAreaView>
                 <View style={styles.textWrapper}>
                     <Text style={styles.residentialListTitle}> Resident List </Text>
@@ -472,7 +472,7 @@ class Resident extends React.Component {
                                 </View>}
                         </View> :
                         <View style={StaffStyle.activityIndicator}>
-                            <ActivityIndicator size="large" color={base.theme.colors.primary}/>
+                            <ActivityIndicator size="large" color={base.theme.colors.themeColor}/>
                         </View>}
                 </View>
             </View>
@@ -572,8 +572,8 @@ const styles = StyleSheet.create({
     viewDetails2: {
         alignItems: "flex-start",
         justifyContent: "center",
-        width: hp("3%"),
-        height: hp("3%"),
+        // width: hp("3%"),
+        // height: hp("3%"),
         marginTop: 5
     },
 });

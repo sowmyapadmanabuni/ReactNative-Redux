@@ -68,7 +68,7 @@ class PrivacyPolicy extends React.Component {
                             {/* <Imrage source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
                         </View>
                     </View>
-                    <View style={{borderWidth: 1, borderColor: "orange"}}/>
+                    <View style={{borderWidth: 1, borderColor: '#EBECED'}}/>
                 </SafeAreaView>
                 <WebView
                     source={{uri: "https://www.oyespace.com/privacy"}}
@@ -119,8 +119,8 @@ const styles = StyleSheet.create({
     viewDetails2: {
         alignItems: "flex-start",
         justifyContent: "center",
-        width: hp("3%"),
-        height: hp("3%"),
+        // width: hp("3%"),
+        // height: hp("3%"),
         marginTop: 5
         // marginLeft: 10
     },

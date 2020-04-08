@@ -1001,14 +1001,14 @@ class Announcement extends Component {
               {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
             </View>
           </View>
-          <View style={{ borderWidth: 1, borderColor: base.theme.colors.grey }} />
+          <View style={{ borderWidth: 1, borderColor: '#EBECED' }} />
         </SafeAreaView>
 
         <View style={styles.viewForMyProfileText}>
           <Text
             style={{
               fontSize: hp('2.5%'),
-              color: base.theme.colors.primary,
+              color: base.theme.colors.black,
               textAlign: 'center'
             }}
           >
@@ -1760,7 +1760,7 @@ class Announcement extends Component {
           isHUD={true}
           isModal={true}
           visible={this.state.isLoading}
-          color={base.theme.colors.primary}
+          color={base.theme.colors.themeColor}
           hudColor={base.theme.colors.white}
         />
       </View>
@@ -1804,8 +1804,8 @@ const styles = StyleSheet.create({
   viewDetails2: {
     alignItems: 'flex-start',
     justifyContent: 'center',
-    width: hp('3%'),
-    height: hp('3%'),
+    // width: hp('3%'),
+    // height: hp('3%'),
     marginTop: 5
     // marginLeft: 10
   },

@@ -193,7 +193,7 @@ class MyProfile extends Component {
               {/* <Image source={require('../icons/notifications.png')} style={{width:36, height:36, justifyContent:'center',alignItems:'flex-end', marginTop:5 }}/> */}
             </View>
           </View>
-          <View style={{ borderWidth: 1, borderColor: 'orange' }} />
+          <View style={{ borderWidth: 1, borderColor: '#EBECED' }} />
         </SafeAreaView>
 
         {/* <NavigationEvents
@@ -210,7 +210,7 @@ class MyProfile extends Component {
                   <Text
                     style={{
                       fontSize: hp('2%'),
-                      color: base.theme.colors.primary,
+                      color: base.theme.colors.themeColor,
                       textAlign: 'center'
                     }}
                   >
@@ -246,7 +246,7 @@ class MyProfile extends Component {
                     }}
                   >
                     <Icon
-                      color={base.theme.colors.primary}
+                      color={base.theme.colors.themeColor}
                       style={styles.editButtonImageStyle}
                       size={hp('2.8%')}
                       name="edit"
@@ -339,7 +339,7 @@ class MyProfile extends Component {
                     }}
                   >
                     <QRCode
-                      logo={require('../icons/logo_QR.png')}
+                      logo={require('../icons/OyespaceSafe.png')}
                       logoSize={hp('6%')}
                       size={hp('25%')}
                       content={userQR}
@@ -385,6 +385,7 @@ class MyProfile extends Component {
                   >
                     <Text
                       style={{
+                        color:base.theme.colors.green,
                         fontSize: hp('2%'),
                         fontWeight: '500'
                       }}
@@ -411,7 +412,7 @@ class MyProfile extends Component {
           isHUD={true}
           isModal={true}
           visible={this.state.isLoading}
-          color={base.theme.colors.primary}
+          color={base.theme.colors.themeColor}
           hudColor={base.theme.colors.white}
         />
       </View>
@@ -532,8 +533,8 @@ const styles = StyleSheet.create({
   viewDetails2: {
     alignItems: 'flex-start',
     justifyContent: 'center',
-    width: hp('3%'),
-    height: hp('3%'),
+    // width: hp('3%'),
+    // height: hp('3%'),
     marginTop: 5
     // marginLeft: 10
   },

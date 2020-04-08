@@ -718,7 +718,7 @@ class App extends React.Component {
         {this.state.isLoading ? (
           <View style={styles.container}>
             <View style={styles.progress}>
-              <ActivityIndicator size="large" color="#ff8c00" />
+              <ActivityIndicator size="large" color="#B51414" />
             </View>
           </View>
         ) : (

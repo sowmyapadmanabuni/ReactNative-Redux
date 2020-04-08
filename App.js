@@ -304,13 +304,17 @@ const styles = StyleSheet.create({
   },
   footerImageContainer: {
     // backgroundColor:'green',
+    flex:1,
     alignItems: 'center',
     justifyContent: 'center',
-    height: hp('40%'),
-    width: Dimensions.get('screen').width
+    resizeMode:'contain'
+
+    // height: hp('40%'),
+    // width: Dimensions.get('screen').width
   },
   bottomImage: {
-    width: Dimensions.get('window').width,
-    height: wp('80%')
+    // width: Dimensions.get('window').width,
+    // height: wp('80%'),
+    resizeMode:'contain'
   }
 });

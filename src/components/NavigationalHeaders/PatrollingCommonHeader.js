@@ -109,7 +109,7 @@ class PatrollingCommonHeader extends React.Component {
                             <Image
                             resizeMode={Platform.OS === 'ios'?'contain':'center'}
                             style={{height: '70%', width: widthPercentageToDP('40%'),alignSelf:'center',marginTop:'5%'}}
-                            source={isShareVisible ? require('../../../icons/share.png') : require('../../../icons/report.png')}/>
+                            source={isShareVisible ? require('../../../icons/share.png') : require('../../../icons/documents.png')}/>
                         </TouchableOpacity>
                     : <EmptyView width={"20%"}/>}
                     </View>
@@ -349,8 +349,8 @@ const styles = StyleSheet.create({
       viewDetails2: {
         alignItems: 'flex-start',
         justifyContent: 'center',
-        width: hp('3%'),
-        height: hp('3%'),
+        // width: hp('3%'),
+        // height: hp('3%'),
         marginTop: 5
         // marginLeft: 10
       },

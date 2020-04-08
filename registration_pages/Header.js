@@ -18,7 +18,7 @@ const Header = props => {
           />
         </View>
       </View>
-      <View style={{ borderWidth: 1, borderColor: '#D5D0D0' }} />
+      <View style={{ borderWidth: 1, borderColor: '#EBECED' }} />
     </SafeAreaView>
   );
 };
