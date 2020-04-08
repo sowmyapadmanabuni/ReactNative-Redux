@@ -153,7 +153,7 @@ class MyProfile extends Component {
     return (
       <View style={styles.mainViewStyle}>
         {/* <Header /> */}
-        <SafeAreaView style={{ backgroundColor: base.theme.colors.primary }}>
+        <SafeAreaView style={{ backgroundColor: base.theme.colors.themeColor }}>
           <View style={[styles.viewStyle1, { flexDirection: 'row' }]}>
             <View style={styles.viewDetails1}>
               <TouchableOpacity

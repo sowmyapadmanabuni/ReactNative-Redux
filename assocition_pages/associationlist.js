@@ -342,7 +342,7 @@ class BlockDetail extends React.Component {
     if (this.state.isLoading) {
       return (
         <View style={styles.container}>
-          <SafeAreaView style={{ backgroundColor: '#ff8c00' }}>
+          <SafeAreaView style={{ backgroundColor: '#B51414' }}>
             <View style={[styles.viewStyle1, { flexDirection: 'row' }]}>
               <View style={styles.viewDetails1}>
                 <TouchableOpacity
@@ -396,7 +396,7 @@ class BlockDetail extends React.Component {
     return (
       <View style={styles.mainView}>
         {/* <Header /> */}
-        <SafeAreaView style={{ backgroundColor: '#ff8c00' }}>
+        <SafeAreaView style={{ backgroundColor: '#B51414' }}>
           <View style={[styles.viewStyle1, { flexDirection: 'row' }]}>
             <View style={styles.viewDetails1}>
               <TouchableOpacity

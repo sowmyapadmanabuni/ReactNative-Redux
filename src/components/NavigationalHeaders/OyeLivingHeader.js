@@ -2,7 +2,7 @@
  * @Author: Sarthak Mishra
  * @Date: 2019-10-07 12:10:39
  * @Last Modified by: Sarthak Mishra
- * @Last Modified time: 2019-10-23 10:56:40
+ * @Last Modified time: 2020-04-08 22:22:12
  */
 
 import React from 'react';
@@ -60,7 +60,7 @@ class OyeLivingHeader extends React.Component {
     } else {
       return (
         <View style={styles.container}>
-          <SafeAreaView style={{ backgroundColor: '#ff8c00' }}>
+          <SafeAreaView style={{ backgroundColor: '#B51414' }}>
             <View style={[styles.viewStyle, { flexDirection: 'row' }]}>
               <View style={styles.viewDetails1}>
                 <TouchableOpacity

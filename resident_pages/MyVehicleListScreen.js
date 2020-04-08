@@ -350,7 +350,7 @@ class VehicleList extends Component {
                 <View style={styles.container}>
                     {/* <Header/> */}
 
-                    <SafeAreaView style={{ backgroundColor: '#ff8c00' }}>
+                    <SafeAreaView style={{ backgroundColor: '#B51414' }}>
                         <View style={[styles.viewStyle1, { flexDirection: 'row' }]}>
                             <View style={styles.viewDetails1}>
                                 <TouchableOpacity
@@ -405,7 +405,7 @@ class VehicleList extends Component {
                 <View style={styles.container}>
                     {/* <Header/> */}
 
-                    <SafeAreaView style={{ backgroundColor: '#ff8c00' }}>
+                    <SafeAreaView style={{ backgroundColor: '#B51414' }}>
                         <View style={[styles.viewStyle1, { flexDirection: 'row' }]}>
                             <View style={styles.viewDetails1}>
                                 <TouchableOpacity

@@ -671,7 +671,7 @@ class NotificationScreen extends PureComponent {
                                             } style={{ flexDirection: 'row', marginRight: 20, alignItems: 'center', justifyContent: 'space-between' }}>
                                                 <Image
                                                     style={{ width: 30, height: 30 }}
-                                                    source={require('../../../icons/deny.png')}
+                                                    source={require('../../../icons/view.png')}
                                                 />
                                                 <Text style={{ fontSize: 16, color: base.theme.colors.red, }}>Reject</Text>
                                             </TouchableOpacity>
@@ -1859,7 +1859,7 @@ class NotificationScreen extends PureComponent {
 
     renderHeader() {
         return (
-            <SafeAreaView style={{ backgroundColor: '#ff8c00' }}>
+            <SafeAreaView style={{ backgroundColor: '#B51414' }}>
                 <View style={[styles.viewStyle1, { flexDirection: 'row' }]}>
                     <View style={styles.viewDetails1}>
                         <TouchableOpacity
@@ -2097,7 +2097,7 @@ class NotificationScreen extends PureComponent {
                         width: hp('6%'),
                         height: hp('6%'), marginRight: hp('0'), bottom: hp('2')
                     }}
-                    source={require('../../../icons/search.png')}
+                    source={require('../../../icons/view.png')}
                 />
             </View>
 

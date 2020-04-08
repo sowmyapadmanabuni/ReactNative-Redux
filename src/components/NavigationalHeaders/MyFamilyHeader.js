@@ -64,7 +64,7 @@ class MyFamilyHeader extends React.Component {
             //     </TouchableOpacity>*/}
             // </View>
             <View style={styles.container}>
-                <SafeAreaView style={{backgroundColor: '#ff8c00'}}>
+                <SafeAreaView style={{backgroundColor: '#B51414'}}>
                     <View style={[styles.viewStyle, {flexDirection: 'row'}]}>
                         <View style={styles.viewDetails1}>
                             <TouchableOpacity

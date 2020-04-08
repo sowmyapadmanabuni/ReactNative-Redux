@@ -409,7 +409,7 @@ class EditProfile extends Component {
                 }}
             >
                 <View style={styles.mainViewStyle}>
-                    <SafeAreaView style={{backgroundColor: "#ff8c00"}}>
+                    <SafeAreaView style={{backgroundColor: "#B51414"}}>
                         <View style={[styles.viewStyle, {flexDirection: "row"}]}>
                             <View
                                 style={{
