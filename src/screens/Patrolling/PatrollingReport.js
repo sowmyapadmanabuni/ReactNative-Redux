@@ -248,7 +248,7 @@ class PatrollingReport extends React.Component {
                                                 underlayColor={base.theme.colors.transparent}
                                                 style={PatrollingReportStyles.radioView2}>
                                 <View style={[PatrollingReportStyles.radioButtonView, {
-                                    backgroundColor: this.state.isYesSelected ? base.theme.colors.primary : base.theme.colors.white
+                                    backgroundColor: this.state.isYesSelected ? base.theme.colors.black : base.theme.colors.white
                                 }]}/>
                             </TouchableHighlight>
                             <Text style={PatrollingReportStyles.selType}>Yesterday</Text>
@@ -258,7 +258,7 @@ class PatrollingReport extends React.Component {
                                                 underlayColor={base.theme.colors.transparent}
                                                 style={PatrollingReportStyles.radioView2}>
                                 <View
-                                    style={[PatrollingReportStyles.radioButtonView, {backgroundColor: this.state.isTodaySelected ? base.theme.colors.primary : base.theme.colors.white}]}/>
+                                    style={[PatrollingReportStyles.radioButtonView, {backgroundColor: this.state.isTodaySelected ? base.theme.colors.black : base.theme.colors.white}]}/>
                             </TouchableHighlight>
                             <Text style={PatrollingReportStyles.selType}>Today</Text>
                         </View>
@@ -269,7 +269,7 @@ class PatrollingReport extends React.Component {
                                                 underlayColor={base.theme.colors.transparent}
                                                 style={PatrollingReportStyles.radioView2}>
                                 <View style={[PatrollingReportStyles.radioButtonView, {
-                                    backgroundColor: this.state.isMonthSelected ? base.theme.colors.primary : base.theme.colors.white
+                                    backgroundColor: this.state.isMonthSelected ? base.theme.colors.black : base.theme.colors.white
                                 }]}/>
                             </TouchableHighlight>
                             <Text style={PatrollingReportStyles.selType}>Month Till Date</Text>

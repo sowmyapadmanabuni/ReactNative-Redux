@@ -217,7 +217,7 @@ class PatrolShuffling extends React.Component {
                 <View style={PatrollingCheckPointsStyles.header}>
                     <Text
 
-                        style={[PatrollingCheckPointsStyles.headerText, { textAlign: 'center', color: base.theme.colors.primary }]}>Swipe the seleted checkpoints up and down{'\n'}to set the patrolling path</Text>
+                        style={[PatrollingCheckPointsStyles.headerText, { textAlign: 'center', color: base.theme.colors.themeColor }]}>Swipe the seleted checkpoints up and down{'\n'}to set the patrolling path</Text>
                 </View>
                 <DraggableFlatList
                     data={this.state.data}

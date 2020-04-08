@@ -890,7 +890,7 @@ class UnitList extends Component {
                         <View style={styles.blockNameFlexStyle}>
                             <Image
                                 style={styles.memberDetailIconImageStyle}
-                                source={require("../icons/buil.png")}
+                                source={require("../icons/building.png")}
                             />
                             <View style={{flexDirection: "column"}}>
                                 <Text style={styles.blockNameTextStyle}>
@@ -1142,7 +1142,7 @@ class UnitList extends Component {
                                     <View style={styles.calView}>
                                         <Image
                                             style={styles.viewDatePickerImageStyle}
-                                            source={require("../icons/cal.png")}
+                                            source={require("../icons/calender.png")}
                                         />
                                     </View>
                                 </View>
@@ -1365,7 +1365,7 @@ const styles = StyleSheet.create({
         justifyContent: "center"
     },
     addUnitText: {
-        color: "#B51414",
+        // color: "#B51414",
         fontWeight: "700",
         fontSize: hp("1.6%")
     }

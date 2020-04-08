@@ -273,8 +273,8 @@ const styles = StyleSheet.create({
   containers: {},
   ImageContainer: {
     //   backgroundColor:'yellow',
-    width: Dimensions.get('screen').width,
-    height: hp('25%'),
+    // width: Dimensions.get('screen').width,
+    // height: hp('25%'),
     alignItems: 'center',
     justifyContent: 'center'
   },

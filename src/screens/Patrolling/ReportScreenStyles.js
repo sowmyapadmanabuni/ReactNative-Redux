@@ -20,9 +20,9 @@ const ReportScreenStyles = StyleSheet.create({
     headerText: {
         fontSize: 15,
         fontFamily: base.theme.fonts.medium,
-        color: base.theme.colors.primary
+        color: base.theme.colors.themeColor
     },
-    headRow: {height: 40, width: wp('100%'), backgroundColor: base.theme.colors.primary},
+    headRow: {height: 40, width: wp('100%'), backgroundColor: base.theme.colors.themeColor},
     textRow: {
         fontSize: 11,
         color: base.theme.colors.white,

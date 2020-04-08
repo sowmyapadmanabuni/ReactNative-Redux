@@ -567,7 +567,7 @@ const styles = StyleSheet.create({
     marginBottom: hp('1%')
   },
   icon: {
-    color: '#ff8c00'
+    color: '#B51414'
   },
   inputItem: {
     marginTop: wp('1%'),
@@ -622,7 +622,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: hp('2.3%'),
     fontWeight: '500',
-    color: '#FF8C00'
+    // color: '#FF8C00'
   },
 
   lineAboveAndBelowFlatList: {
@@ -740,12 +740,12 @@ const styles = StyleSheet.create({
     height: hp('3.6%'),
     borderRadius: hp('2%'),
     //borderWidth: hp("0.2%"),
-    borderColor: '#ff8c00',
-    backgroundColor: '#ff8c00',
+    borderColor: '#B51414',
+    // backgroundColor: '#B51414',
     justifyContent: 'center'
   },
   addUnitText: {
-    color: 'white',
+    color: '#B51414',
     fontWeight: '700',
     fontSize: hp('1.6%')
   },

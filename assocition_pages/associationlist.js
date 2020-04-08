@@ -598,7 +598,7 @@ const styles = StyleSheet.create({
     marginBottom: hp('1%')
   },
   icon: {
-    color: '#ff8c00'
+    color: '#B51414'
   },
   inputItem: {
     marginTop: wp('1%'),

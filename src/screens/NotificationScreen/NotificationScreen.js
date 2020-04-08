@@ -568,7 +568,14 @@ class NotificationScreen extends PureComponent {
                                 
                                 <Text style={{ fontSize: 14, color: base.theme.colors.black }}>{' '}{item.mrRolName}</Text>
                                  </Text>
-                          
+                                <View style={{marginLeft:'30%'}}> 
+                                <Icon
+                                  color="#B51414"
+                    type="material"
+                    name="call"
+                    size={hp('2%')}
+                />
+                               </View>
                             <Text onPress={() => {
                                 Platform.OS === 'android'
                                     ? Linking.openURL(`tel:${item.mobileNumber}`)
@@ -596,7 +603,7 @@ class NotificationScreen extends PureComponent {
                               {item.ntType=="Join" ? 
                             
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
-                                    <Text style={{ fontSize: 16, color: base.theme.colors.lightgrey, alignSelf: 'flex-start', marginLeft: 15 }}>Occupancy
+                                    <Text style={{ fontSize: 16,  alignSelf: 'flex-start', marginLeft: 15 }}>Occupancy
                         <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{item.unit.unOcStat}</Text>
                                     </Text>
                                 </View>
@@ -605,7 +612,7 @@ class NotificationScreen extends PureComponent {
                                 }
                                  {item.ntType=="Join" ? 
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
-                                    <Text style={{ fontSize: 16, color: base.theme.colors.lightgrey, alignSelf: 'flex-start', marginLeft: 15 }}>Occupaied by
+                                    <Text style={{ fontSize: 16,  alignSelf: 'flex-start', marginLeft: 15 }}>Occupaied by
                                         <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{item.unit.unOcStat}
                                    </Text>
                                     </Text>
@@ -616,7 +623,7 @@ class NotificationScreen extends PureComponent {
                                    {item.ntType=="Join" ? 
 
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}> 
-                                    <Text style={{ fontSize: 16, color: base.theme.colors.lightgrey, alignSelf: 'flex-start', marginLeft: 15 }}>Owner Name
+                                    <Text style={{ fontSize: 16,  alignSelf: 'flex-start', marginLeft: 15 }}>Owner Name
                                     <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{item.unit.owner.length !==0 ? item.unit.owner[0].uofName+' '+ item.unit.owner[0].uolName : item.unit.tenant.length !==0 ?item.unit.tenant[0].utfName+' '+item.unit.tenant[0].utlName:""}</Text>
                                     </Text>
                                    
@@ -626,7 +633,7 @@ class NotificationScreen extends PureComponent {
                                 }
                                  {item.ntType=="Join" ? 
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
-                                    <Text style={{ fontSize: 16, color: base.theme.colors.lightgrey, alignSelf: 'flex-start', marginLeft: 15 }}>Mobile
+                                    <Text style={{ fontSize: 16, alignSelf: 'flex-start', marginLeft: 15 }}>Mobile
                                         <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{item.unit.owner.length !==0 ? item.unit.owner[0].uoMobile : item.unit.tenant.length !==0 ? item.unit.tenant[0].utMobile :""}</Text>
                                     </Text>
                                 </View>
@@ -657,7 +664,7 @@ class NotificationScreen extends PureComponent {
                                                     style={{ width: 30, height: 30 }}
                                                     source={require('../../../icons/allow.png')}
                                                 />
-                                                <Text style={{ fontSize: 16, color: base.theme.colors.themeColor, }}>Approve</Text>
+                                                <Text style={{ fontSize: 16, color: base.theme.colors.green, }}>Approve</Text>
                                             </TouchableOpacity>
                                             <TouchableOpacity onPress={() =>
                                                 this.reject(item)
@@ -949,7 +956,7 @@ class NotificationScreen extends PureComponent {
                                                         style={{ width: 30, height: 30 }}
                                                         source={require('../../../icons/allow.png')}
                                                     />
-                                                    <Text style={{ fontSize: 16, color: base.theme.colors.themeColor, }}>Allow</Text>
+                                                    <Text style={{ fontSize: 16, color: base.theme.colors.green, }}>Allow</Text>
                                                 </TouchableOpacity>
                                                 <TouchableOpacity onPress={() =>
                                                     this.declinegateVisitor(
@@ -997,7 +1004,7 @@ class NotificationScreen extends PureComponent {
                                                         style={{ width: 30, height: 30 }}
                                                         source={require('../../../icons/allow.png')}
                                                     />
-                                                    <Text style={{ fontSize: 16, color: base.theme.colors.themeColor, }}>Allow</Text>
+                                                    <Text style={{ fontSize: 16, color: base.theme.colors.green, }}>Allow</Text>
                                                 </TouchableOpacity>
                                                 <TouchableOpacity onPress={() =>
                                                     this.declinegateVisitor(
@@ -1041,7 +1048,7 @@ class NotificationScreen extends PureComponent {
                                                         style={{ width: 30, height: 30 }}
                                                         source={require('../../../icons/allow.png')}
                                                     />
-                                                    <Text style={{ fontSize: 16, color: base.theme.colors.themeColor, }}>Allow</Text>
+                                                    <Text style={{ fontSize: 16, color: base.theme.colors.green, }}>Allow</Text>
                                                 </TouchableOpacity>
                                                 <TouchableOpacity onPress={() =>
                                                     this.declinegateVisitor(
