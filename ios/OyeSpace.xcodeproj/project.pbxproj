@@ -763,7 +763,7 @@
 					"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)",
 					"\"$(SRCROOT)/OyeSpace\"",
 				);
-				MARKETING_VERSION = 10.23;
+				MARKETING_VERSION = 10.24;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -823,7 +823,7 @@
 					"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)",
 					"\"$(SRCROOT)/OyeSpace\"",
 				);
-				MARKETING_VERSION = 10.23;
+				MARKETING_VERSION = 10.24;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

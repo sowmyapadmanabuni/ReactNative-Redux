@@ -1092,7 +1092,7 @@ class Dashboard extends React.Component {
                     seconds={5}
                     radius={25}
                     borderWidth={7}
-                    color={base.theme.colors.primary}
+                    color={base.theme.colors.themeColor}
                     updateText={(elapsedSeconds, totalSeconds) =>
                       ('' + totalSeconds - elapsedSeconds).toString() + '\nsec'
                     }
