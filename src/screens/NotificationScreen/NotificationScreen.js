@@ -671,7 +671,7 @@ class NotificationScreen extends PureComponent {
                                             } style={{ flexDirection: 'row', marginRight: 20, alignItems: 'center', justifyContent: 'space-between' }}>
                                                 <Image
                                                     style={{ width: 30, height: 30 }}
-                                                    source={require('../../../icons/view.png')}
+                                                    source={require('../../../icons/deny_1.png')}
                                                 />
                                                 <Text style={{ fontSize: 16, color: base.theme.colors.red, }}>Reject</Text>
                                             </TouchableOpacity>
@@ -2032,7 +2032,7 @@ class NotificationScreen extends PureComponent {
         if (count >= 1) {
             return (
                 <BadgedIcon
-                    color="#FF8C00"
+                    color="#B51414"
                     type="material"
                     name="notifications"
                     size={hp('4%')}
@@ -2041,7 +2041,7 @@ class NotificationScreen extends PureComponent {
         } else
             return (
                 <Icon
-                    color="#FF8C00"
+                    color="#B51414"
                     type="material"
                     name="notifications"
                     size={hp('4%')}
@@ -2064,7 +2064,7 @@ class NotificationScreen extends PureComponent {
         if (count >= 1) {
             return (
                 <BadgedIcon
-                    color="#FF8C00"
+                    color="#B51414"
                     type="material"
                     name="notifications"
                     size={hp('4%')}
@@ -2073,7 +2073,7 @@ class NotificationScreen extends PureComponent {
         } else
             return (
                 <Icon
-                    color="#FF8C00"
+                    color="#B51414"
                     type="material"
                     name="notifications"
                     size={hp('4%')}
@@ -2097,7 +2097,7 @@ class NotificationScreen extends PureComponent {
                         width: hp('6%'),
                         height: hp('6%'), marginRight: hp('0'), bottom: hp('2')
                     }}
-                    source={require('../../../icons/view.png')}
+                    source={require('../../../icons/search.png')}
                 />
             </View>
 

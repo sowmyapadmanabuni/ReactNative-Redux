@@ -1553,7 +1553,7 @@ class Dashboard extends React.Component {
             height={'100%'}
             width={'25%'}
             cardText={' Family'}
-            cardIcon={require('../../../../icons/view.png')}
+            cardIcon={require('../../../../icons/view_all.png')}
             cardCount={this.props.dashBoardReducer.familyMemberCount}
             marginTop={20}
             iconWidth={Platform.OS === 'ios' ? hp('5') : 35}
@@ -1595,7 +1595,7 @@ class Dashboard extends React.Component {
             height={'100%'}
             width={'25%'}
             cardText={'Visitors'}
-            cardIcon={require('../../../../icons/vehicle.png')}
+            cardIcon={require('../../../../icons/view_all.png')}
             marginTop={20}
             iconWidth={Platform.OS === 'ios' ? hp('5') : 35}
             iconHeight={Platform.OS === 'ios' ? hp('5') : 20}
@@ -1753,7 +1753,7 @@ class Dashboard extends React.Component {
             iconWidth={Platform.OS === 'ios' ? hp('5') : 35}
             iconHeight={Platform.OS === 'ios' ? hp('5') : 20}
             textFontSize={Platform.OS === 'ios' ? 8 : 12}
-            cardIcon={require('../../../../icons/view.png')}
+            cardIcon={require('../../../../icons/view_all.png')}
             marginTop={20}
             backgroundColor={base.theme.colors.cardBackground}
             onCardClick={() =>
