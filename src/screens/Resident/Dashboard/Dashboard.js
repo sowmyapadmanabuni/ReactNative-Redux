@@ -500,7 +500,7 @@ class Dashboard extends React.Component {
         })
         .android.setAutoCancel(true)
         .android.setColor('#FF9100')
-        .android.setLargeIcon('ic_notif')
+        .android.setLargeIcon('ic_launcher')
         .android.setSmallIcon('ic_stat_ic_notification')
         .android.setChannelId('channel_id')
         .android.setVibrate([1000, 1000])

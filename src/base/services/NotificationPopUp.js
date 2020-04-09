@@ -298,28 +298,28 @@ async acceptGateVisitor(visitorId, index, associationid, visitorStatus, notifiId
                     updatedTime: currentTime,
                     status: visitorStatus,
                 });
-                if(visitorStatus == "Entry Approved"){
-                    axios.delete(
-                        `http://${this.props.oyeURL}/oyesafe/api/v1/DeleteOldNotifications`,
-                              {
-                                  headers: {
-                                      'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE',
-                                      'Content-Type': 'application/json'
-                                  },
-                                  data: {
-                                      Notification: [{ "NTID": notifiId }]
-                                  }
-                              },
+                // if(visitorStatus == "Entry Approved"){
+                //     axios.delete(
+                //         `http://${this.props.oyeURL}/oyesafe/api/v1/DeleteOldNotifications`,
+                //               {
+                //                   headers: {
+                //                       'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE',
+                //                       'Content-Type': 'application/json'
+                //                   },
+                //                   data: {
+                //                       Notification: [{ "NTID": notifiId }]
+                //                   }
+                //               },
     
     
-                          )
-                          .then(responses => { 
-                              console.log('NotificationDeleted',responses)
-                          })
-                          .catch(e => {
-                              console.log('RESPONSE2222', e)
-                          })
-                }
+                //           )
+                //           .then(responses => { 
+                //               console.log('NotificationDeleted',responses)
+                //           })
+                //           .catch(e => {
+                //               console.log('RESPONSE2222', e)
+                //           })
+                // }
                
             this.removeNotificationData();
         }
@@ -381,28 +381,28 @@ async denyGateVisitor(visitorId, index, associationid, visitorStatus, notifiId, 
     try {
         if (approvalResponse.status === 200) {
 
-            if(visitorStatus == "Entry Rejected"){
-                axios.delete(
-                    `http://${this.props.oyeURL}/oyesafe/api/v1/DeleteOldNotifications`,
-                          {
-                              headers: {
-                                  'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE',
-                                  'Content-Type': 'application/json'
-                              },
-                              data: {
-                                  Notification: [{ "NTID": notifiId }]
-                              }
-                          },
+            // if(visitorStatus == "Entry Rejected"){
+            //     axios.delete(
+            //         `http://${this.props.oyeURL}/oyesafe/api/v1/DeleteOldNotifications`,
+            //               {
+            //                   headers: {
+            //                       'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE',
+            //                       'Content-Type': 'application/json'
+            //                   },
+            //                   data: {
+            //                       Notification: [{ "NTID": notifiId }]
+            //                   }
+            //               },
 
 
-                      )
-                      .then(responses => { 
-                          console.log('NotificationDeletedDeny',responses)
-                      })
-                      .catch(e => {
-                          console.log('RESPONSE2222Deny', e)
-                      })
-            }
+            //           )
+            //           .then(responses => { 
+            //               console.log('NotificationDeletedDeny',responses)
+            //           })
+            //           .catch(e => {
+            //               console.log('RESPONSE2222Deny', e)
+            //           })
+            // }
 
             
             gateFirebase
