@@ -80,7 +80,7 @@ class DrawerMenu extends Component {
                       }
                       }
                   >
-                      <Image style={{height:22,width:22}} source={menu.icon}/>
+                      <Image style={{height:22,width:22,tintColor:'#B51414'}} source={menu.icon}/>
                       <Text style={{alignSelf:'center',paddingHorizontal:4,marginLeft:8}}>{menu.title}</Text>
                   </TouchableOpacity>
               )
@@ -90,7 +90,7 @@ class DrawerMenu extends Component {
                   <TouchableOpacity
                       style={{height:48,width:'100%',alignItems:'center',flexDirection:'row'}}
                   >
-                      <Image style={{height:22,width:22}} source={menu.icon}/>
+                      <Image style={{height:22,width:22,tintColor:'#B51414'}} source={menu.icon}/>
                       <Text style={{alignSelf:'center',paddingHorizontal:4,marginLeft:8}}>{menu.title}</Text>
                   </TouchableOpacity>
               )

@@ -66,7 +66,7 @@ class DashBoardHeader extends React.Component {
     if (count >= 1) {
       return (
         <BadgedIcon
-          color="#FF8C00"
+          color="#B51414"
           type="material"
           name="notifications"
           size={hp('4%')}
@@ -75,7 +75,7 @@ class DashBoardHeader extends React.Component {
     } else
       return (
         <Icon
-          color="#FF8C00"
+          color="#B51414"
           type="material"
           name="notifications"
           size={hp('4%')}
@@ -121,7 +121,7 @@ class DashBoardHeader extends React.Component {
 
   render() {
     return (
-      <SafeAreaView style={{ backgroundColor: '#ff8c00' }}>
+      <SafeAreaView style={{ backgroundColor: '#B51414' }}>
         <View style={HeaderStyles.container}>
           <View style={HeaderStyles.subContainerLeft}>
             <TouchableOpacity onPress={()=>this.openDrawer()}>

@@ -941,7 +941,7 @@ class RegisterMe extends Component {
         return (
                !this.state.isLoading ?
             <View style={styles.container}>
-                <SafeAreaView style={{ backgroundColor: '#ff8c00' }}>
+                <SafeAreaView style={{ backgroundColor: '#B51414' }}>
                     <View style={[styles.viewStyle1, { flexDirection: 'row' }]}>
                         <View style={styles.viewDetails1}>
                             <TouchableOpacity
@@ -1003,7 +1003,7 @@ class RegisterMe extends Component {
                                         <View style={styles.calView}>
                                             <Image
                                                 style={styles.viewDatePickerImageStyle}
-                                                source={require('../icons/cal.png')}
+                                                source={require('../icons/calender.png')}
                                             />
                                         </View>
 
@@ -1092,7 +1092,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: hp('2%'),
         fontWeight: 'bold',
-        color: '#ff8c00',
+        // color: '#ff8c00',
         marginBottom: hp('1.6%')
     },
     viewStyle1: {

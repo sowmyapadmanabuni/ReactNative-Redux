@@ -116,7 +116,7 @@ const PatrollingCheckPointsStyles = StyleSheet.create({
     },
     modalText: {
         alignSelf: 'center',
-        color: base.theme.colors.primary,
+        color: base.theme.colors.themeColor,
         fontFamily: base.theme.fonts.medium
     },
     marker: {

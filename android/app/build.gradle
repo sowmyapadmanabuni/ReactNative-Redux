@@ -197,6 +197,9 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-contacts-wrapper')
+    implementation project(':react-native-date-picker')
+    implementation project(':@react-native-community_masked-view')
     implementation project(':react-native-linear-gradient')
     implementation project(':@react-native-community_datetimepicker')
     implementation project(':react-native-safe-area-context')

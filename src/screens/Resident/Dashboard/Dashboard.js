@@ -1095,7 +1095,7 @@ class Dashboard extends React.Component {
                     seconds={5}
                     radius={25}
                     borderWidth={7}
-                    color={base.theme.colors.primary}
+                    color={base.theme.colors.themeColor}
                     updateText={(elapsedSeconds, totalSeconds) =>
                       ('' + totalSeconds - elapsedSeconds).toString() + '\nsec'
                     }
@@ -1302,6 +1302,7 @@ class Dashboard extends React.Component {
                           style={{
                             width: hp('4%'),
                             height: hp('4%'),
+                            tintColor:"#B51414"
                           }}
                           source={require('../../../../icons/buil.png')}
                         />
@@ -1556,7 +1557,7 @@ class Dashboard extends React.Component {
             height={'100%'}
             width={'25%'}
             cardText={' Family'}
-            cardIcon={require('../../../../icons/view_all_visitors.png')}
+            cardIcon={require('../../../../icons/view_all.png')}
             cardCount={this.props.dashBoardReducer.familyMemberCount}
             marginTop={20}
             iconWidth={Platform.OS === 'ios' ? hp('5') : 35}
@@ -1598,7 +1599,7 @@ class Dashboard extends React.Component {
             height={'100%'}
             width={'25%'}
             cardText={'Visitors'}
-            cardIcon={require('../../../../icons/view_all_visitors.png')}
+            cardIcon={require('../../../../icons/view_all.png')}
             marginTop={20}
             iconWidth={Platform.OS === 'ios' ? hp('5') : 35}
             iconHeight={Platform.OS === 'ios' ? hp('5') : 20}
@@ -1756,7 +1757,7 @@ class Dashboard extends React.Component {
             iconWidth={Platform.OS === 'ios' ? hp('5') : 35}
             iconHeight={Platform.OS === 'ios' ? hp('5') : 20}
             textFontSize={Platform.OS === 'ios' ? 8 : 12}
-            cardIcon={require('../../../../icons/view_all_visitors.png')}
+            cardIcon={require('../../../../icons/view_all.png')}
             marginTop={20}
             backgroundColor={base.theme.colors.cardBackground}
             onCardClick={() =>

@@ -1,44 +1,29 @@
 import React, { Component, Fragment } from 'react';
-import {
-  BackHandler,
-  Dimensions,
-  Image,
-  SafeAreaView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
+import { BackHandler, Dimensions, Image, SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import Spinner from 'react-native-spinkit';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
 import { connect } from 'react-redux';
-import {  
-  createStackNavigator  
-} from 'react-navigation-stack';
-import { createAppContainer,createSwitchNavigator } from 'react-navigation';
-import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp
-} from 'react-native-responsive-screen';
-import RegisterUser from './pages/RegisterUser';
-
-import MobileValid from './registration_pages/MobileValid';
-import OTPVerification from './registration_pages/OTPVerification';
-import SelectMyRole from './registration_pages/SelectMyRole';
-import RegistrationPage from './registration_pages/RegistrationPage';
-
-import ResApp from './dashboard_pages/ResApp';
+import { persistStore } from 'redux-persist';
 import associationlist from './assocition_pages/associationlist';
 import CreateAssociation from './assocition_pages/CreateAssociation';
-import unitlist from './assocition_pages/unitlist';
-import CreateOrJoin from './assocition_pages/CreateOrJoin';
 import CreateUnitsPotrait from './assocition_pages/CreateUnitsPotrait';
-import store from './src/store';
-import { persistStore } from 'redux-persist';
-
-import Spinner from 'react-native-spinkit';
+import unitlist from './assocition_pages/unitlist';
+import ResApp from './dashboard_pages/ResApp';
+import NavigatorService from './navigator';
+import RegisterUser from './pages/RegisterUser';
+import MobileValid from './registration_pages/MobileValid';
+import OTPVerification from './registration_pages/OTPVerification';
+import RegistrationPage from './registration_pages/RegistrationPage';
+import SelectMyRole from './registration_pages/SelectMyRole';
+import base from './src/base';
 import PrivacyPolicy from './src/screens/Policy/PrivacyPolicy';
 import TermsAndConditions from './src/screens/Policy/TermsAndConditions';
-import base from './src/base';
-import NavigatorService from './navigator';
+import store from './src/store';
+
+
+
 
 const AuthStack = createStackNavigator(
   {
@@ -273,8 +258,8 @@ const styles = StyleSheet.create({
   containers: {},
   ImageContainer: {
     //   backgroundColor:'yellow',
-    width: Dimensions.get('screen').width,
-    height: hp('25%'),
+    // width: Dimensions.get('screen').width,
+    // height: hp('25%'),
     alignItems: 'center',
     justifyContent: 'center'
   },

@@ -233,7 +233,7 @@ export default class HelloWorldApp extends Component {
                                     <View style={Styles.calView}>
                                         <Image
                                             style={Styles.viewDatePickerImageStyle}
-                                            source={require('../../../icons/cal.png')}
+                                            source={require('../../../icons/calender.png')}
                                         />
                                     </View>
                                 </View>
@@ -347,7 +347,7 @@ export default class HelloWorldApp extends Component {
                                     <View style={Styles.calView}>
                                         <Image
                                             style={Styles.viewDatePickerImageStyle}
-                                            source={require('../../../icons/cal.png')}
+                                            source={require('../../../icons/calender.png')}
                                         />
                                     </View>
                                 </View>

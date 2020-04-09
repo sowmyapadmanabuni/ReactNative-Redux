@@ -252,8 +252,8 @@ const ResApp = createStackNavigator({
     screen: EditProfile,
     navigationOptions: {
       title: 'Edit Profile',
-      header: null
-      //headerStyle: { backgroundColor: '#FA9917' },
+      header: null,
+      headerStyle: { backgroundColor: '#B51414' },
       // headerTintColor: '#ffffff',
     }
   },
@@ -271,8 +271,8 @@ const ResApp = createStackNavigator({
   MyFamilyList: {
     screen: MyFamilyList,
     navigationOptions: {
-      title: 'My Family List'
-      // headerStyle: { backgroundColor: "#f05555"},
+      title: 'My Family List',
+      //headerStyle: { backgroundColor: "#B51414"},
       // headerTintColor:  "#ffffff"
     }
   },

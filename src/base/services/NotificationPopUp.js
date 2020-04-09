@@ -179,7 +179,7 @@ class NotificationPopUp extends React.Component {
                                                 height: hp('6%'),
                                                 marginLeft: hp('0')
                                             }}
-                                            source={require('../../../icons/allow_1.png')}
+                                            source={require('../../../icons/allow.png')}
                                         />
                                         <Text style={{ color: 'green', textAlign: 'center', fontSize: hp('2') }}> Allow</Text>
                                     </View>

@@ -888,7 +888,7 @@ class NotificationDetailScreen extends PureComponent {
                               style={{width:30,height:30}}
                               source={require('../../../icons/allow.png')}
                           />
-                          <Text style={{fontSize:16,color:base.theme.colors.themeColor,}}>Allow</Text>
+                          <Text style={{fontSize:16,color:base.theme.green.themeColor,}}>Allow</Text>
                       </TouchableOpacity>
                       <TouchableOpacity onPress={() => this.rejectModal(details)
                       }  style={{flexDirection:'row',marginRight:20,alignItems:'center',justifyContent:'space-between'}}>
@@ -896,7 +896,7 @@ class NotificationDetailScreen extends PureComponent {
                               style={{width:30,height:30}}
                               source={require('../../../icons/deny.png')}
                           />
-                          <Text style={{fontSize:16,color:base.theme.colors.red,}}>Deny</Text>
+                          <Text style={{fontSize:16,color:base.theme.colors.themeColor,}}>Deny</Text>
                       </TouchableOpacity>
                   </View>
               </View>

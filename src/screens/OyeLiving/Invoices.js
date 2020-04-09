@@ -698,7 +698,7 @@ class Invoices extends React.Component {
                                                     <Image
                                                         resizeMode={'contain'}
                                                         style={{ height: hp('6'), width: wp('6'), left: wp('5') }}
-                                                        source={require('../../../icons/cal.png')}
+                                                        source={require('../../../icons/calender.png')}
                                                     />
                                                 </View>
                                             </TouchableOpacity>
@@ -726,7 +726,7 @@ class Invoices extends React.Component {
                                                     <Image
                                                         resizeMode={'contain'}
                                                         style={{ height: hp('6'), width: wp('6'), left: wp('5') }}
-                                                        source={require('../../../icons/cal.png')}
+                                                        source={require('../../../icons/calender.png')}
                                                     />
                                                 </View>
                                             </TouchableOpacity>

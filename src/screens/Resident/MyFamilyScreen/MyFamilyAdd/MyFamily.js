@@ -114,7 +114,7 @@ class MyFamily extends Component {
         return (
             <View style={Style.container}>
 
-                <SafeAreaView style={{backgroundColor: "#ff8c00"}}>
+                <SafeAreaView style={{backgroundColor: "#B51414"}}>
                     <View style={[
                         Style.viewStyle1,
                         {flexDirection: "row"}

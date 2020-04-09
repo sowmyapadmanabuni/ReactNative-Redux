@@ -79,10 +79,10 @@ PODS:
     - GoogleUtilities/Network (~> 5.2)
     - "GoogleUtilities/NSData+zlib (~> 5.2)"
     - nanopb (~> 0.3)
-  - GoogleMaps (3.2.0):
-    - GoogleMaps/Maps (= 3.2.0)
-  - GoogleMaps/Base (3.2.0)
-  - GoogleMaps/Maps (3.2.0):
+  - GoogleMaps (3.5.0):
+    - GoogleMaps/Maps (= 3.5.0)
+  - GoogleMaps/Base (3.5.0)
+  - GoogleMaps/Maps (3.5.0):
     - GoogleMaps/Base
   - GoogleUtilities/AppDelegateSwizzler (5.8.0):
     - GoogleUtilities/Environment
@@ -108,13 +108,13 @@ PODS:
     - nanopb/encode (= 0.3.9011)
   - nanopb/decode (0.3.9011)
   - nanopb/encode (0.3.9011)
-  - Permission-BluetoothPeripheral (2.0.9):
+  - Permission-BluetoothPeripheral (2.0.10):
     - RNPermissions
-  - Permission-Camera (2.0.9):
+  - Permission-Camera (2.0.10):
     - RNPermissions
-  - Permission-MediaLibrary (2.0.9):
+  - Permission-MediaLibrary (2.0.10):
     - RNPermissions
-  - Permission-Microphone (2.0.9):
+  - Permission-Microphone (2.0.10):
     - RNPermissions
   - Protobuf (3.11.4)
   - RCTRequired (0.61.5)
@@ -284,19 +284,33 @@ PODS:
   - React-jsinspector (0.61.5)
   - react-native-background-timer (2.2.0):
     - React
-  - react-native-document-picker (3.3.0):
+  - react-native-date-picker (2.7.9):
+    - React
+  - react-native-document-picker (3.3.3):
     - React
   - react-native-geolocation (2.0.2):
     - React
-  - react-native-google-maps (0.26.1):
+  - react-native-google-maps (0.27.1):
     - Google-Maps-iOS-Utils (= 2.1.0)
-    - GoogleMaps (= 3.2.0)
+    - GoogleMaps (= 3.5.0)
+    - React
+  - react-native-html-to-pdf (0.8.0):
     - React
   - react-native-image-picker (2.3.1):
     - React
-  - react-native-maps (0.26.1):
+  - react-native-location-satellites (1.0.5):
+    - React
+  - react-native-maps (0.27.1):
+    - React
+  - react-native-netinfo (5.7.0):
+    - React
+  - react-native-safe-area-context (0.7.3):
+    - React
+  - react-native-spinkit (1.4.1):
     - React
   - react-native-version-number (0.3.6):
+    - React
+  - react-native-view-shot (3.1.2):
     - React
   - React-RCTActionSheet (0.61.5):
     - React-Core/RCTActionSheetHeaders (= 0.61.5)
@@ -343,19 +357,41 @@ PODS:
     - React
   - RNAudioRecorderPlayer (2.5.0):
     - React
+  - RNCMaskedView (0.1.7):
+    - React
+  - RNDateTimePicker (2.3.1):
+    - React
   - RNDeviceInfo (5.5.3):
+    - React
+  - RNFirebase (5.6.0):
+    - Firebase/Core
+    - React
+    - RNFirebase/Crashlytics (= 5.6.0)
+  - RNFirebase/Crashlytics (5.6.0):
+    - Crashlytics
+    - Fabric
+    - Firebase/Core
     - React
   - RNFS (2.16.6):
     - React
-  - RNGestureHandler (1.6.0):
+  - RNGestureHandler (1.6.1):
+    - React
+  - RNImageToPdf (1.2.0):
     - React
   - RNPDF (0.10.1):
     - React
-  - RNPermissions (2.0.9):
+  - RNPermissions (2.0.10):
     - React
-  - RNReanimated (1.7.0):
+  - RNReanimated (1.8.0):
     - React
-  - RNScreens (2.3.0):
+  - RNScreens (2.4.0):
+    - React
+  - RNShare (3.1.2):
+    - React
+  - RNSound (0.11.0):
+    - React
+    - RNSound/Core (= 0.11.0)
+  - RNSound/Core (0.11.0):
     - React
   - RNSVG (12.0.3):
     - React
@@ -394,12 +430,19 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-background-timer (from `../node_modules/react-native-background-timer`)
+  - react-native-date-picker (from `../node_modules/react-native-date-picker`)
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
   - react-native-google-maps (from `../node_modules/react-native-maps`)
+  - react-native-html-to-pdf (from `../node_modules/react-native-html-to-pdf`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
+  - react-native-location-satellites (from `../node_modules/react-native-location-satellites`)
   - react-native-maps (from `../node_modules/react-native-maps`)
+  - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
+  - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
+  - react-native-spinkit (from `../node_modules/react-native-spinkit`)
   - react-native-version-number (from `../node_modules/react-native-version-number`)
+  - react-native-view-shot (from `../node_modules/react-native-view-shot`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
   - React-RCTBlob (from `../node_modules/react-native/Libraries/Blob`)
@@ -415,13 +458,20 @@ DEPENDENCIES:
   - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
   - RNAudioRecord (from `../node_modules/react-native-audio-record`)
   - RNAudioRecorderPlayer (from `../node_modules/react-native-audio-recorder-player`)
+  - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
+  - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker/RNDateTimePicker.podspec`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
+  - RNFirebase (from `../node_modules/react-native-firebase/ios`)
+  - RNFirebase/Crashlytics (from `../node_modules/react-native-firebase/ios`)
   - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNImageToPdf (from `../node_modules/react-native-image-to-pdf`)
   - RNPDF (from `../node_modules/react-native-view-pdf`)
   - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - RNShare (from `../node_modules/react-native-share`)
+  - RNSound (from `../node_modules/react-native-sound`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -489,18 +539,32 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   react-native-background-timer:
     :path: "../node_modules/react-native-background-timer"
+  react-native-date-picker:
+    :path: "../node_modules/react-native-date-picker"
   react-native-document-picker:
     :path: "../node_modules/react-native-document-picker"
   react-native-geolocation:
     :path: "../node_modules/@react-native-community/geolocation"
   react-native-google-maps:
     :path: "../node_modules/react-native-maps"
+  react-native-html-to-pdf:
+    :path: "../node_modules/react-native-html-to-pdf"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
+  react-native-location-satellites:
+    :path: "../node_modules/react-native-location-satellites"
   react-native-maps:
     :path: "../node_modules/react-native-maps"
+  react-native-netinfo:
+    :path: "../node_modules/@react-native-community/netinfo"
+  react-native-safe-area-context:
+    :path: "../node_modules/react-native-safe-area-context"
+  react-native-spinkit:
+    :path: "../node_modules/react-native-spinkit"
   react-native-version-number:
     :path: "../node_modules/react-native-version-number"
+  react-native-view-shot:
+    :path: "../node_modules/react-native-view-shot"
   React-RCTActionSheet:
     :path: "../node_modules/react-native/Libraries/ActionSheetIOS"
   React-RCTAnimation:
@@ -529,12 +593,20 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-audio-record"
   RNAudioRecorderPlayer:
     :path: "../node_modules/react-native-audio-recorder-player"
+  RNCMaskedView:
+    :path: "../node_modules/@react-native-community/masked-view"
+  RNDateTimePicker:
+    :path: "../node_modules/@react-native-community/datetimepicker/RNDateTimePicker.podspec"
   RNDeviceInfo:
     :path: "../node_modules/react-native-device-info"
+  RNFirebase:
+    :path: "../node_modules/react-native-firebase/ios"
   RNFS:
     :path: "../node_modules/react-native-fs"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNImageToPdf:
+    :path: "../node_modules/react-native-image-to-pdf"
   RNPDF:
     :path: "../node_modules/react-native-view-pdf"
   RNPermissions:
@@ -543,6 +615,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNShare:
+    :path: "../node_modules/react-native-share"
+  RNSound:
+    :path: "../node_modules/react-native-sound"
   RNSVG:
     :path: "../node_modules/react-native-svg"
   RNVectorIcons:
@@ -568,14 +644,14 @@ SPEC CHECKSUMS:
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
   Google-Maps-iOS-Utils: c32891ff472eaaa1fca032beedafa1a013af7875
   GoogleAppMeasurement: 1624046ab1bcc5e170061a56ef5679000b079c8e
-  GoogleMaps: 5046d7edfe381c1a0b20fdaf293915a375c3122b
+  GoogleMaps: 32ca02de09de357a10ac773f2c70f1986751392d
   GoogleUtilities: 04fce34bcd5620c1ee76fb79172105c74a4df335
   lottie-ios: 85ce835dd8c53e02509f20729fc7d6a4e6645a0a
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
-  Permission-BluetoothPeripheral: 879d801d500b7e1767c4529c92268c0c71afb6c4
-  Permission-Camera: b0fec577b27488314a885f9c74433e02f3585b9b
-  Permission-MediaLibrary: 82e374f494221a6202836293448995c927c6603b
-  Permission-Microphone: c46ef776bd65d251d3bcb544bedaf7160c1afe06
+  Permission-BluetoothPeripheral: 90dce4c7b271fab4816fb32a768a1bfc7c223944
+  Permission-Camera: 8f0e5decca5f28f70f28a8dc31f012c9bad40ad8
+  Permission-MediaLibrary: 228fb551f3d683f4e64cd18088cfa33025cb21e2
+  Permission-Microphone: 97ba829d2f3bab3ceb299f112d82b967d48c1d5a
   Protobuf: 176220c526ad8bd09ab1fb40a978eac3fef665f7
   RCTRequired: b153add4da6e7dbc44aebf93f3cf4fcae392ddf1
   RCTSystemSetting: f3123e7de51bf918bc4243167ba2885a72bf09ec
@@ -588,12 +664,19 @@ SPEC CHECKSUMS:
   React-jsiexecutor: d5525f9ed5f782fdbacb64b9b01a43a9323d2386
   React-jsinspector: fa0ecc501688c3c4c34f28834a76302233e29dc0
   react-native-background-timer: 53c0e028a95d58b1f4498ef7ce152b6c6b337595
-  react-native-document-picker: 0573c02d742d4bef38a5d16b5f039754cfa69888
+  react-native-date-picker: 1160a435db143a4a27f2319aba2052186661b2b9
+  react-native-document-picker: dd96ce05bf1453b110d7a3912097bf6d298d2cb6
   react-native-geolocation: cbd9d6bd06bac411eed2671810f454d4908484a8
-  react-native-google-maps: 2e2e697dab576abd5809d78cd74e775865b62bf7
+  react-native-google-maps: 0a989abda71059db2caa98b9dacca7a8f38a47d0
+  react-native-html-to-pdf: be2f7a88b33a12b481b771d1bf172dca5968ef50
   react-native-image-picker: 668e72d0277dc8c12ae90e835507c1eddd2e4f85
-  react-native-maps: 6e499eee4eabf422ba8b6f94e993cc768bf35153
+  react-native-location-satellites: 0c481302baa638d48919c92633ac0bce24a47958
+  react-native-maps: f4b89da81626ad7f151a8bfcb79733295d31ce5c
+  react-native-netinfo: 61a837131d5f0194d22f8048a456d8f31a074baa
+  react-native-safe-area-context: 8260e5157617df4b72865f44006797f895b2ada7
+  react-native-spinkit: da294fd828216ad211fe36a5c14c1e09f09e62db
   react-native-version-number: 15563dc4145a94aabfc1faab2a9af10174a4204e
+  react-native-view-shot: 08c46c9e8e92f6681e8f2ffa55ac3d06e7e99070
   React-RCTActionSheet: 600b4d10e3aea0913b5a92256d2719c0cdd26d76
   React-RCTAnimation: 791a87558389c80908ed06cc5dfc5e7920dfa360
   React-RCTBlob: d89293cc0236d9cb0933d85e430b0bbe81ad1d72
@@ -608,17 +691,23 @@ SPEC CHECKSUMS:
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNAudioRecord: f38c2caac4bbbc34f24563869745110970f1dfe3
   RNAudioRecorderPlayer: 60225f2c9b47f079d0712e013e8f29f02ad42251
+  RNCMaskedView: 90dd32f5b786bd562e876e1421ea77c700cbf71e
+  RNDateTimePicker: f654c60568209005a3d9a5a6c4bff0c7094ec527
   RNDeviceInfo: 67607dfe9cfbed105838144c40187a8392aa404d
+  RNFirebase: 37daa9a346d070f9f6ee1f3b4aaf4c8e3b1d5d1c
   RNFS: 2bd9eb49dc82fa9676382f0585b992c424cd59df
-  RNGestureHandler: dde546180bf24af0b5f737c8ad04b6f3fa51609a
+  RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
+  RNImageToPdf: 81660dde20e7f2cdbf67bdbac773374dd0805efa
   RNPDF: 8a40fafbed2714e7e8fe4e7c9f6f9815f52a939c
-  RNPermissions: 6db7e0a4d94c9c02390d11020b1d3d187aaf77e5
-  RNReanimated: 031fe8d9ea93c2bd689a40f05320ef9d96f74d7f
-  RNScreens: 03bf608b92ac0acf323f47d8f5b63a8f829340c8
+  RNPermissions: 8afd37dbc1be65748363c6a90caffd1806567651
+  RNReanimated: 955cf4068714003d2f1a6e2bae3fb1118f359aff
+  RNScreens: b5c0e1b2b04512919e78bd3898e144a157ce2363
+  RNShare: c19dbe4a7224098cd3cfc4d3b92c886ca817b3f0
+  RNSound: c980916b596cc15c8dcd2f6ecd3b13c4881dbe20
   RNSVG: 7e16ddfc6e00d5aa69c9eb83e699bcce5dcb85d4
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
-PODFILE CHECKSUM: 950c5087fe2aa1a49988c099deaedbdf2cef6f28
+PODFILE CHECKSUM: c5815bbe6286adb1e8646300aabfcab20a3950ab
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.9.1

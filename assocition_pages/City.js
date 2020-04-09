@@ -86,7 +86,7 @@ export default class City extends Component {
     render() {
         return (
             <View style={styles.contaianer}>
-                <SafeAreaView style={{backgroundColor: '#ff8c00'}}>
+                <SafeAreaView style={{backgroundColor: '#B51414'}}>
                     <View style={[styles.viewStyle1, {flexDirection: 'row'}]}>
                         <View style={styles.viewDetails1}>
                             <TouchableOpacity

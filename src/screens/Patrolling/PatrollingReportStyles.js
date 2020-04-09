@@ -20,7 +20,7 @@ const PatrollingReportStyles = StyleSheet.create({
     headerText: {
         fontSize: 15,
         fontFamily: base.theme.fonts.medium,
-        color: base.theme.colors.primary
+        color: base.theme.colors.black
     },
     dropdownView: {
         width: wp('90%'),
@@ -61,7 +61,7 @@ const PatrollingReportStyles = StyleSheet.create({
     },
     slotTime: {
         fontSize: 18,
-        color: base.theme.colors.primary,
+        color: base.theme.colors.themeColor,
         top: 3
     },
     calender: {
@@ -134,8 +134,8 @@ const PatrollingReportStyles = StyleSheet.create({
     },
     calenderIcon: {
         borderWidth: 0,
-        height: hp('5%'),
-        width: wp('5%')
+        // height: hp('5%'),
+        // width: wp('5%')
     },
     radioButtonView: {
         height: hp('3%'),

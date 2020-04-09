@@ -256,7 +256,7 @@ class AddVehicle extends Component {
         return (
             <View style={styles.container}>
                 {/* <Header/> */}
-                <SafeAreaView style={{backgroundColor: '#ff8c00'}}>
+                <SafeAreaView style={{backgroundColor: '#B51414'}}>
                     <View style={[styles.viewStyle1, {flexDirection: 'row'}]}>
                         <View style={styles.viewDetails1}>
                             <TouchableOpacity
@@ -518,13 +518,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     box1: {
-        borderBottomColor: '#ff8c00',
+        borderBottomColor: '#B51414',
         borderBottomWidth: hp('0.2%'),
         marginLeft: wp('5%'),
         marginRight: wp('5%'),
         paddingLeft: wp('5%'),
         height: hp('5%'),
-        backgroundColor: '#ff8c00',
+        backgroundColor: '#B51414',
         width: hp('50%'),
         marginTop: hp('4%')
     },

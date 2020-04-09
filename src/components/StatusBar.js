@@ -9,7 +9,7 @@ export function StatusBarPlaceHolder() {
         <View style={{
             width: "100%",
             height: STATUS_BAR_HEIGHT,
-            backgroundColor: base.theme.colors.primary
+            backgroundColor: base.theme.colors.themeColor
         }}>
             <StatusBar
                 barStyle="light-content"
