@@ -743,7 +743,7 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        //backgroundColor: "#fff",
+        backgroundColor: "#fff",
         flexDirection: "column"
     },
     progress: {
@@ -752,7 +752,8 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
     mainView: {
-        flex: 1
+        flex: 1,
+        backgroundColor:base.theme.colors.white
     },
     titleOfScreen: {
         marginTop: hp("2%"),

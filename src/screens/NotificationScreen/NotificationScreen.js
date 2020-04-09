@@ -61,6 +61,26 @@ import ProgressLoader from 'rn-progress-loader';
 
 
 
+// "Entry Expired";
+
+//  "Exit Expired";
+
+//  "Entry Rejected";
+
+// "Exit Rejected";
+
+//  "Entry Approved";
+
+//  "Exit Approved";
+
+//  "Exited";
+
+// "Entry Pending";
+
+// "Exit Pending";
+
+
+
 class NotificationScreen extends PureComponent {
     constructor(props) {
         super(props);
@@ -212,7 +232,7 @@ class NotificationScreen extends PureComponent {
         oldNotif[index].opened = true;
         this.props.onGateApp(oldNotif);
         let delArray = [];
-        if (visitorStatus == "ExitApproved") {
+        if (visitorStatus == "ExitApproved" || visitorStatus == "Exit Approved") {
             for (let i = 0; i < oldNotif.length; i++) {
 
                 if (oldNotif[i].vlVisLgID === visitorId) {
@@ -241,8 +261,8 @@ class NotificationScreen extends PureComponent {
                         {
                             VLApprStat: visitorStatus,
                             VLVisLgID: visitorId,
-                            VLApprdBy: visitorStatus == "EntryApproved" ? this.props.userReducer.MyFirstName : approvedBy,
-                            VLExAprdBy: visitorStatus == "ExitApproved" ? this.props.userReducer.MyFirstName : "",
+                            VLApprdBy: visitorStatus == "EntryApproved" || visitorStatus == "Entry Approved" ? this.props.userReducer.MyFirstName : approvedBy,
+                            VLExAprdBy: visitorStatus == "ExitApproved" || visitorStatus == "Exit Approved"? this.props.userReducer.MyFirstName : "",
 
                         },
                         {
@@ -333,7 +353,7 @@ class NotificationScreen extends PureComponent {
         oldNotif[index].opened = true;
         this.props.onGateApp(oldNotif);
         let delArray = [];
-        if (visitorStatus == "ExitRejected") {
+        if (visitorStatus == "ExitRejected" || visitorStatus == "Exit Rejected") {
             for (let i = 0; i < oldNotif.length; i++) {
 
                 if (oldNotif[i].vlVisLgID === visitorId) {
@@ -362,8 +382,8 @@ class NotificationScreen extends PureComponent {
                         {
                             VLApprStat: visitorStatus,
                             VLVisLgID: visitorId,
-                            VLApprdBy: visitorStatus == "EntryRejected" ? this.props.userReducer.MyFirstName : approvedBy,
-                            VLExAprdBy: visitorStatus == "ExitRejected" ? this.props.userReducer.MyFirstName : "",
+                            VLApprdBy: visitorStatus == "EntryRejected" || visitorStatus == "Entry Rejected"? this.props.userReducer.MyFirstName : approvedBy,
+                            VLExAprdBy: visitorStatus == "ExitRejected" || visitorStatus == "Exit Rejected"? this.props.userReducer.MyFirstName : "",
                         },
                         {
                             headers: {
@@ -826,7 +846,7 @@ class NotificationScreen extends PureComponent {
                             backgroundColor: base.theme.colors.greyCard,
                         }}>
                             <View style={{
-                                flexDirection: 'row', backgroundColor: item.visitorlog[0].vlVisType == "Delivery" && item.visitorlog[0].vlApprStat == "Entry Pending" && item.ntIsActive ? "#FFE49B" : base.theme.colors.greyCard,
+                                flexDirection: 'row', backgroundColor: item.visitorlog[0].vlVisType == "Delivery" && (item.visitorlog[0].vlApprStat == "Entry Pending" || item.visitorlog[0].vlApprStat == "Exit Pending" )&& item.ntIsActive ? "#FFE49B" : base.theme.colors.greyCard,
                                 alignItems: 'center', justifyContent: 'space-between',
                                 borderBottomWidth: 0.5, borderBottomColor: base.theme.colors.greyHead, height: 50
                             }}>
@@ -890,14 +910,14 @@ class NotificationScreen extends PureComponent {
                                 </View>
                                 {item.visitorlog[0].vlApprdBy != "" ?
                                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
-                                        <Text style={{ fontSize: 16, color: base.theme.colors.themeColor, alignSelf: 'flex-start', marginLeft: 15 }}>{item.visitorlog[0].vlApprStat == "Rejected" ? "Entry Rejected by :" : "Entry Approved by :"}
+                                        <Text style={{ fontSize: 16, color: base.theme.colors.themeColor, alignSelf: 'flex-start', marginLeft: 15 }}>{item.visitorlog[0].vlApprStat == "Rejected" || item.visitorlog[0].vlApprStat == "Entry Rejected"? "Entry Rejected by :" : "Entry Approved by :"}
                                             <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{' '}{item.visitorlog[0].vlApprdBy}</Text>
                                         </Text>
                                     </View>
                                     :
                                     <View />}
     
-                                {item.visitorlog[0].vlexgName != "" && (item.visitorlog[0].vlApprStat != "Expired" || item.visitorlog[0].vlApprStat !="EntryExpired" ||  item.visitorlog[0].vlApprStat !="ExitExpired")?
+                                {item.visitorlog[0].vlexgName != "" && (item.visitorlog[0].vlApprStat != "Expired" || item.visitorlog[0].vlApprStat !="EntryExpired" ||  item.visitorlog[0].vlApprStat !="ExitExpired" || item.visitorlog[0].vlApprStat !="Entry Expired" ||  item.visitorlog[0].vlApprStat !="Exit Expired")?
                                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                                         <Text style={{ fontSize: 14, color: base.theme.colors.themeColor, marginLeft: 15 }}>Exit on   :
                                             <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{' '}{moment(item.visitorlog[0].vldUpdated, 'YYYY-MM-DD').format(
@@ -913,13 +933,13 @@ class NotificationScreen extends PureComponent {
     
                                 {item.visitorlog[0].vlExAprdBy != "" ?
                                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
-                                        <Text style={{ fontSize: 16, color: base.theme.colors.themeColor, alignSelf: 'flex-start', marginLeft: 15 }}>{item.visitorlog[0].vlApprStat == "Rejected" ? "Exit Rejected by :" : "Exit Approved by :"}
+                                        <Text style={{ fontSize: 16, color: base.theme.colors.themeColor, alignSelf: 'flex-start', marginLeft: 15 }}>{item.visitorlog[0].vlApprStat == "Rejected" || item.visitorlog[0].vlApprStat == "Exit Rejected" ? "Exit Rejected by :" : "Exit Approved by :"}
                                             <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{' '}{item.visitorlog[0].vlExAprdBy}</Text>
                                         </Text>
                                     </View>
                                     :
                                     <View />}
-                                {item.visitorlog[0].vlVisType === "Delivery" && (item.visitorlog[0].vlApprStat == "Expired"  || item.visitorlog[0].vlApprStat !="EntryExpired" || item.visitorlog[0].vlApprStat !="ExitExpired" )?
+                                {item.visitorlog[0].vlVisType === "Delivery" && (item.visitorlog[0].vlApprStat == "Expired"  || item.visitorlog[0].vlApprStat !="EntryExpired" || item.visitorlog[0].vlApprStat !="ExitExpired" || item.visitorlog[0].vlApprStat !="Entry Expired" || item.visitorlog[0].vlApprStat !="Exit Expired" )?
                                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
                                         <Text style={{ fontSize: 16, color: base.theme.colors.themeColor, alignSelf: 'flex-start', marginLeft: 15 }}>Status  :
                                             <Text style={{ fontSize: 14, color: base.theme.colors.black, }}>{' '}{item.visitorlog[0].vlApprStat}</Text>
@@ -940,7 +960,7 @@ class NotificationScreen extends PureComponent {
                                                         item.visitorlog[0].vlVisLgID,
                                                         index,
                                                         item.asAssnID,
-                                                        "EntryApproved",
+                                                        "Entry Approved",
                                                         item.ntid,
                                                         item.visitorlog[0].vlApprdBy
                                                     );
@@ -956,7 +976,7 @@ class NotificationScreen extends PureComponent {
                                                         item.visitorlog[0].vlVisLgID,
                                                         index,
                                                         item.asAssnID,
-                                                        "EntryRejected",
+                                                        "Entry Rejected",
                                                         item.ntid,
                                                         item.visitorlog[0].vlApprdBy
                                                  )
@@ -974,7 +994,7 @@ class NotificationScreen extends PureComponent {
                                 }
     
                                 {
-                                    item.visitorlog[0].vlVisType === "Delivery" && item.visitorlog[0].vlApprStat === "ExitPending" ?
+                                    item.visitorlog[0].vlVisType === "Delivery" && item.visitorlog[0].vlApprStat === "Exit Pending" ?
                                         <View style={{
                                             flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
                                             marginBottom: 20, backgroundColor: base.theme.colors.shadedWhite, paddingTop: 10, paddingBottom: 10, marginTop: 10
@@ -986,7 +1006,7 @@ class NotificationScreen extends PureComponent {
                                                         item.visitorlog[0].vlVisLgID,
                                                         index,
                                                         item.asAssnID,
-                                                        "ExitApproved",
+                                                        "Exit Approved",
                                                         item.ntid,
                                                         item.visitorlog[0].vlApprdBy
     
@@ -1004,7 +1024,7 @@ class NotificationScreen extends PureComponent {
                                                         item.visitorlog[0].vlVisLgID,
                                                         index,
                                                         item.asAssnID,
-                                                        "ExitRejected",
+                                                        "Exit Rejected",
                                                         item.visitorlog[0].vlApprdBy
                                                     )
                                                 } style={{ flexDirection: 'row', marginRight: 20, alignItems: 'center', justifyContent: 'space-between' }}>
@@ -1032,7 +1052,7 @@ class NotificationScreen extends PureComponent {
                                                         item.visitorlog[0].vlVisLgID,
                                                         index,
                                                         item.asAssnID,
-                                                        "ExitApproved",
+                                                        "Exit Approved",
                                                         item.ntid,
                                                     );
                                                 }}
@@ -1048,7 +1068,7 @@ class NotificationScreen extends PureComponent {
                                                         item.visitorlog[0].vlVisLgID,
                                                         index,
                                                         item.asAssnID,
-                                                        "ExitRejected",
+                                                        "Exit Rejected",
                                                         item.ntid,
     
                                                     )
