@@ -470,7 +470,7 @@ class OTPVerification extends Component {
                                     height: hp("5%"),
                                     justifyContent: "center",
                                     alignItems: "center",
-                                    backgroundColor: this.state.timer === 1 && this.state.isSmsLimit ? base.theme.colors.themeColor : base.theme.colors.themeColor,
+                                    backgroundColor: this.state.timer === 1 && this.state.isSmsLimit ? base.theme.colors.themeColor : base.theme.colors.grey,
                                 }}
                                 rounded
                             >
@@ -488,7 +488,7 @@ class OTPVerification extends Component {
                                     height: hp("5%"),
                                     justifyContent: "center",
                                     alignItems: "center",
-                                    backgroundColor: this.state.timer === 1 && this.state.isCallLimit ? base.theme.colors.themeColor : base.theme.colors.themeColor,
+                                    backgroundColor: this.state.timer === 1 && this.state.isCallLimit ? base.theme.colors.themeColor : base.theme.colors.grey,
                                 }}
                                 rounded
                             >
