@@ -15,7 +15,8 @@ import {
     UPDATE_ID_DASHBOARD,
     UPDATE_SELECTED_DROPDOWN,
     USER_ROLE,
-    IS_NOTIFICATION
+    IS_NOTIFICATION,
+    IS_SOS
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -44,7 +45,8 @@ const INITIAL_STATE = {
     roleId: null,
     isInternetConnected:true,
     userQRCode:"",
-    isNotification:false
+    isNotification:false,
+    isSOS:false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -138,6 +140,12 @@ export default (state = INITIAL_STATE, action) => {
                 dropdown: action.payload.dropdown,
                 associationid: action.payload.associationid,isLoading:false
             };
+
+        case IS_SOS:
+                return{
+                    ...state,
+                    isSOS:action.payload.prop
+                }
 
         default:
             return state;

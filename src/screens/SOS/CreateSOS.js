@@ -358,6 +358,7 @@ class CreateSOS extends React.Component {
         let longitude = (this.state.region.longitude).toString();
         let unitName = data.dashBoardReducer.selectedDropdown1;
         let isActive = true;
+
         this.setState({
             unitId:unitName
         })
@@ -367,7 +368,7 @@ class CreateSOS extends React.Component {
         let self = this;
         if (this.state.image === null) {
             firebase.database().ref('SOS/' + associationID + "/" + userId + "/").set({
-                isActive, latitude, longitude, unitId, userId, userMobile, userName, unitName
+                isActive, latitude, longitude, unitId, userId, userMobile, userName, unitName,associationID
             }).then((data) => {
                 console.log("Data saved to RTD:", data);
                 self.sendPushNotification();
@@ -611,7 +612,7 @@ class CreateSOS extends React.Component {
     render() {
         let imageURI = require('../../../icons/camera.png');
         let unitName = this.props.dashBoardReducer.selectedDropdown1 === undefined || this.props.dashBoardReducer.selectedDropdown1 === null ?"Help is on the way":`Help is on the way to your unit - ${this.state.unitId}`;
-        console.log("Guard Detail:", this.state);
+        console.log("Guard Detail:", this.props);
         return (
             <ScrollView style={CreateSOSStyles.container}>
                 <View style={{marginBottom:50}}>

@@ -37,7 +37,8 @@ import {
   updateSelectedDropDown,
   updateUserInfo,
   updateuserRole,
-  updatePopUpNotification
+  updatePopUpNotification,
+  updateSOS
 } from '../../../actions';
 import IcoMoonConfig from '../../../assets/selection.json';
 import base from '../../../base';
@@ -234,9 +235,6 @@ class Dashboard extends React.Component {
     };
 
 
-    let sRespo = await axios(options);
-    console.log('Data received in data notification pop up fetch:', sRespo);
-
     axios(options).then((response) => {
       try {
         let sResp = response.data.data.popupNotifications;
@@ -244,7 +242,6 @@ class Dashboard extends React.Component {
         if (sResp.length !== 0) {
           updatePopUpNotification(sResp);
           updateNotificationData(true);
-          firebase.notifications().removeAllDeliveredNotifications()
         } else {
           updatePopUpNotification([]);
           updateNotificationData(false);
@@ -298,7 +295,7 @@ class Dashboard extends React.Component {
   }
 
   readFBRTB(isNotificationClicked) {
-    const { dropdown } = this.props;
+    const { dropdown, updateSOS } = this.props;
     let count = 0;
     for (let i in dropdown) {
       let SelectedAssociationID = parseInt(dropdown[i].associationId);
@@ -312,12 +309,14 @@ class Dashboard extends React.Component {
           if (receivedData !== null) {
             count = count + 1;
             if (receivedData.isActive && receivedData.userId) {
+              updateSOS(true)
               self.props.navigation.navigate('sosScreen', {
                 isActive: true,
                 images:
                   receivedData.emergencyImages === undefined
                     ? []
-                    : receivedData.emergencyImages
+                    : receivedData.emergencyImages,
+                    selectedAssociation:receivedData.associationID
               });
             }
           }
@@ -2025,6 +2024,7 @@ export default connect(
     fetchAssociationByAccountId,
     updateUnitDropdown,
     updateNotificationData,
-    updatePopUpNotification
+    updatePopUpNotification,
+    updateSOS
   }
 )(Dashboard);
