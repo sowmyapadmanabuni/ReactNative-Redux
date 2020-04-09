@@ -2,7 +2,7 @@
  * @Author: Sarthak Mishra 
  * @Date: 2020-03-09 16:13:08 
  * @Last Modified by: Sarthak Mishra
- * @Last Modified time: 2020-03-31 13:56:58
+ * @Last Modified time: 2020-04-09 10:39:27
  */
 
 
@@ -134,7 +134,7 @@ class NotificationPopUp extends React.Component {
                                     }}
                                     source={{ uri: 'data:image/png;base64,' + notificationData.visitorlog[0].vlEntryImg }}
                                 />
-                                <View style={{ width: wp('50'), height: hp('0'), borderWidth: 0, alignSelf: 'center', left: hp('1'), alignItems: 'center', justifyContent: 'center', top: hp('3') }}>
+                                <View style={{ width: wp('50'), height: hp('0'), borderWidth: 0, alignSelf: 'center', left: hp('1'), alignItems: 'center', justifyContent: 'center', top:Platform.OS === 'ios'?0: hp('3') }}>
                                     <Text numberOfLines={1} style={{ color: '#333333', textAlign: 'center' }}>{notificationData.visitorlog[0].vlfName}</Text>
                                     <Text onPress={() => this.initiateCall(notificationData.visitorlog[0].vlMobile)} style={{ color: '#B51414', textAlign: 'center', fontSize: hp('1.5') }}>{notificationData.visitorlog[0].vlMobile}</Text>
                                 </View>

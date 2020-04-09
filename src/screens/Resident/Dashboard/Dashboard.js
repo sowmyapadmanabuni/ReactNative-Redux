@@ -225,11 +225,15 @@ class Dashboard extends React.Component {
 
     let options = {
       method: "get",
-      url: ` http://apiuat.oyespace.com/oyesafe/api/v1/Notification/GetNotificationsAsPopup/${MyAccountID}`,
+      url: `http://apiuat.oyespace.com/oyesafe/api/v1/Notification/GetNotificationsAsPopup/${MyAccountID}`,
       headers: {
         "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
       }
     };
+
+
+    let sRespo = await axios(options);
+    console.log('Data received in data notification pop up fetch:', sRespo);
 
     axios(options).then((response) => {
       try {
@@ -245,7 +249,7 @@ class Dashboard extends React.Component {
           firebase.notifications().removeAllDeliveredNotifications()
         }
       } catch (e) {
-        console.log(e)
+        console.log("Data received in data notification pop up fetch:",e)
       }
 
 
