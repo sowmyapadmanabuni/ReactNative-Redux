@@ -164,7 +164,7 @@ class NotificationPopUp extends React.Component {
                                         notificationData.visitorlog[0].vlVisLgID,
                                         0,
                                         notificationData.asAssnID,
-                                        notificationData.visitorlog[0].vlApprStat === "ExitPending"?"ExitApproved":"EntryApproved",
+                                        notificationData.visitorlog[0].vlApprStat === "Exit Pending"?"Exit Approved":"Entry Approved",
                                         notificationData.ntid,
                                         notificationData.visitorlog[0].vlApprdBy,
                                         notificationData.visitorlog[0].vlApprStat
@@ -190,7 +190,7 @@ class NotificationPopUp extends React.Component {
                                         notificationData.visitorlog[0].vlVisLgID,
                                         item.index,
                                         notificationData.asAssnID,
-                                        notificationData.visitorlog[0].vlApprStat === "ExitPending"?"ExitRejected":"EntryRejected",
+                                        notificationData.visitorlog[0].vlApprStat === "Exit Pending"?"Exit Rejected":"Entry Rejected",
                                         notificationData.ntid,
                                         notificationData.visitorlog[0].vlApprdBy,
                                         notificationData.visitorlog[0].vlApprStat
@@ -275,8 +275,8 @@ async acceptGateVisitor(visitorId, index, associationid, visitorStatus, notifiId
         data: {
             VLApprStat: visitorStatus,
             VLVisLgID: visitorId,
-            VLApprdBy: visitorStatus == "EntryApproved" ? this.props.userReducer.MyFirstName : approvedBy,
-            VLExAprdBy: visitorStatus == "ExitApproved" ? this.props.userReducer.MyFirstName : "",
+            VLApprdBy: visitorStatus == "Entry Approved" ? this.props.userReducer.MyFirstName : approvedBy,
+            VLExAprdBy: visitorStatus == "Exit Approved" ? this.props.userReducer.MyFirstName : "",
         },
         headers: headers
     }
@@ -298,6 +298,29 @@ async acceptGateVisitor(visitorId, index, associationid, visitorStatus, notifiId
                     updatedTime: currentTime,
                     status: visitorStatus,
                 });
+                if(visitorStatus == "Entry Approved"){
+                    axios.delete(
+                        `http://${this.props.oyeURL}/oyesafe/api/v1/DeleteOldNotifications`,
+                              {
+                                  headers: {
+                                      'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE',
+                                      'Content-Type': 'application/json'
+                                  },
+                                  data: {
+                                      Notification: [{ "NTID": notifiId }]
+                                  }
+                              },
+    
+    
+                          )
+                          .then(responses => { 
+                              console.log('NotificationDeleted',responses)
+                          })
+                          .catch(e => {
+                              console.log('RESPONSE2222', e)
+                          })
+                }
+               
             this.removeNotificationData();
         }
     } catch (error) {
@@ -345,8 +368,8 @@ async denyGateVisitor(visitorId, index, associationid, visitorStatus, notifiId, 
         data: {
             VLApprStat: visitorStatus,
             VLVisLgID: visitorId,
-            VLApprdBy: visitorStatus == "EntryRejected" ? this.props.userReducer.MyFirstName : approvedBy,
-            VLExAprdBy: visitorStatus == "ExitRejected" ? this.props.userReducer.MyFirstName : "",
+            VLApprdBy: visitorStatus == "Entry Rejected" ? this.props.userReducer.MyFirstName : approvedBy,
+            VLExAprdBy: visitorStatus == "Exit Rejected" ? this.props.userReducer.MyFirstName : "",
         },
         headers: headers
     }
@@ -357,6 +380,31 @@ async denyGateVisitor(visitorId, index, associationid, visitorStatus, notifiId, 
 
     try {
         if (approvalResponse.status === 200) {
+
+            if(visitorStatus == "Entry Rejected"){
+                axios.delete(
+                    `http://${this.props.oyeURL}/oyesafe/api/v1/DeleteOldNotifications`,
+                          {
+                              headers: {
+                                  'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE',
+                                  'Content-Type': 'application/json'
+                              },
+                              data: {
+                                  Notification: [{ "NTID": notifiId }]
+                              }
+                          },
+
+
+                      )
+                      .then(responses => { 
+                          console.log('NotificationDeletedDeny',responses)
+                      })
+                      .catch(e => {
+                          console.log('RESPONSE2222Deny', e)
+                      })
+            }
+
+            
             gateFirebase
                 .database()
                 .ref(`NotificationSync/A_${associationid}/${visitorId}`)

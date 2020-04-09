@@ -126,6 +126,7 @@ class Dashboard extends React.Component {
         self.setState({ isLoading: false });
         self.getPopUpNotifications();
         self.createTopicListener(self.props.dropdown, true)
+        self.getInvoiceMethodsList()
       }
       else {
         const { MyAccountID } = self.props;
@@ -169,6 +170,7 @@ class Dashboard extends React.Component {
         self.setState({ isLoading: false });
         self.createTopicListener(self.props.dropdown, true);
         self.readFBRTB(true);
+        self.getInvoiceMethodsList();
         self.getPopUpNotifications();
          firebase.notifications().getInitialNotification().then((notificationOpen: NotificationOpen) => {
           console.log("self.getPopUpNotifications();self.getPopUpNotifications();:",notificationOpen);
@@ -849,6 +851,7 @@ class Dashboard extends React.Component {
       dropdown[index].unit.length === 0 ? "" : this.getVehicleList()
       this.checkUserRole(dropdown[index])
       this.setView(0)
+      this.getInvoiceMethodsList()
     } catch (e) {
       //alert("err")
     }
@@ -1270,6 +1273,7 @@ class Dashboard extends React.Component {
                             unitDropdownIndex: index
                           })
                           this.getVehicleList();
+                          this.getInvoiceMethodsList();
                           //    this.updateUnit(value, index);
                         }}
                       // itemTextStyle={{}}
@@ -1650,7 +1654,7 @@ class Dashboard extends React.Component {
 
     let stat = await base.services.OyeLivingApi.getTheInvoicesOfResident(this.props.dashBoardReducer.assId,
       this.props.dashBoardReducer.uniID, this.props.userReducer.MyAccountID)
-    console.log('RESPONSE_INVOICES_RESIDENT', stat)
+    console.log('RESPONSE_INVOICES_RESIDENT', stat,this.props.dashBoardReducer.assId,this.props.dashBoardReducer.uniID,this.props.userReducer.MyAccountID)
     try {
       if (stat.success) {
         let invoicesList = stat.data.invoices;
