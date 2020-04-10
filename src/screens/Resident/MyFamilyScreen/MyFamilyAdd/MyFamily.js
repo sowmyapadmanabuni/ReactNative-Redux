@@ -18,7 +18,8 @@ import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view"
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen"
 import base from "../../../../base"
 import {connect} from "react-redux";
-import ContactsWrapper from "react-native-contacts-wrapper"
+import ContactsWrapper from "react-native-contacts-wrapper";
+import Contacts from 'react-native-contacts';
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import Style from './Style'
 import * as fb from 'firebase';
@@ -490,6 +491,18 @@ class MyFamily extends Component {
             .catch(err => {
                 console.error(err)
             });
+    }
+
+
+    async getTheContact1(){
+        Contacts.getAll((err, contacts) => {
+            console.log("Get The contact List:",contacts);
+            // if (err === 'denied'){
+            //   // error
+            // } else {
+            //   // contacts returned in Array
+            // }
+          })
     }
 
     async getTheContact() {

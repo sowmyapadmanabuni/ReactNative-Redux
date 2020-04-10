@@ -107,7 +107,7 @@
 		049386FA225DFA370033CF63 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		049386FC225E00580033CF63 /* OyeSpace.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = OyeSpace.entitlements; path = OyeSpace/OyeSpace.entitlements; sourceTree = "<group>"; };
 		102944E29C634BF6AAFA7678 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../node_modules/native-base/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* OyeSpace.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OyeSpace.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07F961A680F5B00A75B9A /* ScuareX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ScuareX.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = OyeSpace/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = OyeSpace/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB21A68108700A75B9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -389,7 +389,7 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* OyeSpace.app */,
+				13B07F961A680F5B00A75B9A /* ScuareX.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -445,7 +445,7 @@
 			);
 			name = OyeSpace;
 			productName = "Hello World";
-			productReference = 13B07F961A680F5B00A75B9A /* OyeSpace.app */;
+			productReference = 13B07F961A680F5B00A75B9A /* ScuareX.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -770,7 +770,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.oyespace.oyesafe;
-				PRODUCT_NAME = OyeSpace;
+				PRODUCT_NAME = ScuareX;
 				PROVISIONING_PROFILE_SPECIFIER = sarthak_dev_ScuareX_Dev;
 				SWIFT_OBJC_BRIDGING_HEADER = "OyeSpace-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -830,7 +830,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.oyespace.oyesafe;
-				PRODUCT_NAME = OyeSpace;
+				PRODUCT_NAME = ScuareX;
 				PROVISIONING_PROFILE_SPECIFIER = sarthak_mac_prov_oyesociety;
 				SWIFT_OBJC_BRIDGING_HEADER = "OyeSpace-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;

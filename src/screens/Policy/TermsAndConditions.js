@@ -1,6 +1,8 @@
 import React from 'react';
-import {BackHandler, Dimensions, Image, SafeAreaView, StyleSheet, TouchableOpacity, View, WebView} from 'react-native';
+import {BackHandler, Dimensions, Image, SafeAreaView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
+import { WebView } from 'react-native-webview';
+
 
 
 const {width, height} = Dimensions.get('window');
@@ -26,7 +28,7 @@ class TermsAndConditions extends React.Component {
         return (
             <View style={styles.container}>
 
-                <SafeAreaView style={{backgroundColor: "#ff8c00"}}>
+                <SafeAreaView style={{backgroundColor: "#B51414"}}>
                     <View style={[styles.viewStyle1, {flexDirection: "row"}]}>
                         <View style={styles.viewDetails1}>
                             <TouchableOpacity
@@ -58,8 +60,9 @@ class TermsAndConditions extends React.Component {
                             }}
                         >
                             <Image
+                            resizeMode={'center'}
                                 style={[styles.image1]}
-                                source={require("../../../icons/headerLogo.png")}
+                                source={require("../../../icons/OyespaceSafe.png")}
                             />
                         </View>
                         <View style={{flex: 0.2}}>

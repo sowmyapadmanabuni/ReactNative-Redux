@@ -1050,7 +1050,7 @@ class Dashboard extends React.Component {
             justifyContent: 'center',
             marginTop: hp('52%'),
             position: 'absolute',
-            right: Platform.OS === 'ios' ? hp('1') : hp('2.5'),
+            right: Platform.OS === 'ios' ? hp('2.5') : hp('2.5'),
             // backgroundColor:'pink'
           }}
         >
