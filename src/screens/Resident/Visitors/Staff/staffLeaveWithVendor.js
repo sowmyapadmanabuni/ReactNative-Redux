@@ -514,7 +514,7 @@ class StaffLeaveWithVendor extends Component {
       } else {
         console.log('ImagePicker : ', response);
         let img = self.state.vendorImages;
-        img.push({fileUrl: response.uri, type: 'Image', res:response,isUpload:false})
+        img.push({fileUrl:response.uri, type: 'Image', res:response,isUpload:false,dataUrl:response.data})
         self.setState({
           vendorImages: img,
         })
@@ -607,7 +607,8 @@ class StaffLeaveWithVendor extends Component {
       console.log('Errorrrrrrrrrrrrrr', e);
     }
 
-    this.uploadFile()
+    //this.uploadFile()
+    this.submitVendorDetails()
 
 
   };
@@ -663,9 +664,12 @@ class StaffLeaveWithVendor extends Component {
     let vendorImages=this.state.vendorImages;
     if(vendorImages.length !==0){
       for(let i=0;i<vendorImages.length;i++){
-        if(vendorImages[i].isUpload){
-          imgUrl=imgUrl !=''?imgUrl+','+vendorImages[i].fileUrl:vendorImages[i].fileUrl
-        }
+        // if(vendorImages[i].isUpload){
+        //   //dataUrl
+        //   imgUrl=imgUrl !=''?imgUrl+','+vendorImages[i].fileUrl:vendorImages[i].fileUrl
+        // }
+        imgUrl=imgUrl !=''?imgUrl+','+vendorImages[i].dataUrl:vendorImages[i].dataUrl
+
       }
     }
     let self=this

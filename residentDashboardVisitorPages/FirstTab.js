@@ -12,6 +12,7 @@ import {
 } from 'react-navigation';
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import GetStaffReport from '../src/screens/Resident/Visitors/Staff/GetStaffReport';
+import base from '../src/base/index.js';
 
 class FirstTab extends Component {
 
@@ -86,7 +87,7 @@ class FirstTab extends Component {
             borderTopColor: '#F4F4F4'
           },
           indicatorStyle: {
-            backgroundColor: '#ff8c00',
+            backgroundColor: base.theme.colors.themeColor,
             height: 1,
             marginBottom: 2
           },
