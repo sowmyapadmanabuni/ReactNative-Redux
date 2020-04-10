@@ -4,7 +4,7 @@
 
 const colors = {
   themeColor:'#B51414',
-  primary: '#EBECED',
+  primary: '#B51414',
   white: '#ffffff',
   black: '#000000',
   lavender: '#E6E6FA',

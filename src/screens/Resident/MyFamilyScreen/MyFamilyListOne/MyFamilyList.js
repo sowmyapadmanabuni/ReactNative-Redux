@@ -28,6 +28,7 @@ import { updateIdDashboard } from '../../../../actions';
 import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import IcoMoonConfig from '../../../../assets/selection.json';
 import FloatingButton from "../../../../components/FloatingButton";
+import * as fb from 'firebase';
 
 
 const Icon = createIconSetFromIcoMoon(IcoMoonConfig);
@@ -67,8 +68,10 @@ class MyFamilyList extends React.Component {
         );
     }
 
-    deleteData(itemID) {
-        console.log('fsdkjhfjsa', itemID);
+    deleteData(item, itemID) {
+        let mobNum= item.fmMobile.replace('+91',"")
+        console.log('fsdkjhfjsa', item, itemID,mobNum);
+       
         let itemId = itemID;
 
         fetch(
@@ -89,6 +92,7 @@ class MyFamilyList extends React.Component {
                 console.log(responseJson);
                 let data = responseJson;
                 if (data.success) {
+                    this.updateFirebase(mobNum)
                     this.myFamilyListGetData();
                 } else {
                     alert(data.error.message);
@@ -98,6 +102,27 @@ class MyFamilyList extends React.Component {
                 console.log('error', error);
                 alert(data.error.message);
             });
+    }
+
+    updateFirebase(mobNum){
+        let self = this;
+        let mobilePath = `syncdashboard/isMemberRefreshing/${mobNum}`;
+        console.log('GETTHEDETAILS',mobilePath)
+        let isMobUpdating = 0;
+
+         fb.database().ref(mobilePath).set({
+            isMobUpdating
+        }).then((data) => {
+            fb.database().ref(mobilePath).remove().then((response)=>{
+                let receivedData = response.val();
+                console.log("Response!!!!!!!11111",receivedData)
+
+            }).catch((error)=>{
+                console.log('Response!!!!!!!111111@@@@',error.response)
+            });
+        }).catch(error => {
+            console.log("Error:", error);
+        })
     }
 
     searchFilterFunction = text => {
@@ -326,7 +351,7 @@ class MyFamilyList extends React.Component {
 
                         {item.pAccntID === this.props.MyAccountID ?
 
-                            <TouchableOpacity style={[Style.threeBtnStyle]} onPress={() => this.deleteData(item.fmid)}>
+                            <TouchableOpacity style={[Style.threeBtnStyle]} onPress={() => this.deleteData(item,item.fmid)}>
                                 <Icon color="#B51414" size={wp('5%')} name="delete" />
 
                             </TouchableOpacity>

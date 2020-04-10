@@ -711,7 +711,7 @@ class MyFamily extends Component {
                    // self.updateFirebase(self.props.dashBoardReducer.assId)
                     self.props.navigation.navigate('MyFamilyList');
                     this.setState({
-                        isLoading: true
+                        isLoading: false
                     })
                 } else {
                     this.showAlert(stat.error.message, true);

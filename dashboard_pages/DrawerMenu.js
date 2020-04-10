@@ -113,7 +113,7 @@ class DrawerMenu extends Component {
                 backgroundColor: '#fff', flexDirection:'column',
                 paddingTop: 0,paddingHorizontal:8,borderLeftWidth:0,borderLeftColor:'orange'
               }}>
-              <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center', height:64,borderBottomWidth:1,borderBottomColor:'orange'}}>
+              <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center', height:64,borderBottomWidth:1,borderBottomColor:base.theme.colors.themeColor}}>
                   <View style={{flexDirection:'row',alignItems:'center'}}>
                 <TouchableOpacity
                 onPress={() => this.props.navigation.navigate('MyProfileScreen')}
@@ -203,7 +203,7 @@ class DrawerMenu extends Component {
                             />
 
               <View style={{position:'absolute',bottom:0,paddingHorizontal:8,paddingVertical:8,justifyContent:'center',witdh:'100%'}}>
-                    <Text style={{color:'orange',alignSelf:'center',fontSize:12}}>Version 10.19</Text>
+                    <Text style={{color:base.theme.colors.themeColor,alignSelf:'center',fontSize:12}}>Version 10.19</Text>
               </View>
             </View>
         )

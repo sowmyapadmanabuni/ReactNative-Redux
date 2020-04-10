@@ -324,7 +324,7 @@ let dummyData={
                 })
                     .then(response => response.json())
                     .then(responseJson => {
-                        console.log('Response JSON', responseJson);
+                        console.log('Response JSON@@@@@@@', responseJson, this.props.dashBoardReducer.assId,this.props.dashBoardReducer.uniID);
                         Alert.alert("","Invitation created, please share the invitation using the share button");
                         this.props.navigation.goBack()
                     })

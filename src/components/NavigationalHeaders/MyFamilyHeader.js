@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: hp('2%'),
         fontWeight: 'bold',
-        color: '#B51414',
+        color: base.theme.colors.themeColor,
         marginBottom: hp('1.6%')
     }
 });
