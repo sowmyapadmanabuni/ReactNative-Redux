@@ -1104,6 +1104,7 @@ export const createUserNotification = (
     // let formatdate = date._d;
     // alert(refresh);
     // console.log(notifType);
+    
     console.log('GETTHEDETAILSOFCREATENOTIFICATION@@@@@@@@@@',notifType,
     oyeURL,
     accountID,

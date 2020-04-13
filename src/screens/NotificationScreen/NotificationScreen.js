@@ -1573,6 +1573,7 @@ class NotificationScreen extends PureComponent {
                                         false,
                                         this.props.MyAccountID,
                                         this.props.userReducer.MyISDCode+this.props.userReducer.MyMobileNumber,
+                                        this.props.userReducer.userProfilePic,
                                         "Rejected"
                                          );
 

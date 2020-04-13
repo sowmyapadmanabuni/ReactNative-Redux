@@ -172,6 +172,9 @@ class StaffLeaveWithVendor extends Component {
             break;
           case RESULTS.GRANTED:
             console.log('The permission is granted');
+            this.setState({
+              isAudioPMGranted: true
+            })
             break;
           case RESULTS.BLOCKED:
             //this.requestPermission();
@@ -185,7 +188,11 @@ class StaffLeaveWithVendor extends Component {
   requestPermission = async () => {
     AudioRecord.init(options);
     if (Platform.OS === 'ios') {
-      request(PERMISSIONS.IOS.MICROPHONE).then(result => {});
+      request(PERMISSIONS.IOS.MICROPHONE).then(result => {
+        this.setState({
+          isAudioPMGranted:result =="denied" || result == "blocked" || result == "unavailable" ? false : true
+        })
+      });
     } else {
       request(PERMISSIONS.ANDROID.RECORD_AUDIO).then(result => {
         console.log('GetThePERMISSIONRESULTS',result)
