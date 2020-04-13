@@ -195,6 +195,9 @@ class SendingMsgToGate extends Component {
             break;
           case RESULTS.GRANTED:
             console.log('The permission is granted');
+            this.setState({
+              isAudioPMGranted:true
+            })
             break;
           case RESULTS.BLOCKED:
             console.log('The permission is denied and not requestable anymore');
@@ -221,6 +224,7 @@ class SendingMsgToGate extends Component {
   start = async () => {
     // AudioRecord.init(options);
     // setTimeout(() => {
+      console.log("Hittting")
     AudioRecord.init(options);
     AudioRecord.start();
     this.setState({
@@ -342,35 +346,40 @@ class SendingMsgToGate extends Component {
         switch (this.state.id) {
           case 1:
             self.setState({
-              myProfileImage1: response.uri
+              myProfileImage1: response.uri,
+              relativeImage1:response.uri
             });
             this.uploadImage(response);
             // alert(response.uri);
             break;
           case 2:
             self.setState({
-              myProfileImage2: response.uri
+              myProfileImage2: response.uri,
+              relativeImage2:response.uri
             });
             this.uploadImage(response);
             // alert(response.uri);
             break;
           case 3:
             self.setState({
-              myProfileImage3: response.uri
+              myProfileImage3: response.uri,
+              relativeImage3:response.uri
             });
             this.uploadImage(response);
             // alert(response.uri);
             break;
           case 4:
             self.setState({
-              myProfileImage4: response.uri
+              myProfileImage4: response.uri,
+              relativeImage4:response.uri
             });
             this.uploadImage(response);
             // alert(response.uri);
             break;
           case 5:
             self.setState({
-              myProfileImage5: response.uri
+              myProfileImage5: response.uri,
+              relativeImage5:response.uri
             });
             this.uploadImage(response);
             // alert(response.uri);
@@ -761,7 +770,7 @@ class SendingMsgToGate extends Component {
       (this.state.currentPositionSec / this.state.currentDurationSec) *
       (screenWidth - 56 * ratio);
     if (!playWidth) playWidth = 0;
-    console.log('COMMENT', this.state.comment.length);
+    console.log('COMMENT', this.state.isAudioPMGranted);
     console.log('All_Data', this.props.navigation.state.params);
     return (
       <View style={styles.container}>

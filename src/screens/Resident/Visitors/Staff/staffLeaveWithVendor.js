@@ -172,6 +172,9 @@ class StaffLeaveWithVendor extends Component {
             break;
           case RESULTS.GRANTED:
             console.log('The permission is granted');
+            this.setState({
+              isAudioPMGranted: true
+            })
             break;
           case RESULTS.BLOCKED:
             //this.requestPermission();
