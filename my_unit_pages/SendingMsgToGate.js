@@ -349,37 +349,37 @@ class SendingMsgToGate extends Component {
         switch (this.state.id) {
           case 1:
             self.setState({
-              myProfileImage1: response.uri
+              myProfileImage1: response.data
             });
-            this.uploadImage(response);
+           // this.uploadImage(response);
             // alert(response.uri);
             break;
           case 2:
             self.setState({
-              myProfileImage2: response.uri
+              myProfileImage2: response.data
             });
-            this.uploadImage(response);
+           // this.uploadImage(response);
             // alert(response.uri);
             break;
           case 3:
             self.setState({
-              myProfileImage3: response.uri
+              myProfileImage3: response.data
             });
-            this.uploadImage(response);
+           // this.uploadImage(response);
             // alert(response.uri);
             break;
           case 4:
             self.setState({
-              myProfileImage4: response.uri
+              myProfileImage4: response.data
             });
-            this.uploadImage(response);
+           // this.uploadImage(response);
             // alert(response.uri);
             break;
           case 5:
             self.setState({
-              myProfileImage5: response.uri
+              myProfileImage5: response.data
             });
-            this.uploadImage(response);
+           // this.uploadImage(response);
             // alert(response.uri);
             break;
         }
@@ -646,7 +646,7 @@ class SendingMsgToGate extends Component {
 
   datasend = () => {
     let self = this;
-    let img1 = self.state.relativeImage1 ? self.state.relativeImage1 : '';
+    let img1 = self.state.myProfileImage1;
     let img2 = self.state.relativeImage2 ? self.state.relativeImage2 : '';
     let img3 = self.state.relativeImage3 ? self.state.relativeImage3 : '';
     let img4 = self.state.relativeImage4 ? self.state.relativeImage4 : '';
@@ -656,7 +656,7 @@ class SendingMsgToGate extends Component {
     let visitorname = self.state.visitorName;
     let mp3 = self.state.mp3;
     console.log(
-      'All Data',
+      'All Data@@@@@@@@@@@@',
       img1,
       img2,
       img3,
@@ -828,7 +828,7 @@ class SendingMsgToGate extends Component {
                   style={styles.staffImg}
                   source={{
                     uri:
-                      base.utils.strings.imageUrl +
+                    'data:image/png;base64,' +
                       this.props.navigation.state.params.image
                   }}
                 />

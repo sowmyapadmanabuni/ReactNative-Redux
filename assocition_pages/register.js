@@ -799,10 +799,10 @@ class RegisterMe extends Component {
         let status;
 
         // console.log(unitID, "unitID");
-        console.log(memberList, 'memberList');
+        console.log(memberList, unitList, 'memberList');
 
         let matchUnit = _.find(memberList, function (o) {
-            console.log(o, 'values');
+            console.log(o, unitID,'values');
             console.log(o.unUnitID, 'member', unitID, 'unitID');
             return o.unUnitID === unitID;
         });

@@ -54,12 +54,12 @@ class NotificationPopUp extends React.Component {
         const { isNotificationUnRead } = this.props;
         let notificationData = item;
         let inDate = moment()._d
-        let enDate = moment(notificationData.ntdCreated)._d
+        let enDate = moment(notificationData.visitorlog[0].vlsActTm)._d
         let duration = Math.abs(inDate - enDate);
         let days = Math.floor(duration / (1000 * 60 * 60 * 24));
         let hours = Math.floor(duration / (1000 * 60 * 60));
         let mins = Math.floor(duration / (1000 * 60));
-        let notificationTime = days > 1 ? moment(notificationData.ntdCreated).format('DD MMM YYYY') : days == 1 ? "Yesterday" : mins >= 120 ? hours + " hours ago" : (mins < 120 && mins >= 60) ? hours + " hour ago"
+        let notificationTime = days > 1 ? moment(notificationData.visitorlog[0].vlsActTm).format('DD MMM YYYY') : days == 1 ? "Yesterday" : mins >= 120 ? hours + " hours ago" : (mins < 120 && mins >= 60) ? hours + " hour ago"
             : mins == 0 ? "Just now" : mins + " mins ago";
         console.log('In Notification Pop Up:', isNotificationUnRead, item, item, notificationTime);
 

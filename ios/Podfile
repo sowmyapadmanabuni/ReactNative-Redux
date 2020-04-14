@@ -145,6 +145,8 @@ target 'OyeSpace' do
 
   pod 'react-native-spinkit', :path => '../node_modules/react-native-spinkit'
 
+  pod 'react-native-webview', :path => '../node_modules/react-native-webview'
+
 end
 
 def main_pods

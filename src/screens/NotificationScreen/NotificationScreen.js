@@ -661,7 +661,7 @@ class NotificationScreen extends PureComponent {
                                 :
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
                                     <Text style={{ fontSize: 16, color: base.theme.colors.lightgrey, alignSelf: 'flex-start', marginLeft: 15 }}>
-                             Your request to join in {item.asAsnName} in unit {item.mrRolName} has been Accepted  
+                            Your request to join in {item.asAsnName} in unit {item.mrRolName} has been {item.ntJoinStat=="Rejected" ?"Rejected":"Accepted"}
                                     </Text>
                                 </View>
                }
@@ -1546,7 +1546,8 @@ class NotificationScreen extends PureComponent {
                                         ' association as ' +
                                         roleName +
                                         ' has been declined',
-                                    ntType: 'Join_Status'
+                                    ntType: 'Join_Status',
+                                    associationID: item.asAssnID
                                 })
                                 .then(() => {
                                     this.props.createUserNotification(
@@ -2147,9 +2148,10 @@ class NotificationScreen extends PureComponent {
 
         }
         else if(selectednotification.ntType== "Join" ){
-            toggleCollapsible(adminNotification, selectednotification.open, selectednotification.notifIndex,"admin")
+           
            // adminNotification[selectednotification.notifIndex].open=!selectednotification.open
             console.log("CHANGE THE SELECTION BASED ON ITEM ********",selectednotification,unitNotification,adminNotification)
+            toggleCollapsible(adminNotification, selectednotification.open, selectednotification.notifIndex,"admin")
 
         }
 
