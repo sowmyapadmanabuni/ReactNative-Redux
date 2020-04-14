@@ -55,9 +55,10 @@ class RootApp extends Component {
     return (
       <Provider store={store}>
         <CheckInternet />
-        <NotificationPopUp />
+        
         <StatusBarPlaceHolder />
         <App />
+        <NotificationPopUp />
       </Provider>
     );
   }
