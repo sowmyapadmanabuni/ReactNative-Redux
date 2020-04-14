@@ -341,35 +341,40 @@ class Announcement extends Component {
         switch (this.state.id) {
           case 1:
             self.setState({
-              myProfileImage1: response.uri
+              myProfileImage1: response.uri,
+              relativeImage1: response.uri
             });
             this.uploadImage(response);
             // alert(response.uri);
             break;
           case 2:
             self.setState({
-              myProfileImage2: response.uri
+              myProfileImage2: response.uri,
+              relativeImage2: response.uri
             });
             this.uploadImage(response);
             // alert(response.uri);
             break;
           case 3:
             self.setState({
-              myProfileImage3: response.uri
+              myProfileImage3: response.uri,
+              relativeImage3: response.uri
             });
             this.uploadImage(response);
             // alert(response.uri);
             break;
           case 4:
             self.setState({
-              myProfileImage4: response.uri
+              myProfileImage4: response.uri,
+              relativeImage4: response.uri
             });
             this.uploadImage(response);
             // alert(response.uri);
             break;
           case 5:
             self.setState({
-              myProfileImage5: response.uri
+              myProfileImage5: response.uri,
+              relativeImage5: response.uri
             });
             this.uploadImage(response);
             // alert(response.uri);
@@ -957,11 +962,11 @@ class Announcement extends Component {
       (this.state.currentPositionSec / this.state.currentDurationSec) *
       (screenWidth - 56 * ratio);
     if (!playWidth) playWidth = 0;
-    console.log('COMMENT', this.state.comment.length);
+    console.log('COMMENT', this.state);
     console.log('PROPS:', this.props.navigation.state.params);
     return (
       <View style={styles.container}>
-        <SafeAreaView style={{ backgroundColor: base.theme.colors.primary }}>
+        <SafeAreaView style={{ backgroundColor: base.theme.colors.themeColor }}>
           <View style={[styles.viewStyle1, { flexDirection: 'row' }]}>
             <View style={styles.viewDetails1}>
               <TouchableOpacity

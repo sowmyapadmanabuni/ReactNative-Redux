@@ -9,7 +9,8 @@ import {
     Text,
     TextInput,
     TouchableOpacity,
-    View
+    View,
+    FlatList
 } from "react-native";
 import ProgressLoader from "rn-progress-loader";
 import ImagePicker from "react-native-image-picker"
@@ -18,10 +19,13 @@ import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view"
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen"
 import base from "../../../../base"
 import {connect} from "react-redux";
-import ContactsWrapper from "react-native-contacts-wrapper"
+import ContactsWrapper from "react-native-contacts-wrapper";
+import Contacts from 'react-native-contacts';
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import Style from './Style'
 import * as fb from 'firebase';
+import Modal from 'react-native-modal'
+import _ from 'lodash';
 
 const RNFS = require('react-native-fs');
 
@@ -70,7 +74,11 @@ class MyFamily extends Component {
             filePath: '',
 
             isLoading: false,
-            isPhoneBookOpened: false
+            isPhoneBookOpened: false,
+            contactList:[],
+            dummyContactList:[],
+            showContact:false,
+            searchText:""
         }
         this.processBackPress = this.processBackPress.bind(this);
     }
@@ -109,11 +117,10 @@ class MyFamily extends Component {
     }
 
     render() {
-        console.log('Isminor', this.state);
+        console.log('Isminor', this.state.contactList);
         let mobPlaceHolder = this.state.isMinor && this.state.isMinorSelected === 0 ? "Guardian's Number" : "Mobile Number";
         return (
             <View style={Style.container}>
-
                 <SafeAreaView style={{backgroundColor: "#B51414"}}>
                     <View style={[
                         Style.viewStyle1,
@@ -308,7 +315,7 @@ class MyFamily extends Component {
                                     maxLength={10}
                                     placeholderTextColor={base.theme.colors.grey}
                                 />
-                                <TouchableOpacity style={{width: 35, height: 35,}} onPress={() => this.getTheContact()}>
+                                <TouchableOpacity style={{width: 35, height: 35,}} onPress={() => this.getAllContacts()}>
                                     <Image source={require("../../../../../icons/phone-book.png")}
                                            style={{width: 25, height: 25,}}/>
                                 </TouchableOpacity>
@@ -374,11 +381,104 @@ class MyFamily extends Component {
                         color={base.theme.colors.themeColor}
                         hudColor={"#FFFFFF"}
                     />
+                    {this.state.showContact?this.showContactList():null}
                 </KeyboardAwareScrollView>
 
 
             </View>
         )
+    }
+
+    showContactList(){
+        let contactList = this.state.dummyContactList;
+
+        return(
+            <Modal
+            isVisible={this.state.showContact}
+            style={{height:hp('100'),width:wp('100'),backgroundColor:'white',justifyContent:'center',alignSelf:'center'}}
+            >
+                <View style={{height:hp('5'),width:wp('100'),flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
+                    <TextInput
+                     style={{height: hp('5'),width:wp('80'),backgroundColor: 'white', fontSize: 20}}  
+                     placeholder="Type here to search!"  
+                     onChangeText={(searchText) => this.setState({searchText},()=>this.filterSearch(searchText))}  
+                    />
+                    <TouchableOpacity onPress={()=>this.setState({showContact:false})}>
+                        <Text style={{fontSize:hp('3'),color:'#B51414'}}>Close</Text>
+                    </TouchableOpacity>
+                </View>
+            <FlatList
+                data={contactList}
+                keyExtractor={(item,index)=>index.toString()}
+                renderItem={(item,index)=>this._renderContactList(item)}
+                extraData = {this.state}
+            />
+            </Modal>
+        )
+    }
+
+    filterSearch(searchText){
+        let contactArray = this.state.contactList;
+        let searchKeyword = searchText.toLowerCase();
+        let newArr = [];
+        if(searchText !== ""){
+            _.each(contactArray,function(value,key){
+                //  console.log(value,key)
+                  let fName = value.givenName.toLowerCase();
+                  let lName = value.familyName.toLowerCase();
+                  if(lName.includes(searchKeyword) || fName.includes(searchKeyword)){
+                      newArr.push(value)
+                  }     
+              })
+        }else{
+             newArr = contactArray;
+        }
+        
+
+        this.setState({dummyContactList:newArr})
+
+        console.log("Fitered Array:",newArr,searchKeyword)
+
+    }
+
+    _renderContactList(item){
+        let contactDetail = item.item;
+        let phoneNumbers = contactDetail.phoneNumbers;
+        //console.log("Item:",phoneNumbers)
+        return(
+            <TouchableOpacity onPress={()=>this.selectedContact(contactDetail)}>
+            <View style={{height:hp('6'),borderWidth:1,justifyContent:'center'}}>
+                <Text>{contactDetail.givenName} {contactDetail.familyName}</Text>
+            </View>
+            </TouchableOpacity>
+        )
+    }
+
+    selectedContact(selectedContact){
+        console.log('Selected Contact:',selectedContact);
+        let phoneNumber = selectedContact.phoneNumbers
+        this.setState({showContact:false})
+        let nPhone = "";
+        if(phoneNumber.length !== 0){
+            nPhone = phoneNumber[0].number;
+            if(nPhone.includes("+91")){
+                nPhone = nPhone.slice(3)
+            }else if(nPhone.length>10){
+                nPhone = nPhone.slice(2)
+            }else{
+                nPhone = nPhone
+            }
+        }
+
+        console.log('New umber:',nPhone)
+        this.setState({
+            sendNum: nPhone
+        })
+        this.setState({
+            firstName: selectedContact.givenName,
+            lastName: selectedContact.familyName,
+            mobileNumber: nPhone,
+        })
     }
 
     setImage() {
@@ -490,6 +590,53 @@ class MyFamily extends Component {
             .catch(err => {
                 console.error(err)
             });
+    }
+
+
+    async getTheContact1(){
+        Contacts.getAll((err, contacts) => {
+            console.log("Get The contact List:",contacts);
+            // if (err === 'denied'){
+            //   // error
+            // } else {
+            //   // contacts returned in Array
+            // }
+          })
+    }
+
+    getAllContacts(){
+        if(Platform.OS === 'ios'){
+            this.getIOSContact();
+        }else{
+            this.getTheContact();
+        }
+    }
+
+    getIOSContact(){
+        // selectContactPhone.then((selection)=>{
+        //     console.log('Selection:',selection)
+        // })
+        // // return selectContactPhone()
+        // // .then(selection => {
+        // //     if (!selection) {
+        // //         return null;
+        // //     }
+            
+        // //     let { contact, selectedPhone } = selection;
+        // //     console.log(`Selected ${selectedPhone.type} phone number ${selectedPhone.number} from ${contact.name}`);
+        // //     return selectedPhone.number;
+        // // }); 
+        Contacts.getAll((err, contacts) => {
+            if(err === 'denied'){
+                console.log("Permission Denied")
+            }else{
+                this.setState({
+                    contactList:contacts,
+                    showContact:true,
+                    dummyContactList:contacts
+                })
+            }
+        })
     }
 
     async getTheContact() {

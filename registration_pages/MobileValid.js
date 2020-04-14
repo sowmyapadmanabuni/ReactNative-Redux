@@ -132,7 +132,7 @@ class MobileValid extends Component {
     render() {
         return (
             <Fragment>
-                <SafeAreaView style={{ flex: 0, backgroundColor: "#ff8c00" }} />
+                <SafeAreaView style={{ flex: 0, backgroundColor: "#B51414" }} />
                 <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
                     {/* {this.state.isLoading1 ? (
             <SplashScreen />
@@ -228,7 +228,7 @@ class MobileValid extends Component {
                                             </Text>
                                         </View>
 
-                                        <View style={{ flex: 0.5, marginTop: hp("2%") }}>
+                                        <View style={{ flex: 0.5, marginTop: Platform.OS === "ios"?0: hp("2%") }}>
                                             <TextField
                                                 label="Mobile Number"
                                                 fontSize={16}
@@ -333,21 +333,6 @@ class MobileValid extends Component {
                                                 Get OTP
                                             </Text>
                                         </TouchableOpacity>
-                                        {/* <Button
-                                            onPress={this.getOtp.bind(this, this.state.Mobilenumber)}
-                                            style={{
-                                                width: wp("30%"),
-                                                height: hp("4.8%"),
-                                                justifyContent: "center",
-                                                alignItems: "center",
-                                                backgroundColor: "#ff8c00"
-                                            }}
-                                            rounded
-                                        >
-                                            <Text style={{color: "#B51414", fontSize: hp("2%")}}>
-                                                Get OTP
-                                            </Text>
-                                        </Button> */}
                                     </View>
                                 </View>
                                 <ProgressLoader

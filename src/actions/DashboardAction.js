@@ -16,7 +16,8 @@ import {
   UPDATE_USER_INFO,
   USER_ROLE,
   DASHBOARD_ASSOCIATION_SYNC,
-  IS_NOTIFICATION
+  IS_NOTIFICATION,
+  IS_SOS
 } from './types';
 import axios from 'axios';
 import _ from 'lodash';
@@ -965,6 +966,16 @@ export const updateNotificationData = (payload) => {
   return (dispatch) => {
     dispatch({
       type:IS_NOTIFICATION,
+      payload:payload
+    })
+  }
+}
+
+
+export const updateSOS = (payload) => {
+  return (dispatch) => {
+    dispatch({
+      type:IS_SOS,
       payload:payload
     })
   }

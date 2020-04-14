@@ -127,11 +127,11 @@ const Style = StyleSheet.create({
   },
   dueDate: {
     fontSize: 14,
-    color: base.theme.colors.blue
+    color: base.theme.colors.themeColor
   },
   rupeeIcon: {
     fontSize: 18,
-    color: base.theme.colors.primary
+    color: base.theme.colors.themeColor
   },
   billText: {
     fontSize: 18,

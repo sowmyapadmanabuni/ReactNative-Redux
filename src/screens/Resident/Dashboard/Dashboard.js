@@ -38,7 +38,8 @@ import {
   updateSelectedDropDown,
   updateUserInfo,
   updateuserRole,
-  updatePopUpNotification
+  updatePopUpNotification,
+  updateSOS
 } from '../../../actions';
 import IcoMoonConfig from '../../../assets/selection.json';
 import base from '../../../base';
@@ -242,16 +243,15 @@ class Dashboard extends React.Component {
     const { updatePopUpNotification, updateNotificationData } = self.props;
 
     console.log('Data received in data notification pop up fetch:', MyAccountID);
-
-    // url: ` http://apiuat.oyespace.com/oyesafe/api/v1/Notification/GetNotificationsAsPopup/${MyAccountID}`,
-
+    updateNotificationData(false);
     let options = {
       method: "get",
-      url: `http://apiuat.oyespace.com/oyesafe/api/v1/Notification/GetNotificationsAsPopup/${MyAccountID}`,
+      url: `http://${self.props.oyeURL}/oyesafe/api/v1/Notification/GetNotificationsAsPopup/${MyAccountID}`,
       headers: {
         "X-OYE247-APIKey": "7470AD35-D51C-42AC-BC21-F45685805BBE"
       }
     };
+
 
     axios(options).then((response) => {
       try {
@@ -260,14 +260,13 @@ class Dashboard extends React.Component {
         if (sResp.length !== 0) {
           updatePopUpNotification(sResp);
           updateNotificationData(true);
-          firebase.notifications().removeAllDeliveredNotifications()
         } else {
           updatePopUpNotification([]);
           updateNotificationData(false);
          // firebase.notifications().removeAllDeliveredNotifications()
         }
       } catch (e) {
-        console.log(e)
+        console.log("Data received in data notification pop up fetch:",e)
       }
 
 
@@ -314,7 +313,7 @@ class Dashboard extends React.Component {
   }
 
   readFBRTB(isNotificationClicked) {
-    const { dropdown } = this.props;
+    const { dropdown, updateSOS } = this.props;
     let count = 0;
     for (let i in dropdown) {
       let SelectedAssociationID = parseInt(dropdown[i].associationId);
@@ -328,12 +327,14 @@ class Dashboard extends React.Component {
           if (receivedData !== null) {
             count = count + 1;
             if (receivedData.isActive && receivedData.userId) {
+              updateSOS(true)
               self.props.navigation.navigate('sosScreen', {
                 isActive: true,
                 images:
                   receivedData.emergencyImages === undefined
                     ? []
-                    : receivedData.emergencyImages
+                    : receivedData.emergencyImages,
+                    selectedAssociation:receivedData.associationID
               });
             }
           }
@@ -1067,7 +1068,7 @@ class Dashboard extends React.Component {
             justifyContent: 'center',
             marginTop: hp('52%'),
             position: 'absolute',
-            right: Platform.OS === 'ios' ? hp('1') : hp('2.5'),
+            right: Platform.OS === 'ios' ? hp('2.5') : hp('2.5'),
             // backgroundColor:'pink'
           }}
         >
@@ -2041,6 +2042,7 @@ export default connect(
     fetchAssociationByAccountId,
     updateUnitDropdown,
     updateNotificationData,
-    updatePopUpNotification
+    updatePopUpNotification,
+    updateSOS
   }
 )(Dashboard);

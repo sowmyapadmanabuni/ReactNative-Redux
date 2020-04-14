@@ -12,6 +12,7 @@ export function StatusBarPlaceHolder() {
             backgroundColor: base.theme.colors.themeColor
         }}>
             <StatusBar
+                backgroundColor={"#B51414"}
                 barStyle="light-content"
             />
         </View>

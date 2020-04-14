@@ -175,7 +175,7 @@ class Loading extends Component {
     StatusBar.setBackgroundColor(base.theme.colors.primary, true);
     return (
       <Fragment>
-        <SafeAreaView style={{ flex: 0, backgroundColor: '#ff8c00' }} />
+        <SafeAreaView style={{ flex: 0, backgroundColor: '#B51414' }} />
         <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
           <View style={styles.container}>
             <View style={{ flex: 1, flexDirection: 'column' }}>

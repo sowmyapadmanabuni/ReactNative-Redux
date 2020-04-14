@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.facebook.react.ReactApplication;
+import com.streem.selectcontact.SelectContactPackage;
 import com.reactnativecommunity.webview.RNCWebViewPackage;
 import com.reactnativecommunity.netinfo.NetInfoPackage;
 import com.th3rdwave.safeareacontext.SafeAreaContextPackage;
@@ -79,7 +80,8 @@ public class MainApplication extends Application implements ShareApplication, Re
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
-                    new RNCWebViewPackage(),
+            new SelectContactPackage(),
+            new RNCWebViewPackage(),
                     new NetInfoPackage(),
                     new RNScreensPackage(),
                     new ReanimatedPackage(),

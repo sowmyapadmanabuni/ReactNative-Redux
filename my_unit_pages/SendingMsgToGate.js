@@ -228,6 +228,7 @@ class SendingMsgToGate extends Component {
   start = async () => {
     // AudioRecord.init(options);
     // setTimeout(() => {
+      console.log("Hittting")
     AudioRecord.init(options);
     AudioRecord.start();
     this.setState({
@@ -768,7 +769,7 @@ class SendingMsgToGate extends Component {
       (this.state.currentPositionSec / this.state.currentDurationSec) *
       (screenWidth - 56 * ratio);
     if (!playWidth) playWidth = 0;
-    console.log('COMMENT', this.state.comment.length);
+    console.log('COMMENT', this.state.isAudioPMGranted);
     console.log('All_Data', this.props.navigation.state.params);
     return (
       <View style={styles.container}>

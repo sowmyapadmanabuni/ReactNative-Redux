@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string></string>
+	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
@@ -18,7 +18,7 @@
 			<key>CFBundleTypeIconFiles</key>
 			<string>Icon.png</string>
 			<key>CFBundleTypeName</key>
-			<string></string>
+			<string>Document Type</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSHandlerRank</key>
