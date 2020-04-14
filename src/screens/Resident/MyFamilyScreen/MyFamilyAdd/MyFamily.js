@@ -460,7 +460,7 @@ class MyFamily extends Component {
         this.setState({showContact:false})
         let nPhone = "";
         if(phoneNumber.length !== 0){
-            nPhone = phoneNumber[0].number;
+            nPhone = phoneNumber[0].number.replace(" ","");
             if(nPhone.includes("+91")){
                 nPhone = nPhone.slice(3)
             }else if(nPhone.length>10){

@@ -16,6 +16,7 @@ import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
 import { NavigationEvents } from 'react-navigation';
 import { connect } from 'react-redux';
 import ProgressLoader from 'rn-progress-loader';
+
 import {
   fetchAssociationByAccountId,
   updateNotificationData,
@@ -45,6 +46,7 @@ import base from '../../../base';
 import CardView from '../../../components/cardView/CardView';
 import OSButton from '../../../components/osButton/OSButton';
 import Style from './Style';
+
 
 let counter = 0;
 var associationLoaded = false;
@@ -107,6 +109,22 @@ class Dashboard extends React.Component {
       />
     ),
   };
+
+
+  getNetInfoConnection(){
+    const unsubscribe = NetInfo.addEventListener(state => {
+      console.log("Connection type", state.type);
+      console.log("Is connected?", state.isConnected);
+      this.setState({
+          isConnected:state.isConnected
+      })
+      const { updateIdDashboard } = this.props;
+  updateIdDashboard({
+      prop: 'isInternetConnected',
+      value: state.isConnected
+  });
+  });
+  }
 
 
   updateAllTheData() {
@@ -593,7 +611,7 @@ class Dashboard extends React.Component {
         }
        // this.readFBRTB(true);
         this.getPopUpNotifications();
-        firebase.notifications().removeAllDeliveredNotifications();
+        // firebase.notifications().removeAllDeliveredNotifications();
       });
    // }
   };
@@ -1152,7 +1170,7 @@ class Dashboard extends React.Component {
         <View style={{ height: '100%', width: '100%', alignItems: 'center', justifyContent: 'flex-start', marginTop: Platform.OS === 'ios' ? 50 : 100 }}>
           <TouchableOpacity style={{ height: '50%', width: '100%', }}
             onPress={() =>
-              NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange)}>
+             this.getNetInfoConnection()}>
             <Image
               resizeMode={Platform.OS === 'ios' ? 'contain' : 'center'}
               style={{ height: '100%', width: '100%', }}

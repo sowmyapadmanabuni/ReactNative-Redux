@@ -293,7 +293,7 @@ class GetStaffReport extends React.Component {
                                 />
                                 :
                                 <Image style={StaffStyle.staffImg}
-                                       source={{uri: 'data:image/png;base64,'+ + this.props.staffReducer.staffProfilePic}}
+                                       source={{uri: 'data:image/png;base64,'+ this.props.staffReducer.staffProfilePic}}
                                 />
                             }
                             <View style={StaffStyle.textView}>

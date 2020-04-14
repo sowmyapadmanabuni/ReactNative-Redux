@@ -147,8 +147,11 @@ target 'OyeSpace' do
 
   pod 'react-native-webview', :path => '../node_modules/react-native-webview'
 
+<<<<<<< HEAD
+=======
   pod 'react-native-contacts', :path => '../node_modules/react-native-contacts'
   
+>>>>>>> 51ab9e0d2debfc4e5466cc516a7a8f4f6c70445e
 end
 
 def main_pods
