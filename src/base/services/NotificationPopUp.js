@@ -2,7 +2,7 @@
  * @Author: Sarthak Mishra 
  * @Date: 2020-03-09 16:13:08 
  * @Last Modified by: Sarthak Mishra
- * @Last Modified time: 2020-04-13 20:42:54
+ * @Last Modified time: 2020-04-14 11:36:06
  */
 
 
@@ -43,7 +43,9 @@ class NotificationPopUp extends React.Component {
         let { notificationArray } = this.props;
         console.log('In Notification Pop Up main render:', isNotification, notificationArray[0], this.state.key);
         return (
-            <View key={this.state.key} style={{ flex: 1, position: 'absolute' }}>
+            <View key={this.state.key} 
+            style={{ backgroundColor:'transparent',position:'absolute',justifyContent:'center',alignItems:'center',flex:1,alignSelf:'center' }}
+            >
                 {notificationArray.length !== 0 && isNotification ? this._renderPopUp(notificationArray[0]) : null}
             </View>
         )
@@ -51,7 +53,7 @@ class NotificationPopUp extends React.Component {
 
 
     _renderPopUp(item, index) {
-        let { isNotificationUnRead,updateNotificationData,notificationArray } = this.props;
+        let { isNotificationUnRead, updateNotificationData, notificationArray } = this.props;
         let notificationData = item;
         let inDate = moment()._d
         let enDate = moment(notificationData.ntdCreated)._d
@@ -64,19 +66,14 @@ class NotificationPopUp extends React.Component {
         console.log('In Notification Pop Up:', isNotificationUnRead, item, item, notificationTime);
 
         return (
-            <View key={this.state.key} style={{ justifyContent: 'center', alignItems: 'center', height: hp('100'), width: wp('90') }}>
-
-                <Modal
+            <View key={this.state.key} style={{ justifyContent: 'center', alignItems: 'center',borderTopRightRadius: hp('2'), borderTopLeftRadius: hp('2'), height: hp('35'), width: wp('90'),backgroundColor:"red",top:hp('25'),alignSelf:'center',left:hp('0')}}>
+                <View
                     key={this.state.key}
-                    onModalHide={()=>notificationArray.length!==0?updateNotificationData(true):updateNotificationData(false)}
-                    onModalWillHide={()=>notificationArray.length!==0?updateNotificationData(true):updateNotificationData(false)}
                     style={{
-                        width: wp('90'),
-                        maxHeight: hp('35'), borderBottomLeftRadius: hp('2'), borderBottomRightRadius: hp('2'), borderTopRightRadius: hp('2'), borderTopLeftRadius: hp('2'), backgroundColor: 'white', alignSelf: 'center', top: hp('25')
+                        width: wp('95'),
+                        height: hp('35'), borderBottomLeftRadius: hp('2'), borderBottomRightRadius: hp('2'), borderTopRightRadius: hp('2'), borderTopLeftRadius: hp('2'), backgroundColor: '#ffffff', alignSelf: 'center', top: hp('0')
                     }}
-                    isVisible={isNotificationUnRead}
                 >
-                    <View>
 
                         <LinearGradient
                             colors={['#581113', '#971510']}
@@ -126,7 +123,7 @@ class NotificationPopUp extends React.Component {
 
 
 
-                        <View style={{ height: hp('8'), width: wp('90'), backgroundColor: '#F0F0F0', bottom: hp('0'), borderTopRightRadius: hp('2'), borderTopLeftRadius: hp('2'), borderRadius: hp('2'), flexDirection: 'row' }}>
+                        <View style={{ height: hp('8'), width: wp('95'), backgroundColor: '#F0F0F0', bottom: hp('0'), borderTopRightRadius: hp('2'), borderTopLeftRadius: hp('2'), borderRadius: hp('2'), flexDirection: 'row' }}>
                             <View style={{ height: hp('8'), width: wp('45'), bottom: hp('0'), flexDirection: 'row', alignSelf: 'center', justifyContent: 'flex-start', alignItems: 'center' }}>
                                 {/* <Image
                                     resizeMode={'center'}
@@ -140,63 +137,83 @@ class NotificationPopUp extends React.Component {
                                 /> */}
                                 <Text style={{ color: '#14C8E5', textAlign: 'center', fontSize: hp('1.5') }}> </Text>
                             </View>
-                            <View style={{ height: hp('8'), width: wp('45'), bottom: hp('0'), borderWidth: 0, flexDirection: 'row', alignSelf: 'center', justifyContent: 'space-around', alignItems: 'center' }}>
-                                <TouchableHighlight
-                                    underlayColor={'transparent'}
-                                    onPress={() => this.acceptGateVisitor(
-                                        notificationData.visitorlog[0].vlVisLgID,
-                                        0,
-                                        notificationData.asAssnID,
-                                        notificationData.visitorlog[0].vlApprStat === "Exit Pending" ? "Exit Approved" : "Entry Approved",
-                                        notificationData.ntid,
-                                        notificationData.visitorlog[0].vlApprdBy,
-                                        notificationData.visitorlog[0].vlApprStat
-                                    )}
-                                    style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0, left: hp('1') }}>
-                                    <View style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0, left: hp('1') }}>
-                                        <Image
-                                            resizeMode={'center'}
-                                            style={{
-                                                borderWidth: 0,
-                                                width: wp('6%'),
-                                                height: hp('6%'),
-                                                marginLeft: hp('0')
-                                            }}
-                                            source={require('../../../icons/allow.png')}
-                                        />
-                                        <Text style={{ color: 'green', textAlign: 'center', fontSize: hp('2') }}> Allow</Text>
+                            <View>
+                                {notificationData.visitorlog[0].vlVisType !== 'Staff' ?
+                                    <View style={{ height: hp('8'), width: wp('45'), bottom: hp('0'), borderWidth: 0, flexDirection: 'row', alignSelf: 'center', justifyContent: 'space-around', alignItems: 'center' }}>
+                                        <TouchableHighlight
+                                            underlayColor={'transparent'}
+                                            onPress={() => this.acceptGateVisitor(
+                                                notificationData.visitorlog[0].vlVisLgID,
+                                                0,
+                                                notificationData.asAssnID,
+                                                notificationData.visitorlog[0].vlApprStat === "Exit Pending" ? "Exit Approved" : "Entry Approved",
+                                                notificationData.ntid,
+                                                notificationData.visitorlog[0].vlApprdBy,
+                                                notificationData.visitorlog[0].vlApprStat
+                                            )}
+                                            style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0, left: hp('1') }}>
+                                            <View style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0, left: hp('1') }}>
+                                                <Image
+                                                    resizeMode={'center'}
+                                                    style={{
+                                                        borderWidth: 0,
+                                                        width: wp('6%'),
+                                                        height: hp('6%'),
+                                                        marginLeft: hp('0')
+                                                    }}
+                                                    source={require('../../../icons/allow.png')}
+                                                />
+                                                <Text style={{ color: 'green', textAlign: 'center', fontSize: hp('2') }}> Allow</Text>
+                                            </View>
+                                        </TouchableHighlight>
+                                        <TouchableHighlight
+                                            underlayColor={'transparent'}
+                                            onPress={() => this.denyGateVisitor(
+                                                notificationData.visitorlog[0].vlVisLgID,
+                                                item.index,
+                                                notificationData.asAssnID,
+                                                notificationData.visitorlog[0].vlApprStat === "Exit Pending" ? "Exit Rejected" : "Entry Rejected",
+                                                notificationData.ntid,
+                                                notificationData.visitorlog[0].vlApprdBy,
+                                                notificationData.visitorlog[0].vlApprStat
+                                            )}
+                                            style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0 }}>
+                                            <View style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0, left: hp('1') }}>
+                                                <Image
+                                                    resizeMode={'center'}
+                                                    style={{
+                                                        borderWidth: 0,
+                                                        width: wp('6%'),
+                                                        height: hp('6%'),
+                                                        marginLeft: hp('0'),
+                                                    }}
+                                                    source={require('../../../icons/deny_1.png')}
+                                                />
+                                                <Text style={{ color: '#B51414', textAlign: 'center', fontSize: hp('2') }}> Deny</Text>
+                                            </View>
+                                        </TouchableHighlight>
                                     </View>
-                                </TouchableHighlight>
-                                <TouchableHighlight
-                                    underlayColor={'transparent'}
-                                    onPress={() => this.denyGateVisitor(
-                                        notificationData.visitorlog[0].vlVisLgID,
-                                        item.index,
-                                        notificationData.asAssnID,
-                                        notificationData.visitorlog[0].vlApprStat === "Exit Pending" ? "Exit Rejected" : "Entry Rejected",
-                                        notificationData.ntid,
-                                        notificationData.visitorlog[0].vlApprdBy,
-                                        notificationData.visitorlog[0].vlApprStat
-                                    )}
-                                    style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0 }}>
-                                    <View style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0, left: hp('1') }}>
-                                        <Image
-                                            resizeMode={'center'}
-                                            style={{
-                                                borderWidth: 0,
-                                                width: wp('6%'),
-                                                height: hp('6%'),
-                                                marginLeft: hp('0'),
-                                            }}
-                                            source={require('../../../icons/deny_1.png')}
-                                        />
-                                        <Text style={{ color: '#B51414', textAlign: 'center', fontSize: hp('2') }}> Deny</Text>
-                                    </View>
-                                </TouchableHighlight>
+                                    :
+                                    <TouchableHighlight
+                                        underlayColor={'transparent'}
+                                        onPress={() => this.removeNotificationData()}
+                                        style={{ flexDirection: 'row', alignSelf: 'flex-end', justifyContent: 'flex-end', alignItems: 'flex-end', borderWidth: 0, left: hp('15') }}>
+                                        <View style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0, left: hp('1') }}>
+                                            <Image
+                                                resizeMode={'center'}
+                                                style={{
+                                                    borderWidth: 0,
+                                                    width: wp('6%'),
+                                                    height: hp('6%'),
+                                                }}
+                                                source={require('../../../icons/allow.png')}
+                                            />
+                                            <Text style={{ color: 'green', textAlign: 'center', fontSize: hp('2') }}> Ok</Text>
+                                        </View>
+                                    </TouchableHighlight>}
                             </View>
                         </View>
-                    </View>
-                </Modal>
+                </View>
             </View>
         )
     }
@@ -281,24 +298,24 @@ class NotificationPopUp extends React.Component {
                         updatedTime: currentTime,
                         status: visitorStatus,
                     });
-                    axios.get(
-                        `http://${this.props.oyeURL}/oyesafe/api/v1/NotificationActiveStatusUpdate/${notifiId}`,
-                              {
-                                  headers: {
-                                      'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE',
-                                      'Content-Type': 'application/json'
-                                  },
-                              },
+                axios.get(
+                    `http://${this.props.oyeURL}/oyesafe/api/v1/NotificationActiveStatusUpdate/${notifiId}`,
+                    {
+                        headers: {
+                            'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE',
+                            'Content-Type': 'application/json'
+                        },
+                    },
 
 
-                          )
-                          .then(responses => { 
-                              console.log('NotificationDeleted',responses)
-                          })
-                          .catch(e => {
-                              console.log('RESPONSE2222', e)
-                          })
-                
+                )
+                    .then(responses => {
+                        console.log('NotificationDeleted', responses)
+                    })
+                    .catch(e => {
+                        console.log('RESPONSE2222', e)
+                    })
+
 
                 this.removeNotificationData();
             }
@@ -365,21 +382,21 @@ class NotificationPopUp extends React.Component {
 
                 axios.get(
                     `http://${this.props.oyeURL}/oyesafe/api/v1/NotificationActiveStatusUpdate/${notifiId}`,
-                          {
-                              headers: {
-                                  'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE',
-                                  'Content-Type': 'application/json'
-                              },
-                          },
+                    {
+                        headers: {
+                            'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE',
+                            'Content-Type': 'application/json'
+                        },
+                    },
 
 
-                      )
-                      .then(responses => { 
-                          console.log('NotificationDeleted',responses)
-                      })
-                      .catch(e => {
-                          console.log('RESPONSE2222', e)
-                      })
+                )
+                    .then(responses => {
+                        console.log('NotificationDeleted', responses)
+                    })
+                    .catch(e => {
+                        console.log('RESPONSE2222', e)
+                    })
 
 
                 gateFirebase
@@ -417,7 +434,7 @@ class NotificationPopUp extends React.Component {
 
 
     removeNotificationData() {
-        const { notificationArray, updatePopUpNotification,updateNotificationData } = this.props;
+        const { notificationArray, updatePopUpNotification, updateNotificationData } = this.props;
         console.log("Notification before splicing:", notificationArray)
         notificationArray.splice(0, 1);
         console.log("Notification after splicing:", notificationArray)
@@ -425,10 +442,10 @@ class NotificationPopUp extends React.Component {
         this.forceUpdate();
         if (notificationArray.length === 0) {
             this.closeModal()
-        }else{
-            setTimeout(()=>{
+        } else {
+            setTimeout(() => {
                 updateNotificationData(true)
-            },1000);
+            }, 1000);
         }
         this.setState({
             key: Math.random()
@@ -447,7 +464,7 @@ const styles = StyleSheet.create({
         borderRadius: hp('2'), alignSelf: 'center', backgroundColor: '#fff'
     },
     gradientHeader: {
-        height: hp('6'), width: wp('90'), borderTopRightRadius: hp('2'),
+        height: hp('6'), width: wp('95'), borderTopRightRadius: hp('2'),
         borderTopLeftRadius: hp('2'), justifyContent: 'center', alignItems: 'center', flexDirection: 'row', borderWidth: 0
     },
     headerText: {
