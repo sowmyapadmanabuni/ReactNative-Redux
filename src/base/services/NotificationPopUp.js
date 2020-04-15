@@ -16,6 +16,7 @@ import Modal from 'react-native-modal';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { connect } from 'react-redux';
 import { updateNotificationData, updatePopUpNotification } from '../../actions';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
 let key = 0;
@@ -140,7 +141,7 @@ class NotificationPopUp extends React.Component {
                         <View>
                             {notificationData.visitorlog[0].vlVisType !== 'Staff' ?
                                 <View style={{ height: hp('8'), width: wp('45'), bottom: hp('0'), borderWidth: 0, flexDirection: 'row', alignSelf: 'center', justifyContent: 'space-around', alignItems: 'center' }}>
-                                    <TouchableHighlight
+                                    <TouchableOpacity
                                         underlayColor={'transparent'}
                                         onPress={() => this.acceptGateVisitor(
                                             notificationData.visitorlog[0].vlVisLgID,
@@ -165,8 +166,8 @@ class NotificationPopUp extends React.Component {
                                             />
                                             <Text style={{ color: 'green', textAlign: 'center', fontSize: hp('2') }}> Allow</Text>
                                         </View>
-                                    </TouchableHighlight>
-                                    <TouchableHighlight
+                                    </TouchableOpacity>
+                                    <TouchableOpacity
                                         underlayColor={'transparent'}
                                         onPress={() => this.denyGateVisitor(
                                             notificationData.visitorlog[0].vlVisLgID,
@@ -191,7 +192,7 @@ class NotificationPopUp extends React.Component {
                                             />
                                             <Text style={{ color: '#B51414', textAlign: 'center', fontSize: hp('2') }}> Deny</Text>
                                         </View>
-                                    </TouchableHighlight>
+                                    </TouchableOpacity>
                                 </View>
                                 :
                                 <TouchableHighlight

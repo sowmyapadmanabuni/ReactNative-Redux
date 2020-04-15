@@ -606,8 +606,8 @@ class Dashboard extends React.Component {
         } else if (notificationOpen.notification._data.admin === 'false') {
         }
         if (notificationOpen.notification.data.ntType === "Join") {
-          this.changeTheAssociation(notificationOpen.notification.data.associationName, notificationOpen.notification.data.associationID,
-            notificationOpen.notification.data.sbUnitID, notificationOpen.notification.data.unitName)
+          // this.changeTheAssociation(notificationOpen.notification.data.associationName, notificationOpen.notification.data.associationID,
+          //   notificationOpen.notification.data.sbUnitID, notificationOpen.notification.data.unitName)
         }
        // this.readFBRTB(true);
         this.getPopUpNotifications();

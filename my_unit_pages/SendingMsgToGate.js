@@ -67,6 +67,13 @@ class SendingMsgToGate extends Component {
       relativeImage4: '',
       relativeImage5: '',
 
+      base641:'',
+      base642:'',
+      base643:'',
+      base644:'',
+      base645:'',
+
+
       myProfileImage1: '',
       myProfileImage2: '',
       myProfileImage3: '',
@@ -115,6 +122,11 @@ class SendingMsgToGate extends Component {
       timestamp: '',
       isPause:true,
       isAudioPMGranted:false,
+      base641:'',
+      base642:'',
+      base643:'',
+      base644:'',
+      base645:'',
     };
     // this.audioRecorderPlayer = new AudioRecorderPlayer();
     // this.audioRecorderPlayer.setSubscriptionDuration(0.09); // optional. Default is 0.1
@@ -350,35 +362,48 @@ class SendingMsgToGate extends Component {
         switch (this.state.id) {
           case 1:
             self.setState({
-              myProfileImage1: response.data
+              myProfileImage1: response.uri,
+              base641:response.data,
+              relativeImage1: response.uri,
             });
            // this.uploadImage(response);
             // alert(response.uri);
             break;
           case 2:
             self.setState({
-              myProfileImage2: response.data
+              myProfileImage2: response.uri,
+              base642:response.data,
+              relativeImage2: response.uri,
             });
            // this.uploadImage(response);
             // alert(response.uri);
             break;
           case 3:
             self.setState({
-              myProfileImage3: response.data
+              myProfileImage3: response.uri,
+               base643:response.data,
+               relativeImage3: response.uri,
+   
+
             });
            // this.uploadImage(response);
             // alert(response.uri);
             break;
           case 4:
             self.setState({
-              myProfileImage4: response.data
+              myProfileImage4: response.uri,
+               base644:response.data,
+               relativeImage4: response.uri,
+      
             });
            // this.uploadImage(response);
             // alert(response.uri);
             break;
           case 5:
             self.setState({
-              myProfileImage5: response.data
+              myProfileImage5: response.uri,
+             base645:response.data,
+             relativeImage5: response.uri,
             });
            // this.uploadImage(response);
             // alert(response.uri);
@@ -495,7 +520,6 @@ class SendingMsgToGate extends Component {
     const formData = new FormData();
 
     // alert(JSON.stringify(stat));
-
     formData.append('file', {
       uri: path,
       name: `${this.state.timestamp}hello.wav`,
@@ -647,11 +671,11 @@ class SendingMsgToGate extends Component {
 
   datasend = () => {
     let self = this;
-    let img1 = self.state.myProfileImage1;
-    let img2 = self.state.relativeImage2 ? self.state.relativeImage2 : '';
-    let img3 = self.state.relativeImage3 ? self.state.relativeImage3 : '';
-    let img4 = self.state.relativeImage4 ? self.state.relativeImage4 : '';
-    let img5 = self.state.relativeImage5 ? self.state.relativeImage5 : '';
+    let img1 = self.state.base641;
+    let img2 = self.state.base642 ;
+    let img3 = self.state.base643 ;
+    let img4 = self.state.base644 ;
+    let img5 = self.state.base645 ;
     let comments = self.state.comment ? self.state.comment : '';
     let visitorid = self.state.visitorId;
     let visitorname = self.state.visitorName;
@@ -717,6 +741,13 @@ class SendingMsgToGate extends Component {
           relativeImage3: '',
           relativeImage4: '',
           relativeImage5: '',
+
+          
+      base641:'',
+      base642:'',
+      base643:'',
+      base644:'',
+      base645:'',
 
           myProfileImage1: '',
           myProfileImage2: '',
