@@ -1358,12 +1358,12 @@ class NotificationScreen extends PureComponent {
                 .then(response => response.json())
                 .then(responseJson => {
                   fetch(
-                    `http://${this.props.oyeURL}/oyeliving/api/v1/UpdateMemberOwnerOrTenantInActive/Update`,
+                    `http://${this.props.oyeURL}/oyesafe/api/v1/UpdateMemberOwnerOrTenantInActive/Update`,
                     {
                       method: 'POST',
                       headers: {
-                        'X-Champ-APIKey':
-                          '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1',
+                        'X-OYE247-APIKey':
+                          '7470AD35-D51C-42AC-BC21-F45685805BBE',
                         'Content-Type': 'application/json'
                       },
                       body: JSON.stringify(UpdateTenant)
