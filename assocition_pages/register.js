@@ -33,8 +33,8 @@ class RegisterMe extends Component {
     }
 
     componentDidMount() {
-        const { getAssoMembers, oyeURL, MyAccountID } = this.props;
-        getAssoMembers(oyeURL, MyAccountID);
+        const { getAssoMembers, oyeURL, MyAccountID,assId } = this.props;
+        getAssoMembers(oyeURL, MyAccountID,assId);
     }
 
     onDOBPress = () => {
@@ -65,8 +65,9 @@ class RegisterMe extends Component {
             associationName,
             unitList
         } = this.props.navigation.state.params;
-
-        const { getAssoMembers, oyeURL, MyAccountID } = this.props;
+        const { getAssoMembers, oyeURL, MyAccountID,assId } = this.props;
+       
+      //  const { getAssoMembers, oyeURL, MyAccountID } = this.props;
         const { fetchAssociationByAccountId } =this.props;
 
     
@@ -286,6 +287,7 @@ class RegisterMe extends Component {
                                                     });
 
                                                     //ass members list 
+                                                    getAssoMembers(oyeURL, MyAccountID,assId);
 
                                                     setTimeout(()=>{
                                                         let isAssocNotificationUpdating = 0;
@@ -318,7 +320,7 @@ class RegisterMe extends Component {
                                                     );
                                                 })
                                                 .catch(error => {
-                                                   // getAssoMembers(oyeURL, MyAccountID);
+                                                    getAssoMembers(oyeURL, MyAccountID,assId);
                                                     this.setState({
                                                         loading: false
                                                     });
@@ -406,7 +408,7 @@ class RegisterMe extends Component {
             unitList
         } = this.props.navigation.state.params;
 
-        const { getAssoMembers, oyeURL, MyAccountID } = this.props;
+        const { getAssoMembers, oyeURL, MyAccountID,assId } = this.props;
         const { fetchAssociationByAccountId}=this.props;
         
         /**
@@ -634,7 +636,7 @@ class RegisterMe extends Component {
                                                         }
                                                     });
 
-                                                    getAssoMembers(oyeURL, MyAccountID);
+                                                    getAssoMembers(oyeURL, MyAccountID,assId);
                                                     setTimeout(()=>{
                                                         let isAssocNotificationUpdating = 0;
                                                         let associationPath = `syncdashboard/isAssociationRefreshing/${unitList.asAssnID}/${unitList.unUnitID}`;
@@ -668,7 +670,7 @@ class RegisterMe extends Component {
                                                     );
                                                 })
                                                 .catch(error => {
-                                                    getAssoMembers(oyeURL, MyAccountID);
+                                                    getAssoMembers(oyeURL, MyAccountID,assId);
                                                     this.setState({isLoading:false,
                                                         loading: false
                                                     });
@@ -799,9 +801,11 @@ class RegisterMe extends Component {
         let status;
 
         // console.log(unitID, "unitID");
+        console.log('GETTHELISTOFMEMBERS',memberList,unitList)
         console.log(memberList, unitList, 'memberList');
 
         let matchUnit = _.find(memberList, function (o) {
+            console.log('GETTHELISTOFMEMBERS111111',o,unitID,o.unUnitID)
             console.log(o, unitID,'values');
             console.log(o.unUnitID, 'member', unitID, 'unitID');
             return o.unUnitID === unitID;
@@ -819,7 +823,7 @@ class RegisterMe extends Component {
                 // } else if (matchUnit.mrmRoleID === 3 && matchUnit.meIsActive) {
                 //   status = true;
             } else if (matchUnit.mrmRoleID === 1) {
-                status = { stat: false, admin: true };
+                status = { stat: true, admin: true };
             } else {
                 status = { stat: false, admin: false };
             }
@@ -873,8 +877,10 @@ class RegisterMe extends Component {
         let status;
 
         // console.log(unitID, "unitID");
+        console.log('GETTHELISTOFMEMBERS',memberList,unitList,this.props)
 
         let matchUnit = _.find(memberList, function (o) {
+            console.log('GETTHELISTOFMEMBERS2222222',o,unitID)
             console.log(o, 'values');
             console.log(o.unUnitID, 'member', unitID, 'unitID');
             return o.unUnitID === unitID;
@@ -1209,6 +1215,8 @@ const mapStateToProps = state => {
         userReducer:state.UserReducer,
         userImage:state.UserReducer.userProfilePic,
         userReducer: state.UserReducer,
+        assId:state.DashboardReducer.assId ,
+        uniID: state.DashboardReducer.uniID,
     };
 };
 

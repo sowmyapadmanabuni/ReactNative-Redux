@@ -674,11 +674,11 @@ export const getDashUnits = (
   };
 };
 
-export const getAssoMembers = (oyeURL, id) => {
+export const getAssoMembers = (oyeURL, accountId,assId) => {
   return dispatch => {
     axios
       .get(
-        `http://${oyeURL}/oyeliving/api/v1/Member/GetMemberListByAccountID/${id}`,
+        `http://${oyeURL}/oyeliving/api/v1/Member/GetMemberByAccountID/${accountId}/${assId}`,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -688,7 +688,7 @@ export const getAssoMembers = (oyeURL, id) => {
       )
       .then(response => {
         let resData = response.data.data.memberListByAccount;
-        console.log('Datacoming in this place',resData,response)
+        console.log('GETTHEMEMEBERLISTFORJOINREQUEST',resData,response)
         resData.map((data, index) => {
           // console.log(data.meJoinStat + index);
         });
@@ -883,7 +883,7 @@ export const fetchAssociationByAccountId = (oyeURL,accountId,callBack) => {
                 dropdown:sortedAssociationData,
                 allAssociations:sortedAssociationData,
                 associationId:associationIdArray,
-                memberList:data
+                //memberList:data
               }
             })
     

@@ -468,7 +468,21 @@ class App extends React.Component {
                 marginRight: hp('1%')
               }}
             >
-                  {item.vlExitT === '0001-01-01T00:00:00' &&
+                
+              {item.open ? (
+                <View />
+              ) : (
+                <View style={{ flexDirection: 'row' }}>
+                  <Text style={{ color: '#B51414', marginRight: hp('1%') }}>
+                    More
+                  </Text>
+                  <Icon color="#B51414" size={hp('1.8%')} name="show_more" />
+                </View>
+              )}
+            </View>
+          </TouchableOpacity>
+        </View>
+        {item.vlExitT === '0001-01-01T00:00:00' &&
               isButtonColorAvailable &&
               color == '#75be6f' ? (
                 <View
@@ -504,19 +518,6 @@ class App extends React.Component {
               ) : (
                 <View />
               )}
-              {item.open ? (
-                <View />
-              ) : (
-                <View style={{ flexDirection: 'row' }}>
-                  <Text style={{ color: '#B51414', marginRight: hp('1%') }}>
-                    More
-                  </Text>
-                  <Icon color="#B51414" size={hp('1.8%')} name="show_more" />
-                </View>
-              )}
-            </View>
-          </TouchableOpacity>
-        </View>
 
         <Collapsible duration={100} collapsed={!item.open}>
           <View style={{ flexDirection: 'column' }}>
@@ -533,42 +534,7 @@ class App extends React.Component {
                   <Text style={{ color: '#38bcdb' }}>{item.vlComName}</Text>
                 </Text>
               </View>
-              {item.vlExitT === '0001-01-01T00:00:00' &&
-              isButtonColorAvailable &&
-              color == '#75be6f' ? (
-                <View
-                  style={{
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    marginRight: hp('1%')
-                  }}
-                >
-                  <Button
-                    bordered
-                    warning
-                    style={styles.button2}
-                    onPress={() =>
-                      this.props.navigation.navigate('SendingMsgToGate', {
-                        image: item.vlEntryImg,
-                        fname: item.vlfName,
-                        lname: item.vllName,
-                        id: item.vlVisLgID,
-                        associationId: item.asAssnID
-                      })
-                    }
-                  >
-                    <Text
-                      style={{
-                        fontSize: hp('1.6%')
-                      }}
-                    >
-                      Leave with Vendor
-                    </Text>
-                  </Button>
-                </View>
-              ) : (
-                <View />
-              )}
+            
             </View>
             {/* <View style={{ flexDirection: 'row' }}>
                 <Text style={{ fontSize: hp('1.6%'), marginLeft: hp('1%'), marginBottom: hp('0.5%') }}>Entry approved by: {item.vlpOfVis}</Text>
