@@ -377,45 +377,60 @@ class CreateSOS extends React.Component {
                 console.log("Error:", error)
             })
         } else {
-            const data = new FormData();
-            let imgObj = {
-                name: (this.state.image.fileName !== undefined) ? this.state.image.fileName : "XXXXX.jpg",
-                uri: this.state.imageURI,
-                type: (this.state.image.type !== undefined || this.state.image.type != null) ? this.state.image.type : "image/jpeg"
-            };
 
-            data.append('oyespace', imgObj);
+            console.log("Image Data:",this.state);
 
-            console.log("Data to be stored:",data)
-;
-            let statForMediaUpload = await base.services.MediaUploadApi.uploadRelativeImage(data);
-            console.log("Stat in Media Upload:", "http://mediaupload.oyespace.com/oyeliving/api/V1/", statForMediaUpload);
-            let sosImage = "http://mediaupload.oyespace.com/" + statForMediaUpload;
-            let imgArr = this.state.imageArr;
-            console.log("Image Arr:", imgArr);
-            if(statForMediaUpload!==null){
-                imgArr.push(sosImage);
-                this.setState({
-                    imageArr: imgArr
-                }, () => {
-                    let tempArr = [];
-                    for (let i in imgArr) {
-                        if (!imgArr[i].includes("content") && !imgArr[i].includes("file:///")) {
-                            tempArr.push(imgArr[i])
-                        }
-                    }
-                    let emergencyImages = tempArr;
-                    console.log("SOS Image Array:", emergencyImages);
-                    firebase.database().ref('SOS/' + associationID + "/" + userId + "/").update({
-                        emergencyImages
-                    }).then((data) => {
-                        console.log("Image Saved in RTDB", data);
-                        self.updateSOSInAPI(sosImage)
-                    }).catch((err) => {
-                        console.log("Error:", err)
-                    });
-                })
-            }
+            let emergencyImages = this.state.imageArr;
+
+            firebase.database().ref('SOS/' + associationID + "/" + userId + "/").update({
+                emergencyImages
+            }).then((data) => {
+                console.log("Image Saved in RTDB", data);
+               // self.updateSOSInAPI(sosImage)
+            }).catch((err) => {
+                console.log("Error:", err)
+            });
+
+
+//             const data = new FormData();
+//             let imgObj = {
+//                 name: (this.state.image.fileName !== undefined) ? this.state.image.fileName : "XXXXX.jpg",
+//                 uri: this.state.imageURI,
+//                 type: (this.state.image.type !== undefined || this.state.image.type != null) ? this.state.image.type : "image/jpeg"
+//             };
+
+//             data.append('oyespace', imgObj);
+
+//             console.log("Data to be stored:",data)
+// ;
+//             let statForMediaUpload = await base.services.MediaUploadApi.uploadRelativeImage(data);
+//             console.log("Stat in Media Upload:", "http://mediaupload.oyespace.com/oyeliving/api/V1/", statForMediaUpload);
+//             let sosImage = "http://mediaupload.oyespace.com/" + statForMediaUpload;
+//             let imgArr = this.state.imageArr;
+//             console.log("Image Arr:", imgArr);
+//             if(statForMediaUpload!==null){
+//                 imgArr.push(sosImage);
+//                 this.setState({
+//                     imageArr: imgArr
+//                 }, () => {
+//                     let tempArr = [];
+//                     for (let i in imgArr) {
+//                         if (!imgArr[i].includes("content") && !imgArr[i].includes("file:///")) {
+//                             tempArr.push(imgArr[i])
+//                         }
+//                     }
+//                     let emergencyImages = tempArr;
+//                     console.log("SOS Image Array:", emergencyImages);
+//                     firebase.database().ref('SOS/' + associationID + "/" + userId + "/").update({
+//                         emergencyImages
+//                     }).then((data) => {
+//                         console.log("Image Saved in RTDB", data);
+//                         self.updateSOSInAPI(sosImage)
+//                     }).catch((err) => {
+//                         console.log("Error:", err)
+//                     });
+//                 })
+//             }
         }
     }
 
@@ -597,10 +612,10 @@ class CreateSOS extends React.Component {
                 console.log("Response:", response);
                 if (!response.didCancel && !response.error) {
                     let imageArr = this.state.imageArr;
-                    imageArr.push(response.uri);
+                    imageArr.push(response.data);
                     this.setState({
                         image: response,
-                        imageURI: response.uri,
+                        imageURI: response.data,
                         imageArr: imageArr
                     }, () => this.createSOS())
                 }
@@ -614,7 +629,7 @@ class CreateSOS extends React.Component {
     render() {
         let imageURI = require('../../../icons/camera.png');
         let unitName = this.props.dashBoardReducer.selectedDropdown1 === undefined || this.props.dashBoardReducer.selectedDropdown1 === null ?"Help is on the way":`Help is on the way to your unit - ${this.state.unitId}`;
-        console.log("Guard Detail:", this.props);
+        console.log("Guard Detail:", this.state);
         return (
             <ScrollView style={CreateSOSStyles.container}>
                 <View style={{marginBottom:50}}>
@@ -821,7 +836,9 @@ class CreateSOS extends React.Component {
     }
 
     renderImages(item, index) {
-        let imageURI = {uri: item.item};
+        console.log("Item of images:",item);
+
+        let imageURI = {uri:`data:image/png;base64,${item.item}`};
 
         return (
             <TouchableHighlight
