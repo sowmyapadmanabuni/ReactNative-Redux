@@ -132,10 +132,11 @@ class Dashboard extends React.Component {
     const { oyeURL } = this.props.oyespaceReducer;
 
     let self = this;
-    const { fetchAssociationByAccountId } = self.props
+    const { fetchAssociationByAccountId } = self.props;
+    
     fetchAssociationByAccountId(oyeURL, MyAccountID, function (data) {
       console.log('HERE DATA TO DISPLAY111', data, self.props)
-      if (data) {
+      if (data) { 
 
         self.requestNotifPermission();
         self.myProfileNet();
@@ -146,6 +147,8 @@ class Dashboard extends React.Component {
         self.getPopUpNotifications();
         self.createTopicListener(self.props.dropdown, true)
         self.getInvoiceMethodsList()
+        // const { getAssoMembers, oyeURL, MyAccountID,assId } = self.props;
+        //  getAssoMembers(oyeURL, MyAccountID,assId);
       }
       else {
         const { MyAccountID } = self.props;
@@ -191,6 +194,10 @@ class Dashboard extends React.Component {
         self.readFBRTB(true);
         self.getInvoiceMethodsList();
         self.getPopUpNotifications();
+
+        // const { getAssoMembers, oyeURL, MyAccountID,assId } = this.props;
+        //     getAssoMembers(oyeURL, MyAccountID,assId);
+
          firebase.notifications().getInitialNotification().then((notificationOpen: NotificationOpen) => {
           console.log("self.getPopUpNotifications();self.getPopUpNotifications();:",notificationOpen);
           if(notificationOpen){
@@ -864,6 +871,8 @@ class Dashboard extends React.Component {
         prop: 'SelectedMemberID',
         value: dropdown[index].memberId
       });
+    //   const { getAssoMembers, oyeURL, MyAccountID,assId } = this.props;
+    // getAssoMembers(oyeURL, MyAccountID,assId);
 
       dropdown[index].unit.length === 0 ? "" : this.getVehicleList()
       this.checkUserRole(dropdown[index])
