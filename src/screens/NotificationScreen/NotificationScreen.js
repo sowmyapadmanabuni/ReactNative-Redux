@@ -231,19 +231,19 @@ class NotificationScreen extends PureComponent {
         let oldNotif = [...this.props.notifications];
         oldNotif[index].opened = true;
         this.props.onGateApp(oldNotif);
-        // let delArray = [];
-        // if (visitorStatus == "ExitApproved" || visitorStatus == "Exit Approved") {
-        //     for (let i = 0; i < oldNotif.length; i++) {
+        let delArray = [];
+        if (visitorStatus == "ExitApproved" || visitorStatus == "Exit Approved") {
+            for (let i = 0; i < oldNotif.length; i++) {
 
-        //         if (oldNotif[i].vlVisLgID === visitorId) {
-        //             if (oldNotif[i].ntid != notifiId) {
-        //                 delArray.push({ "NTID": oldNotif[i].ntid })
-        //             }
-        //         }
-        //     }
-        // }
-       // let data = delArray.push({ "NTID": oldNotif[0].ntid })
-       // console.log('DELETE ARRAY NOTIFICATION', delArray,data)
+                if (oldNotif[i].vlVisLgID === visitorId) {
+                    if (oldNotif[i].ntid != notifiId) {
+                        delArray.push({ "NTID": oldNotif[i].ntid })
+                    }
+                }
+            }
+        }
+        let data = delArray.push({ "NTID": oldNotif[0].ntid })
+        console.log('DELETE ARRAY NOTIFICATION', delArray,data)
 
         axios
             .get(`http://${this.props.oyeURL}/oyesafe/api/v1/GetCurrentDateTime`, {
@@ -285,27 +285,27 @@ class NotificationScreen extends PureComponent {
                                 status: visitorStatus,
                             });
 
-                        // axios
-                        //     .delete(
-                        //         `http://${this.props.oyeURL}/oyesafe/api/v1/DeleteOldNotifications`,
-                        //         {
-                        //             headers: {
-                        //                 'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE',
-                        //                 'Content-Type': 'application/json'
-                        //             },
-                        //             data: {
-                        //                 Notification: delArray
-                        //             }
-                        //         },
+                        axios
+                            .delete(
+                                `http://${this.props.oyeURL}/oyesafe/api/v1/DeleteOldNotifications`,
+                                {
+                                    headers: {
+                                        'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE',
+                                        'Content-Type': 'application/json'
+                                    },
+                                    data: {
+                                        Notification: delArray
+                                    }
+                                },
 
 
-                        //     )
-                        //     .then(responses => {
-                        //         console.log('RESPONSE1111', responses)
-                        //     })
-                        //     .catch(e => {
-                        //         console.log('RESPONSE2222', e)
-                        //     })
+                            )
+                            .then(responses => {
+                                console.log('RESPONSE1111', responses)
+                            })
+                            .catch(e => {
+                                console.log('RESPONSE2222', e)
+                            })
                         this.props.getNotifications(this.props.oyeURL, this.props.MyAccountID);
                         this.props.navigation.navigate('ResDashBoard');
 
@@ -352,18 +352,18 @@ class NotificationScreen extends PureComponent {
         let oldNotif = [...this.props.notifications];
         oldNotif[index].opened = true;
         this.props.onGateApp(oldNotif);
-        // let delArray = [];
-        // if (visitorStatus == "ExitRejected" || visitorStatus == "Exit Rejected") {
-        //     for (let i = 0; i < oldNotif.length; i++) {
+        let delArray = [];
+        if (visitorStatus == "ExitRejected" || visitorStatus == "Exit Rejected") {
+            for (let i = 0; i < oldNotif.length; i++) {
 
-        //         if (oldNotif[i].vlVisLgID === visitorId) {
-        //             if (oldNotif[i].ntid != notifiId) {
-        //                 delArray.push({ "NTID": oldNotif[i].ntid })
-        //             }
-        //         }
-        //     }
-        // }
-        // console.log('DELETE ARRAY NOTIFICATION!!!!!!', delArray, delArray.push({ "NTID": oldNotif[0].ntid }))
+                if (oldNotif[i].vlVisLgID === visitorId) {
+                    if (oldNotif[i].ntid != notifiId) {
+                        delArray.push({ "NTID": oldNotif[i].ntid })
+                    }
+                }
+            }
+        }
+        console.log('DELETE ARRAY NOTIFICATION!!!!!!', delArray, delArray.push({ "NTID": oldNotif[0].ntid }))
 
 
         axios
@@ -405,25 +405,25 @@ class NotificationScreen extends PureComponent {
                                 status: visitorStatus, //"EntryRejected"
 
                             });
-                        // axios
-                        //     .delete(
-                        //         `http://${this.props.oyeURL}/oyesafe/api/v1/DeleteOldNotifications`,
-                        //         {
-                        //             headers: {
-                        //                 'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE',
-                        //                 'Content-Type': 'application/json'
-                        //             },
-                        //             data: {
-                        //                 Notification: delArray
-                        //             }
-                        //         },
-                        //     )
-                        //     .then(responses => {
-                        //         console.log('RESPONSE1111', responses)
-                        //     })
-                        //     .catch(e => {
-                        //         console.log('RESPONSE2222', e)
-                        //     })
+                        axios
+                            .delete(
+                                `http://${this.props.oyeURL}/oyesafe/api/v1/DeleteOldNotifications`,
+                                {
+                                    headers: {
+                                        'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE',
+                                        'Content-Type': 'application/json'
+                                    },
+                                    data: {
+                                        Notification: delArray
+                                    }
+                                },
+                            )
+                            .then(responses => {
+                                console.log('RESPONSE1111', responses)
+                            })
+                            .catch(e => {
+                                console.log('RESPONSE2222', e)
+                            })
                         this.props.getNotifications(this.props.oyeURL, this.props.MyAccountID);
                         this.props.navigation.navigate('ResDashBoard');
                     })
@@ -1264,7 +1264,7 @@ class NotificationScreen extends PureComponent {
         // } else {
         let MemberID = global.MyOYEMemberID;
         this.setState({ loading: true });
-        console.log("Approval111111111:", item, oyeURL, champBaseURL);
+        console.log("Approval:", item, oyeURL, champBaseURL);
 
         const headers = {
             'X-Champ-APIKey': '1FDF86AF-94D7-4EA9-8800-5FBCCFF8E5C1',
@@ -1357,7 +1357,6 @@ class NotificationScreen extends PureComponent {
               )
                 .then(response => response.json())
                 .then(responseJson => {
-                    console.log("Approval2222222:",responseJson,UpdateTenant);
                   fetch(
                     `http://${this.props.oyeURL}/oyesafe/api/v1/UpdateMemberOwnerOrTenantInActive/Update`,
                     {
@@ -1372,9 +1371,8 @@ class NotificationScreen extends PureComponent {
                   )
                     .then(response => response.json())
                     .then(responseJson_2 => {
-                        console.log("Approval333333333:",responseJson_2);
-                      //console.log(JSON.stringify(UpdateTenant));
-                      console.log("GETTING REPNSE IN THIS API",responseJson_2);
+                      console.log(JSON.stringify(UpdateTenant));
+                      console.log(responseJson_2);
 
                      let StatusUpdate = {
                         NTID      : item.ntid,
@@ -1395,12 +1393,10 @@ class NotificationScreen extends PureComponent {
                       )
                         .then(response => {
                           response.json();
-                          console.log("Approval4444444:",response);
                                   console.log('Response', response);
                         })
                         .then(responseJson_3 => {
                           console.log(item.ntid, 'ntid');
-                          console.log("Approval444444444:",responseJson_3);
                           console.log('NTJoinStat');
                           axios
                             .post(
@@ -1417,9 +1413,8 @@ class NotificationScreen extends PureComponent {
                                 }
                               }
                             )
-                            .then((response) => {
+                            .then(() => {
                               console.log('updated suc');
-                              console.log("Approval5555555555:",response);
                               this.props.getNotifications(
                                 this.props.oyeURL,
                                 this.props.MyAccountID
@@ -2033,19 +2028,6 @@ class NotificationScreen extends PureComponent {
         else {
             newArr.push(notificationList)
         }
-        let j=0 ; let k=0; let l=0;
-       let  tempArr=[]
-        for(let i in newArr){
-          
-            newArr[i].notifIndex=j
-            newArr[i].acNoIndex=l
-            j=j+1;
-            l=l+1;
-          
-            tempArr.push(newArr[i])
-         
-        }
-        console.log("============================================1111111111:", notificationList,newArr,tempArr);
 
         console.log("Notitification after search:", notificationList)
 

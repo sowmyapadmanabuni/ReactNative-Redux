@@ -2,7 +2,7 @@
  * @Author: Sarthak Mishra 
  * @Date: 2020-03-09 16:13:08 
  * @Last Modified by: Sarthak Mishra
- * @Last Modified time: 2020-04-14 19:49:14
+ * @Last Modified time: 2020-04-16 11:37:53
  */
 
 
@@ -141,7 +141,7 @@ class NotificationPopUp extends React.Component {
                         <View>
                             {notificationData.visitorlog[0].vlVisType !== 'Staff' ?
                                 <View style={{ height: hp('8'), width: wp('45'), bottom: hp('0'), borderWidth: 0, flexDirection: 'row', alignSelf: 'center', justifyContent: 'space-around', alignItems: 'center' }}>
-                                    <TouchableOpacity
+                                    <TouchableHighlight
                                         underlayColor={'transparent'}
                                         onPress={() => this.acceptGateVisitor(
                                             notificationData.visitorlog[0].vlVisLgID,
@@ -166,7 +166,7 @@ class NotificationPopUp extends React.Component {
                                             />
                                             <Text style={{ color: 'green', textAlign: 'center', fontSize: hp('2') }}> Allow</Text>
                                         </View>
-                                    </TouchableOpacity>
+                                    </TouchableHighlight>
                                     <TouchableOpacity
                                         underlayColor={'transparent'}
                                         onPress={() => this.denyGateVisitor(

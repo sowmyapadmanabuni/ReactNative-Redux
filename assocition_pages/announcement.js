@@ -342,7 +342,7 @@ class Announcement extends Component {
           case 1:
             self.setState({
               myProfileImage1: response.uri,
-              relativeImage1: response.uri
+              relativeImage1: response.data
             });
             this.uploadImage(response);
             // alert(response.uri);
@@ -350,7 +350,7 @@ class Announcement extends Component {
           case 2:
             self.setState({
               myProfileImage2: response.uri,
-              relativeImage2: response.uri
+              relativeImage2: response.data
             });
             this.uploadImage(response);
             // alert(response.uri);
@@ -358,7 +358,7 @@ class Announcement extends Component {
           case 3:
             self.setState({
               myProfileImage3: response.uri,
-              relativeImage3: response.uri
+              relativeImage3: response.data
             });
             this.uploadImage(response);
             // alert(response.uri);
@@ -366,7 +366,7 @@ class Announcement extends Component {
           case 4:
             self.setState({
               myProfileImage4: response.uri,
-              relativeImage4: response.uri
+              relativeImage4: response.data
             });
             this.uploadImage(response);
             // alert(response.uri);
@@ -374,7 +374,7 @@ class Announcement extends Component {
           case 5:
             self.setState({
               myProfileImage5: response.uri,
-              relativeImage5: response.uri
+              relativeImage5: response.data
             });
             this.uploadImage(response);
             // alert(response.uri);
@@ -420,7 +420,7 @@ class Announcement extends Component {
         switch (this.state.id) {
           case 1:
             self.setState({
-              relativeImage1: stat,
+              relativeImage1: response.data,
               isPhotoAvailable: true,
               photo: response.uri,
               photoDetails: response,
@@ -429,7 +429,7 @@ class Announcement extends Component {
             break;
           case 2:
             self.setState({
-              relativeImage2: stat,
+              relativeImage2: response.data,
               isPhotoAvailable: true,
               photo: response.uri,
               photoDetails: response,
@@ -438,7 +438,7 @@ class Announcement extends Component {
             break;
           case 3:
             self.setState({
-              relativeImage3: stat,
+              relativeImage3: response.data,
               isPhotoAvailable: true,
               photo: response.uri,
               photoDetails: response,
@@ -447,7 +447,7 @@ class Announcement extends Component {
             break;
           case 4:
             self.setState({
-              relativeImage4: stat,
+              relativeImage4: response.data,
               isPhotoAvailable: true,
               photo: response.uri,
               photoDetails: response,
@@ -456,7 +456,7 @@ class Announcement extends Component {
             break;
           case 5:
             self.setState({
-              relativeImage5: stat,
+              relativeImage5: response.data,
               isPhotoAvailable: true,
               photo: response.uri,
               photoDetails: response,

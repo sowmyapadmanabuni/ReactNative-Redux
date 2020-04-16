@@ -305,19 +305,19 @@ class NotificationAnnouncementDetailScreen extends Component {
               isLoading: false,
               imageData: response.data.data.announcements[0].anImages,
               image1:
-                'https://mediaupload.oyespace.com/' +
+               // 'https://mediaupload.oyespace.com/' +
                 response.data.data.announcements[0].anImages.split(',')[0],
               image2:
-                'https://mediaupload.oyespace.com/' +
+              //  'https://mediaupload.oyespace.com/' +
                 response.data.data.announcements[0].anImages.split(',')[1],
               image3:
-                'https://mediaupload.oyespace.com/' +
+               // 'https://mediaupload.oyespace.com/' +
                 response.data.data.announcements[0].anImages.split(',')[2],
               image4:
-                'https://mediaupload.oyespace.com/' +
+                //'https://mediaupload.oyespace.com/' +
                 response.data.data.announcements[0].anImages.split(',')[3],
               image5:
-                'https://mediaupload.oyespace.com/' +
+               // 'https://mediaupload.oyespace.com/' +
                 response.data.data.announcements[0].anImages.split(',')[4],
               voice: response.data.data.announcements[0].anVoice,
               notes: response.data.data.announcements[0].anCmnts
@@ -382,7 +382,7 @@ class NotificationAnnouncementDetailScreen extends Component {
       (screenWidth - 56 * ratio);
     if (!playWidth) playWidth = 0;
 
-    console.log('imageData', this.state.imageData);
+    console.log('imageData',`data:image/png;base64,${this.state.image1}`);
     return (
       <View style={Styles.container}>
         <SafeAreaView style={{ backgroundColor: '#ff8c00' }}>
@@ -433,7 +433,7 @@ class NotificationAnnouncementDetailScreen extends Component {
                     showsHorizontalScrollIndicator={false}
                   >
                     <ZoomImage
-                      source={{ uri: this.state.image1 }}
+                      source={{ uri: `data:image/png;base64,${this.state.image1}`}}
                       // style={Styles.image}
                       imgStyle={{
                         height: hp('10%'),
@@ -447,7 +447,7 @@ class NotificationAnnouncementDetailScreen extends Component {
                     />
                     <ZoomImage
                       source={{
-                        uri: this.state.image2
+                        uri: `data:image/png;base64,${this.state.image2}`
                       }}
                       // style={Styles.image}
                       imgStyle={Styles.image}
@@ -457,7 +457,7 @@ class NotificationAnnouncementDetailScreen extends Component {
                     />
                     <ZoomImage
                       source={{
-                        uri: this.state.image3
+                        uri: `data:image/png;base64,${this.state.image3}`
                       }}
                       // style={Styles.image}
                       imgStyle={Styles.image}
@@ -467,7 +467,7 @@ class NotificationAnnouncementDetailScreen extends Component {
                     />
                     <ZoomImage
                       source={{
-                        uri: this.state.image4
+                        uri: `data:image/png;base64,${this.state.image4}`
                       }}
                       // style={Styles.image}
                       imgStyle={Styles.image}
@@ -477,7 +477,7 @@ class NotificationAnnouncementDetailScreen extends Component {
                     />
                     <ZoomImage
                       source={{
-                        uri: this.state.image5
+                        uri: `data:image/png;base64,${this.state.image5}`
                       }}
                       // style={Styles.image}
                       imgStyle={Styles.image}
