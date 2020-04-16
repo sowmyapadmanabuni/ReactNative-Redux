@@ -747,7 +747,7 @@ class SendingMsgToGate extends Component {
           comment: '',
           dropdownValue: ''
         });
-        this.props.navigation.goBack();
+        this.props.navigation.goBack(null);
       })
       .catch(error => {
         console.log('Crash in profile', error);
@@ -815,7 +815,7 @@ class SendingMsgToGate extends Component {
 
           <View style={styles.detailsMainView}>
             <View style={{ ...styles.detailsLeftView, marginLeft: hp('2%') }}>
-              {this.props.navigation.state.params.image === '' ? (
+              {this.props.navigation.state.params === undefined || this.props.navigation.state.params.image === '' ? (
                 <Image
                   style={styles.staffImg}
                   source={{
@@ -836,8 +836,8 @@ class SendingMsgToGate extends Component {
               )}
               <View style={styles.textView1}>
                 <Text style={styles.staffText1} numberofLines={1}>
-                  {this.props.navigation.state.params.fname}{' '}
-                  {this.props.navigation.state.params.lname}
+                  {this.props.navigation.state.params === undefined?"":this.props.navigation.state.params.fname}{' '}
+                  {this.props.navigation.state.params === undefined?"":this.props.navigation.state.params.lname}
                 </Text>
               </View>
             </View>
