@@ -1,7 +1,6 @@
 import React from 'react';
 import {BackHandler, Dimensions, Image, SafeAreaView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import { WebView } from 'react-native-webview';
-
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 
 

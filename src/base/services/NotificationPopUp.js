@@ -417,7 +417,7 @@ class NotificationPopUp extends React.Component {
                 this.removeNotificationData()
             }
         } catch (error) {
-            console.log('error:', error);
+           console.log('error:11111111111111', error);
             alert("Request already handled")
             // this.refs.toast.show('Request already denied');
             this.removeNotificationData()

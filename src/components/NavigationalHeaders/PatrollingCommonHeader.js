@@ -313,7 +313,8 @@ const styles = StyleSheet.create({
         //marginRight: widthPercentageToDP('35%'),
         alignItems: 'center',
         justifyContent: 'center',
-        borderColor: '#B51414'
+        borderColor: '#B51414',
+        right:Platform.OS=="ios" ?0:10
       },
       scheduleTextStyle: {
         color: '#B51414',

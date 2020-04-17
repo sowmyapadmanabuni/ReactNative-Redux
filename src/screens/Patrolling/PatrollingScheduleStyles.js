@@ -1,4 +1,4 @@
-import {StyleSheet} from "react-native";
+import {StyleSheet, Platform} from "react-native";
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 import base from "../../base";
 
@@ -12,7 +12,7 @@ const PatrollingScheduleStyles = StyleSheet.create({
         backgroundColor: "white"
     },
     subtitle: {
-        color: 'black', fontSize: 20,marginVertical:8
+        color: 'black', fontSize: 20,marginVertical:8, left: Platform.OS=="ios"? 0: 10
     },
     childView: {
         justifyContent: 'center',

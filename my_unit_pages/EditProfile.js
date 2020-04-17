@@ -623,11 +623,13 @@ class EditProfile extends Component {
                                                         }*/
                                                     }
                                                     value={this.state.primaryMobNum}
+                                                    editable={false}
+                                                    disabled={true}
                                                 />
-                                                <TouchableOpacity style={{width: 35, height: 35,justifyContent:'center'}} onPress={() => this.getTheContact()}>
+                                                {/* <TouchableOpacity style={{width: 35, height: 35,justifyContent:'center'}} onPress={() => this.getTheContact()}>
                                                     <Image source={require("../icons/phone-book.png")}
                                                            style={{width: 25, height: 25,}}/>
-                                                </TouchableOpacity>
+                                                </TouchableOpacity> */}
 
                                             </Item>
 
@@ -688,10 +690,10 @@ class EditProfile extends Component {
                                                     }}
                                                     value={this.state.alterMobNum}
                                                 />
-                                                <TouchableOpacity style={{width: 35, height: 35,justifyContent:'center'}} onPress={() => this.getTheContact()}>
+                                                {/* <TouchableOpacity style={{width: 35, height: 35,justifyContent:'center'}} onPress={() => this.getTheContact()}>
                                                     <Image source={require("../icons/phone-book.png")}
                                                            style={{width: 25, height: 25,}}/>
-                                                </TouchableOpacity>
+                                                </TouchableOpacity> */}
                                             </Item>
                                         </View>
 
