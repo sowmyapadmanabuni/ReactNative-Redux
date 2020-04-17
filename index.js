@@ -1,4 +1,5 @@
 /** @format */
+import 'react-native-get-random-values'
 import React, { Component } from 'react';
 import { AppRegistry, AsyncStorage, AppState } from 'react-native';
 import { Provider } from 'react-redux';

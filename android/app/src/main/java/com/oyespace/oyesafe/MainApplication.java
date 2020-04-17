@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.facebook.react.ReactApplication;
+import org.linusu.RNGetRandomValuesPackage;
 import com.streem.selectcontact.SelectContactPackage;
 import com.reactnativecommunity.netinfo.NetInfoPackage;
 import com.th3rdwave.safeareacontext.SafeAreaContextPackage;
@@ -55,6 +56,7 @@ import java.util.TimerTask;
 import com.smixx.fabric.FabricPackage;
 import com.crashlytics.android.Crashlytics;
 import io.fabric.sdk.android.Fabric;
+import com.reactnativecommunity.webview.RNCWebViewPackage;
 
 
 import com.heanoria.library.reactnative.locationenabler.RNAndroidLocationEnablerPackage;
@@ -79,6 +81,7 @@ public class MainApplication extends Application implements ShareApplication, Re
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
+            new RNGetRandomValuesPackage(),
                     new SelectContactPackage(),
                      new RNCWebViewPackage(),
                     new NetInfoPackage(),
