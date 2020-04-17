@@ -817,11 +817,13 @@ class RegisterMe extends Component {
             if (
                 (matchUnit.mrmRoleID === 2 && matchUnit.meIsActive)
                 ||
-                (matchUnit.mrmRoleID === 14 && matchUnit.meIsActive)
-            ) {
+                (matchUnit.mrmRoleID === 1007 && matchUnit.meIsActive)
+            ) { 
+                // /* mrmRoleId is 14 for family member in production*/
                 status = { stat: true, admin: false };
                 // } else if (matchUnit.mrmRoleID === 3 && matchUnit.meIsActive) {
                 //   status = true;
+                //
             } else if (matchUnit.mrmRoleID === 1) {
                 status = { stat: true, admin: true };
             } else {
@@ -853,7 +855,7 @@ class RegisterMe extends Component {
         console.log('matchUnit', matchUnit, memberList);
 
         if (matchUnit) {
-            if (matchUnit.mrmRoleID === 14 && matchUnit.meIsActive) {
+            if (matchUnit.mrmRoleID === 1007 && matchUnit.meIsActive) {
                 status = { stat: true, admin: false };
                 // } else if (matchUnit.mrmRoleID === 3 && matchUnit.meIsActive) {
                 //   status = true;
@@ -891,7 +893,7 @@ class RegisterMe extends Component {
         if (matchUnit) {
             if (
                 (matchUnit.mrmRoleID === 3 && matchUnit.meIsActive) ||
-                (matchUnit.mrmRoleID === 14 && matchUnit.meIsActive)
+                (matchUnit.mrmRoleID === 1007 && matchUnit.meIsActive)
             ) {
                 console.log('In_Here');
                 status = { stat: true, admin: false };

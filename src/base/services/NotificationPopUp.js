@@ -140,8 +140,11 @@ class NotificationPopUp extends React.Component {
                         </View>
                         <View>
                             {notificationData.visitorlog[0].vlVisType !== 'Staff' ?
-                                <View style={{ height: hp('8'), width: wp('45'), bottom: hp('0'), borderWidth: 0, flexDirection: 'row', alignSelf: 'center', justifyContent: 'space-around', alignItems: 'center' }}>
-                                    <TouchableHighlight
+                                <View style={{ height: hp('8'), width: wp('45'), bottom: hp('0'), borderWidth: 0, 
+                                flexDirection: 'row',  justifyContent: 'space-between', 
+                                alignItems: 'center', 
+                                 }}>
+                                    <TouchableOpacity
                                         underlayColor={'transparent'}
                                         onPress={() => this.acceptGateVisitor(
                                             notificationData.visitorlog[0].vlVisLgID,
@@ -152,8 +155,8 @@ class NotificationPopUp extends React.Component {
                                             notificationData.visitorlog[0].vlApprdBy,
                                             notificationData.visitorlog[0].vlApprStat
                                         )}
-                                        style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0, left: hp('1') }}>
-                                        <View style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0, left: hp('1') }}>
+                                        style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-start', borderWidth: 0,right:20  }}>
+                                        <View style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0, }}>
                                             <Image
                                                 resizeMode={'center'}
                                                 style={{
@@ -164,9 +167,9 @@ class NotificationPopUp extends React.Component {
                                                 }}
                                                 source={require('../../../icons/allow.png')}
                                             />
-                                            <Text style={{ color: 'green', textAlign: 'center', fontSize: hp('2') }}> Allow</Text>
+                                            <Text style={{ color: 'green', textAlign: 'center', fontSize: hp('2') ,width:'60%',}}> Allow</Text>
                                         </View>
-                                    </TouchableHighlight>
+                                    </TouchableOpacity>
                                     <TouchableOpacity
                                         underlayColor={'transparent'}
                                         onPress={() => this.denyGateVisitor(
@@ -178,8 +181,8 @@ class NotificationPopUp extends React.Component {
                                             notificationData.visitorlog[0].vlApprdBy,
                                             notificationData.visitorlog[0].vlApprStat
                                         )}
-                                        style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0 }}>
-                                        <View style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0, left: hp('1') }}>
+                                        style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0,right:20 }}>
+                                        <View style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0,  }}>
                                             <Image
                                                 resizeMode={'center'}
                                                 style={{
@@ -190,12 +193,12 @@ class NotificationPopUp extends React.Component {
                                                 }}
                                                 source={require('../../../icons/deny_1.png')}
                                             />
-                                            <Text style={{ color: '#B51414', textAlign: 'center', fontSize: hp('2') }}> Deny</Text>
+                                            <Text style={{ color: '#B51414', textAlign: 'center', fontSize: hp('2') ,}}> Deny</Text>
                                         </View>
                                     </TouchableOpacity>
                                 </View>
                                 :
-                                <TouchableHighlight
+                                <TouchableOpacity
                                     underlayColor={'transparent'}
                                     onPress={() => this.removeNotificationData()}
                                     style={{ flexDirection: 'row', alignSelf: 'flex-end', justifyContent: 'flex-end', alignItems: 'flex-end', borderWidth: 0, left: hp('15') }}>
@@ -211,7 +214,7 @@ class NotificationPopUp extends React.Component {
                                         />
                                         <Text style={{ color: 'green', textAlign: 'center', fontSize: hp('2') }}> Ok</Text>
                                     </View>
-                                </TouchableHighlight>}
+                                </TouchableOpacity>}
                         </View>
                     </View>
                 </View>
@@ -322,20 +325,20 @@ class NotificationPopUp extends React.Component {
             }
         } catch (error) {
             console.log('error:', error);
-            alert("Request already accepted")
+            alert("Request already handled")
             //this.refs.toast.show('Request already accepted');
             this.removeNotificationData();
-            gateFirebase
-                .database()
-                .ref(`NotificationSync/A_${associationid}/${visitorId}`)
-                .set({
-                    buttonColor: '#75be6f',
-                    opened: true,
-                    newAttachment: false,
-                    visitorlogId: visitorId,
-                    updatedTime: null,
-                    status: visitorStatus
-                })
+            // gateFirebase
+            //     .database()
+            //     .ref(`NotificationSync/A_${associationid}/${visitorId}`)
+            //     .set({
+            //         buttonColor: '#75be6f',
+            //         opened: true,
+            //         newAttachment: false,
+            //         visitorlogId: visitorId,
+            //         updatedTime: null,
+            //         status: ""
+            //     })
         }
     };
 
@@ -415,20 +418,20 @@ class NotificationPopUp extends React.Component {
             }
         } catch (error) {
             console.log('error:', error);
-            alert("Request already denied")
+            alert("Request already handled")
             // this.refs.toast.show('Request already denied');
             this.removeNotificationData()
-            gateFirebase
-                .database()
-                .ref(`NotificationSync/A_${associationid}/${visitorId}`)
-                .set({
-                    buttonColor: '#ff0000',
-                    opened: true,
-                    newAttachment: false,
-                    visitorlogId: visitorId,
-                    updatedTime: null,
-                    status: visitorStatus
-                })
+            // gateFirebase
+            //     .database()
+            //     .ref(`NotificationSync/A_${associationid}/${visitorId}`)
+            //     .set({
+            //         buttonColor: '#ff0000',
+            //         opened: true,
+            //         newAttachment: false,
+            //         visitorlogId: visitorId,
+            //         updatedTime: null,
+            //         status: visitorStatus
+            //     })
         }
     };
 
