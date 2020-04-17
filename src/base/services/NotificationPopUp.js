@@ -2,7 +2,7 @@
  * @Author: Sarthak Mishra 
  * @Date: 2020-03-09 16:13:08 
  * @Last Modified by: Sarthak Mishra
- * @Last Modified time: 2020-04-16 11:37:53
+ * @Last Modified time: 2020-04-17 13:42:35
  */
 
 
@@ -115,7 +115,7 @@ class NotificationPopUp extends React.Component {
                                 }}
                                 source={{ uri: 'data:image/png;base64,' + notificationData.visitorlog[0].vlEntryImg }}
                             />
-                            <View style={{ width: wp('50'), height: hp('0'), borderWidth: 0, alignSelf: 'center', left: hp('1'), alignItems: 'center', justifyContent: 'center', top: Platform.OS === 'ios' ? 0 : hp('3') }}>
+                            <View style={{ width: wp('50'), height: hp('0'), borderWidth: 0,height:hp('2'), alignSelf: 'center', left: hp('1'), alignItems: 'center', justifyContent: 'center', top: Platform.OS === 'ios' ? hp('3') : hp('3') }}>
                                 <Text numberOfLines={1} style={{ color: '#333333', textAlign: 'center' }}>{notificationData.visitorlog[0].vlfName}</Text>
                                 <Text onPress={() => this.initiateCall(notificationData.visitorlog[0].vlMobile)} style={{ color: '#B51414', textAlign: 'center', fontSize: hp('1.5') }}>{notificationData.visitorlog[0].vlMobile}</Text>
                             </View>
@@ -138,86 +138,175 @@ class NotificationPopUp extends React.Component {
                                 /> */}
                             <Text style={{ color: '#14C8E5', textAlign: 'center', fontSize: hp('1.5') }}> </Text>
                         </View>
-                        <View>
-                            {notificationData.visitorlog[0].vlVisType !== 'Staff' ?
-                                <View style={{ height: hp('8'), width: wp('45'), bottom: hp('0'), borderWidth: 0, flexDirection: 'row', alignSelf: 'center', justifyContent: 'space-around', alignItems: 'center' }}>
-                                    <TouchableHighlight
-                                        underlayColor={'transparent'}
-                                        onPress={() => this.acceptGateVisitor(
-                                            notificationData.visitorlog[0].vlVisLgID,
-                                            0,
-                                            notificationData.asAssnID,
-                                            notificationData.visitorlog[0].vlApprStat === "Exit Pending" ? "Exit Approved" : "Entry Approved",
-                                            notificationData.ntid,
-                                            notificationData.visitorlog[0].vlApprdBy,
-                                            notificationData.visitorlog[0].vlApprStat
-                                        )}
-                                        style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0, left: hp('1') }}>
-                                        <View style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0, left: hp('1') }}>
-                                            <Image
-                                                resizeMode={'center'}
-                                                style={{
-                                                    borderWidth: 0,
-                                                    width: wp('6%'),
-                                                    height: hp('6%'),
-                                                    marginLeft: hp('0')
-                                                }}
-                                                source={require('../../../icons/allow.png')}
-                                            />
-                                            <Text style={{ color: 'green', textAlign: 'center', fontSize: hp('2') }}> Allow</Text>
-                                        </View>
-                                    </TouchableHighlight>
-                                    <TouchableOpacity
-                                        underlayColor={'transparent'}
-                                        onPress={() => this.denyGateVisitor(
-                                            notificationData.visitorlog[0].vlVisLgID,
-                                            item.index,
-                                            notificationData.asAssnID,
-                                            notificationData.visitorlog[0].vlApprStat === "Exit Pending" ? "Exit Rejected" : "Entry Rejected",
-                                            notificationData.ntid,
-                                            notificationData.visitorlog[0].vlApprdBy,
-                                            notificationData.visitorlog[0].vlApprStat
-                                        )}
-                                        style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0 }}>
-                                        <View style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0, left: hp('1') }}>
-                                            <Image
-                                                resizeMode={'center'}
-                                                style={{
-                                                    borderWidth: 0,
-                                                    width: wp('6%'),
-                                                    height: hp('6%'),
-                                                    marginLeft: hp('0'),
-                                                }}
-                                                source={require('../../../icons/deny_1.png')}
-                                            />
-                                            <Text style={{ color: '#B51414', textAlign: 'center', fontSize: hp('2') }}> Deny</Text>
-                                        </View>
-                                    </TouchableOpacity>
-                                </View>
-                                :
-                                <TouchableHighlight
-                                    underlayColor={'transparent'}
-                                    onPress={() => this.removeNotificationData()}
-                                    style={{ flexDirection: 'row', alignSelf: 'flex-end', justifyContent: 'flex-end', alignItems: 'flex-end', borderWidth: 0, left: hp('15') }}>
-                                    <View style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0, left: hp('1') }}>
-                                        <Image
-                                            resizeMode={'center'}
-                                            style={{
-                                                borderWidth: 0,
-                                                width: wp('6%'),
-                                                height: hp('6%'),
-                                            }}
-                                            source={require('../../../icons/allow.png')}
-                                        />
-                                        <Text style={{ color: 'green', textAlign: 'center', fontSize: hp('2') }}> Ok</Text>
-                                    </View>
-                                </TouchableHighlight>}
-                        </View>
+                                {Platform.OS === 'ios'?this._renderIOS(notificationData):this._renderAndroid(notificationData)}
                     </View>
                 </View>
             </View>
         )
     }
+
+
+    _renderAndroid(notificationData) {
+        return (
+            <View>
+                {notificationData.visitorlog[0].vlVisType !== 'Staff' ?
+                    <View style={{ height: hp('8'), width: wp('45'), bottom: hp('0'), borderWidth: 0, flexDirection: 'row', alignSelf: 'center', justifyContent: 'space-around', alignItems: 'center' }}>
+                        <TouchableHighlight
+                            underlayColor={'transparent'}
+                            onPress={() => this.acceptGateVisitor(
+                                notificationData.visitorlog[0].vlVisLgID,
+                                0,
+                                notificationData.asAssnID,
+                                notificationData.visitorlog[0].vlApprStat === "Exit Pending" ? "Exit Approved" : "Entry Approved",
+                                notificationData.ntid,
+                                notificationData.visitorlog[0].vlApprdBy,
+                                notificationData.visitorlog[0].vlApprStat
+                            )}
+                            style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0, left: hp('1') }}>
+                            <View style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0, left: hp('1') }}>
+                                <Image
+                                    resizeMode={'center'}
+                                    style={{
+                                        borderWidth: 0,
+                                        width: wp('6%'),
+                                        height: hp('6%'),
+                                        marginLeft: hp('0')
+                                    }}
+                                    source={require('../../../icons/allow.png')}
+                                />
+                                <Text style={{ color: 'green', textAlign: 'center', fontSize: hp('2') }}> Allow</Text>
+                            </View>
+                        </TouchableHighlight>
+                        <TouchableHighlight
+                            underlayColor={'transparent'}
+                            onPress={() => this.denyGateVisitor(
+                                notificationData.visitorlog[0].vlVisLgID,
+                                item.index,
+                                notificationData.asAssnID,
+                                notificationData.visitorlog[0].vlApprStat === "Exit Pending" ? "Exit Rejected" : "Entry Rejected",
+                                notificationData.ntid,
+                                notificationData.visitorlog[0].vlApprdBy,
+                                notificationData.visitorlog[0].vlApprStat
+                            )}
+                            style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0 }}>
+                            <View style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0, left: hp('1') }}>
+                                <Image
+                                    resizeMode={'center'}
+                                    style={{
+                                        borderWidth: 0,
+                                        width: wp('6%'),
+                                        height: hp('6%'),
+                                        marginLeft: hp('0'),
+                                    }}
+                                    source={require('../../../icons/deny_1.png')}
+                                />
+                                <Text style={{ color: '#B51414', textAlign: 'center', fontSize: hp('2') }}> Deny</Text>
+                            </View>
+                        </TouchableHighlight>
+                    </View>
+                    :
+                    <TouchableOpacity
+                        underlayColor={'transparent'}
+                        onPress={() => this.removeNotificationData()}
+                        style={{ flexDirection: 'row', alignSelf: 'flex-end', justifyContent: 'flex-end', alignItems: 'flex-end', borderWidth: 0, left: hp('15') }}>
+                        <View style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0, left: hp('1') }}>
+                            <Image
+                                resizeMode={'center'}
+                                style={{
+                                    borderWidth: 0,
+                                    width: wp('6%'),
+                                    height: hp('6%'),
+                                }}
+                                source={require('../../../icons/allow.png')}
+                            />
+                            <Text style={{ color: 'green', textAlign: 'center', fontSize: hp('2') }}> Ok</Text>
+                        </View>
+                    </TouchableOpacity>}
+            </View>
+        )
+    }
+
+    _renderIOS(notificationData) {
+        console.log("Notification Data in Pop Up IOS:",notificationData);
+        return (
+            <View>
+                {notificationData.visitorlog[0].vlVisType !== 'Staff' ?
+                    <View style={{ height: hp('8'), width: wp('45'), bottom: hp('0'), borderWidth: 0, flexDirection: 'row', alignSelf: 'center', justifyContent: 'space-around', alignItems: 'center' }}>
+                        <TouchableOpacity
+                            underlayColor={'transparent'}
+                            onPress={() => this.acceptGateVisitor(
+                                notificationData.visitorlog[0].vlVisLgID,
+                                0,
+                                notificationData.asAssnID,
+                                notificationData.visitorlog[0].vlApprStat === "Exit Pending" ? "Exit Approved" : "Entry Approved",
+                                notificationData.ntid,
+                                notificationData.visitorlog[0].vlApprdBy,
+                                notificationData.visitorlog[0].vlApprStat
+                            )}
+                            style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0, left: hp('1') }}>
+                            <View style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0, right: hp('1') }}>
+                                <Image
+                                    resizeMode={'center'}
+                                    style={{
+                                        borderWidth: 0,
+                                        width: wp('6%'),
+                                        height: hp('6%'),
+                                        marginLeft: hp('0')
+                                    }}
+                                    source={require('../../../icons/allow.png')}
+                                />
+                                <Text style={{ color: 'green', textAlign: 'center', fontSize: hp('2') }}> Allow</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            underlayColor={'transparent'}
+                            onPress={() => this.denyGateVisitor(
+                                notificationData.visitorlog[0].vlVisLgID,
+                                item.index,
+                                notificationData.asAssnID,
+                                notificationData.visitorlog[0].vlApprStat === "Exit Pending" ? "Exit Rejected" : "Entry Rejected",
+                                notificationData.ntid,
+                                notificationData.visitorlog[0].vlApprdBy,
+                                notificationData.visitorlog[0].vlApprStat
+                            )}
+                            style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0 }}>
+                            <View style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0, left: hp('0') }}>
+                                <Image
+                                    resizeMode={'center'}
+                                    style={{
+                                        borderWidth: 0,
+                                        width: wp('6%'),
+                                        height: hp('6%'),
+                                        marginLeft: hp('0'),
+                                    }}
+                                    source={require('../../../icons/deny_1.png')}
+                                />
+                                <Text allowFontScaling={false} style={{ color: '#B51414', textAlign: 'center', fontSize: hp('2') }}> Deny</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                    :
+                    <TouchableOpacity
+                        underlayColor={'transparent'}
+                        onPress={() => this.removeNotificationData()}
+                        style={{ flexDirection: 'row', alignSelf: 'flex-end', justifyContent: 'flex-end', alignItems: 'flex-end', borderWidth: 0, left: hp('15') }}>
+                        <View style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0, left: hp('1') }}>
+                            <Image
+                                resizeMode={'center'}
+                                style={{
+                                    borderWidth: 0,
+                                    width: wp('6%'),
+                                    height: hp('6%'),
+                                }}
+                                source={require('../../../icons/allow.png')}
+                            />
+                            <Text style={{ color: 'green', textAlign: 'center', fontSize: hp('2') }}> Ok</Text>
+                        </View>
+                    </TouchableOpacity>}
+            </View>
+        )
+    }
+
 
     closeModal() {
         console.log("Closing Modal")

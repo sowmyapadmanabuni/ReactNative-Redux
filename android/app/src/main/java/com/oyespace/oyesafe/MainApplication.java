@@ -5,7 +5,6 @@ import android.content.Context;
 
 import com.facebook.react.ReactApplication;
 import com.streem.selectcontact.SelectContactPackage;
-import com.reactnativecommunity.webview.RNCWebViewPackage;
 import com.reactnativecommunity.netinfo.NetInfoPackage;
 import com.th3rdwave.safeareacontext.SafeAreaContextPackage;
 import com.swmansion.rnscreens.RNScreensPackage;
