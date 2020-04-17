@@ -545,7 +545,7 @@ class CreateSOS extends React.Component {
         let userId = self.props.userReducer.MyAccountID;
         firebase.database().ref('SOS/' + associationID + "/" + userId + "/").on('value', function (snapshot) {
             let receivedData = snapshot.val();
-            console.log("Receiveddata", snapshot.val(), self.state.isGuardDetailAvailable);
+            console.log("Receiveddata", receivedData, self.state.isGuardDetailAvailable);
             if (receivedData !== null) {
                 if(receivedData.isActive && receivedData.userId){
                     if ((receivedData.attendedBy !== undefined && receivedData.attendedBy !== null)) {

@@ -118,11 +118,6 @@ PODS:
     - RNPermissions
   - Protobuf (3.11.4)
   - RCTRequired (0.61.5)
-  - RCTSelectContact (1.3.2):
-    - RCTSelectContact/Core (= 1.3.2)
-    - React
-  - RCTSelectContact/Core (1.3.2):
-    - React
   - RCTSystemSetting (1.7.4):
     - React
   - RCTTypeSafety (0.61.5):
@@ -319,7 +314,7 @@ PODS:
     - React
   - react-native-view-shot (3.1.2):
     - React
-  - react-native-webview (9.1.3):
+  - react-native-webview (9.2.1):
     - React
   - React-RCTActionSheet (0.61.5):
     - React-Core/RCTActionSheetHeaders (= 0.61.5)
@@ -427,7 +422,6 @@ DEPENDENCIES:
   - Permission-MediaLibrary (from `../node_modules/react-native-permissions/ios/MediaLibrary.podspec`)
   - Permission-Microphone (from `../node_modules/react-native-permissions/ios/Microphone.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
-  - RCTSelectContact (from `../node_modules/react-native-select-contact`)
   - RCTSystemSetting (from `../node_modules/react-native-system-setting`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
   - React (from `../node_modules/react-native/`)
@@ -531,8 +525,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-permissions/ios/Microphone.podspec"
   RCTRequired:
     :path: "../node_modules/react-native/Libraries/RCTRequired"
-  RCTSelectContact:
-    :path: "../node_modules/react-native-select-contact"
   RCTSystemSetting:
     :path: "../node_modules/react-native-system-setting"
   RCTTypeSafety:
@@ -672,7 +664,6 @@ SPEC CHECKSUMS:
   Permission-Microphone: 97ba829d2f3bab3ceb299f112d82b967d48c1d5a
   Protobuf: 176220c526ad8bd09ab1fb40a978eac3fef665f7
   RCTRequired: b153add4da6e7dbc44aebf93f3cf4fcae392ddf1
-  RCTSelectContact: 9d58e8c33bcda9ef30e592fc9ef975a3ba7a4935
   RCTSystemSetting: f3123e7de51bf918bc4243167ba2885a72bf09ec
   RCTTypeSafety: 9aa1b91d7f9310fc6eadc3cf95126ffe818af320
   React: b6a59ef847b2b40bb6e0180a97d0ca716969ac78
@@ -697,7 +688,7 @@ SPEC CHECKSUMS:
   react-native-spinkit: da294fd828216ad211fe36a5c14c1e09f09e62db
   react-native-version-number: 15563dc4145a94aabfc1faab2a9af10174a4204e
   react-native-view-shot: 08c46c9e8e92f6681e8f2ffa55ac3d06e7e99070
-  react-native-webview: e8e74869753ae9d0b021e63e1cd6f175ac824f07
+  react-native-webview: ac2927a8a5e48fabb738b393b289bd996e14ed32
   React-RCTActionSheet: 600b4d10e3aea0913b5a92256d2719c0cdd26d76
   React-RCTAnimation: 791a87558389c80908ed06cc5dfc5e7920dfa360
   React-RCTBlob: d89293cc0236d9cb0933d85e430b0bbe81ad1d72
@@ -729,6 +720,6 @@ SPEC CHECKSUMS:
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
-PODFILE CHECKSUM: 5e1c737328680fbb93bb4a318ca79b02496c6f8b
+PODFILE CHECKSUM: 6d476d640192d4191f4a6bd5e2f55068b5709b1e
 
 COCOAPODS: 1.9.1

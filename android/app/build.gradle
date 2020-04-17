@@ -197,8 +197,8 @@ android {
 }
 
 dependencies {
-    implementation project(':react-native-select-contact')
     implementation project(':react-native-webview')
+    implementation project(':react-native-select-contact')
     implementation project(':react-native-linear-gradient')
     implementation project(':@react-native-community_datetimepicker')
     implementation project(':react-native-safe-area-context')

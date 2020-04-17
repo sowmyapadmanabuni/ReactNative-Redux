@@ -285,8 +285,10 @@ class App extends React.Component {
       <View
         style={{
           flexDirection: 'column',
-          //height:300,
-          marginBottom: index === this.state.dataSource.length - 1 ? 80 : 0
+          height:200,
+          marginBottom: index === this.state.dataSource.length - 1 ? 80 : 0,
+          borderWidth:0,
+        //  top:hp('10')
         }}
       >
         <View style={{ borderColor: '#707070', borderWidth: wp('0.1%') }} />
@@ -391,7 +393,6 @@ class App extends React.Component {
 
               <View style={{ flexDirection: 'row' }}>
                 <View style={{ flexDirection: 'row' }}>
-                  {/* location */}
                   <Icon color="#B51414" size={hp('2%')} name="location" />
                   <Text>{'  '}</Text>
                 </View>
@@ -410,25 +411,12 @@ class App extends React.Component {
                   </View>
                 )}
               </View>
-              {/* <View>
-              {item.open ?
-                <View></View> :
-
-                <View style={{ marginTop: hp('1%') }}>
-                  <View style={{ borderBottomWidth: hp('0.1%'), borderBottomColor: '#474749', width: hp('5%'), justifyContent: 'center', alignSelf: 'center' }}>
-
-                  </View>
-                </View>
-              }
-              </View> */}
-              {/* <View>
-                <Text>{item.vlVisLgID}</Text>
-              </View> */}
+             
             </View>
           </TouchableOpacity>
           <View style={{ flex: 1, alignItems: 'flex-end', paddingRight: 0 }}>
 
-            <Card style={{ marginTop: 0 }}>
+            <Card style={{ marginTop: 0,height:hp('0') }}>
               <TouchableOpacity
                   style={{
                     justifyContent:'center',
@@ -465,7 +453,7 @@ class App extends React.Component {
               style={{
                 alignItems: 'center',
                 justifyContent: 'center',
-                marginRight: hp('1%')
+                marginRight: hp('1%'),
               }}
             >
                 
@@ -536,24 +524,6 @@ class App extends React.Component {
               </View>
             
             </View>
-            {/* <View style={{ flexDirection: 'row' }}>
-                <Text style={{ fontSize: hp('1.6%'), marginLeft: hp('1%'), marginBottom: hp('0.5%') }}>Entry approved by: {item.vlpOfVis}</Text>
-                <Image />
-              </View>
-              <View style={{ flexDirection: 'row' }}>
-                <Text style={{ fontSize: hp('1.6%'), marginLeft: hp('1%'), marginBottom: hp('0.5%') }}>Total Guests: {item.vlVisCnt}</Text>
-                <Image />
-              </View> */}
-
-            {/* {!item.open ?
-                <View></View> :
-
-                <View style={{ marginBottom: hp('1%'), marginTop: hp('1%') }}>
-                  <View style={{ borderBottomWidth: hp('0.1%'), borderBottomColor: '#474749', width: hp('5%'), justifyContent: 'center', alignSelf: 'center', marginLeft: hp('3%') }}>
-
-                  </View>
-                </View>
-              } */}
             <TouchableOpacity
               onPress={() => this.toggleCollapsible(index, item.open)}
             >
@@ -572,7 +542,8 @@ class App extends React.Component {
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'center',
-                      alignItems: 'center'
+                      alignItems: 'center',
+                      bottom:Platform.OS === 'ios'? hp('2'):0
                     }}
                   >
                     <Text style={{ color: '#B51414', marginRight: hp('1%') }}>
