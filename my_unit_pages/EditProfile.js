@@ -327,7 +327,8 @@ class EditProfile extends Component {
                         console.log('mobbbbbb', arr);
                         this.setState({
                             cCode: mobCode2[0],
-                            sendNum: arr
+                            sendNum: arr,
+                            primaryMobNum:mobNum
                         })
 
                     } else {

@@ -2,7 +2,7 @@
  * @Author: Sarthak Mishra 
  * @Date: 2020-03-09 16:13:08 
  * @Last Modified by: Sarthak Mishra
- * @Last Modified time: 2020-04-17 13:42:35
+ * @Last Modified time: 2020-04-17 13:43:38
  */
 
 
@@ -411,20 +411,20 @@ class NotificationPopUp extends React.Component {
             }
         } catch (error) {
             console.log('error:', error);
-            alert("Request already accepted")
+            alert("Request already handled")
             //this.refs.toast.show('Request already accepted');
             this.removeNotificationData();
-            gateFirebase
-                .database()
-                .ref(`NotificationSync/A_${associationid}/${visitorId}`)
-                .set({
-                    buttonColor: '#75be6f',
-                    opened: true,
-                    newAttachment: false,
-                    visitorlogId: visitorId,
-                    updatedTime: null,
-                    status: visitorStatus
-                })
+            // gateFirebase
+            //     .database()
+            //     .ref(`NotificationSync/A_${associationid}/${visitorId}`)
+            //     .set({
+            //         buttonColor: '#75be6f',
+            //         opened: true,
+            //         newAttachment: false,
+            //         visitorlogId: visitorId,
+            //         updatedTime: null,
+            //         status: ""
+            //     })
         }
     };
 
@@ -504,20 +504,20 @@ class NotificationPopUp extends React.Component {
             }
         } catch (error) {
             console.log('error:', error);
-            alert("Request already denied")
+            alert("Request already handled")
             // this.refs.toast.show('Request already denied');
             this.removeNotificationData()
-            gateFirebase
-                .database()
-                .ref(`NotificationSync/A_${associationid}/${visitorId}`)
-                .set({
-                    buttonColor: '#ff0000',
-                    opened: true,
-                    newAttachment: false,
-                    visitorlogId: visitorId,
-                    updatedTime: null,
-                    status: visitorStatus
-                })
+            // gateFirebase
+            //     .database()
+            //     .ref(`NotificationSync/A_${associationid}/${visitorId}`)
+            //     .set({
+            //         buttonColor: '#ff0000',
+            //         opened: true,
+            //         newAttachment: false,
+            //         visitorlogId: visitorId,
+            //         updatedTime: null,
+            //         status: visitorStatus
+            //     })
         }
     };
 
