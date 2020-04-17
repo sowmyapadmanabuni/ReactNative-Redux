@@ -63,6 +63,7 @@ import com.heanoria.library.reactnative.locationenabler.RNAndroidLocationEnabler
 import com.reactcommunity.rndatetimepicker.RNDateTimePickerPackage;
 
 import com.BV.LinearGradient.LinearGradientPackage;
+import com.reactnativecommunity.webview.RNCWebViewPackage;
 
 public class MainApplication extends Application implements ShareApplication, ReactApplication {
 

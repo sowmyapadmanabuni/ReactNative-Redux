@@ -137,7 +137,7 @@ android {
             checkReleaseBuilds false
             abortOnError false
         }
-        multiDexEnabled true
+
     }
     signingConfigs {
         release {

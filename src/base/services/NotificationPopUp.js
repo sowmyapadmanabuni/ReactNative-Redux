@@ -147,11 +147,12 @@ class NotificationPopUp extends React.Component {
 
 
     _renderAndroid(notificationData) {
+        console.log("Notification Data in Pop Up ANDROID:",notificationData);
         return (
             <View>
                 {notificationData.visitorlog[0].vlVisType !== 'Staff' ?
                     <View style={{ height: hp('8'), width: wp('45'), bottom: hp('0'), borderWidth: 0, flexDirection: 'row', alignSelf: 'center', justifyContent: 'space-around', alignItems: 'center' }}>
-                        <TouchableHighlight
+                        <TouchableOpacity
                             underlayColor={'transparent'}
                             onPress={() => this.acceptGateVisitor(
                                 notificationData.visitorlog[0].vlVisLgID,
@@ -160,7 +161,8 @@ class NotificationPopUp extends React.Component {
                                 notificationData.visitorlog[0].vlApprStat === "Exit Pending" ? "Exit Approved" : "Entry Approved",
                                 notificationData.ntid,
                                 notificationData.visitorlog[0].vlApprdBy,
-                                notificationData.visitorlog[0].vlApprStat
+                                notificationData.visitorlog[0].vlApprStat,
+                                notificationData
                             )}
                             style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0, left: hp('1') }}>
                             <View style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0, left: hp('1') }}>
@@ -176,12 +178,12 @@ class NotificationPopUp extends React.Component {
                                 />
                                 <Text style={{ color: 'green', textAlign: 'center', fontSize: hp('2') }}> Allow</Text>
                             </View>
-                        </TouchableHighlight>
-                        <TouchableHighlight
+                        </TouchableOpacity>
+                        <TouchableOpacity
                             underlayColor={'transparent'}
                             onPress={() => this.denyGateVisitor(
                                 notificationData.visitorlog[0].vlVisLgID,
-                                item.index,
+                                0,
                                 notificationData.asAssnID,
                                 notificationData.visitorlog[0].vlApprStat === "Exit Pending" ? "Exit Rejected" : "Entry Rejected",
                                 notificationData.ntid,
@@ -202,7 +204,7 @@ class NotificationPopUp extends React.Component {
                                 />
                                 <Text style={{ color: '#B51414', textAlign: 'center', fontSize: hp('2') }}> Deny</Text>
                             </View>
-                        </TouchableHighlight>
+                        </TouchableOpacity>
                     </View>
                     :
                     <TouchableOpacity
@@ -262,7 +264,7 @@ class NotificationPopUp extends React.Component {
                             underlayColor={'transparent'}
                             onPress={() => this.denyGateVisitor(
                                 notificationData.visitorlog[0].vlVisLgID,
-                                item.index,
+                                notificationData.index,
                                 notificationData.asAssnID,
                                 notificationData.visitorlog[0].vlApprStat === "Exit Pending" ? "Exit Rejected" : "Entry Rejected",
                                 notificationData.ntid,
@@ -337,10 +339,10 @@ class NotificationPopUp extends React.Component {
     };
 
 
-    async acceptGateVisitor(visitorId, index, associationid, visitorStatus, notifiId, approvedBy, approvalStatus) {
+    async acceptGateVisitor(visitorId, index, associationid, visitorStatus, notifiId, approvedBy, approvalStatus, notifiData) {
 
 
-        console.log('SENDING STATUS TO ACCEPT NOTIFICATION', visitorId, index, associationid, visitorStatus, notifiId, approvedBy);
+        console.log('SENDING STATUS TO ACCEPT NOTIFICATION', visitorId, index, associationid, visitorStatus, notifiId, approvedBy,notifiData);
 
         const headers = {
             'Content-Type': 'application/json',
@@ -388,23 +390,23 @@ class NotificationPopUp extends React.Component {
                         updatedTime: currentTime,
                         status: visitorStatus,
                     });
-                axios.get(
-                    `http://${this.props.oyeURL}/oyesafe/api/v1/NotificationActiveStatusUpdate/${notifiId}`,
-                    {
-                        headers: {
-                            'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE',
-                            'Content-Type': 'application/json'
-                        },
-                    },
+                // axios.get(
+                //     `http://${this.props.oyeURL}/oyesafe/api/v1/NotificationActiveStatusUpdate/${notifiId}`,
+                //     {
+                //         headers: {
+                //             'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE',
+                //             'Content-Type': 'application/json'
+                //         },
+                //     },
 
 
-                )
-                    .then(responses => {
-                        console.log('NotificationDeleted', responses)
-                    })
-                    .catch(e => {
-                        console.log('RESPONSE2222', e)
-                    })
+                // )
+                //     .then(responses => {
+                //         console.log('NotificationDeleted', responses)
+                //     })
+                //     .catch(e => {
+                //         console.log('RESPONSE2222', e)
+                //     })
 
 
                 this.removeNotificationData();
@@ -470,23 +472,23 @@ class NotificationPopUp extends React.Component {
 
             if (approvalResponse.status === 200) {
 
-                axios.get(
-                    `http://${this.props.oyeURL}/oyesafe/api/v1/NotificationActiveStatusUpdate/${notifiId}`,
-                    {
-                        headers: {
-                            'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE',
-                            'Content-Type': 'application/json'
-                        },
-                    },
+                // axios.get(
+                //     `http://${this.props.oyeURL}/oyesafe/api/v1/NotificationActiveStatusUpdate/${notifiId}`,
+                //     {
+                //         headers: {
+                //             'X-OYE247-APIKey': '7470AD35-D51C-42AC-BC21-F45685805BBE',
+                //             'Content-Type': 'application/json'
+                //         },
+                //     },
 
 
-                )
-                    .then(responses => {
-                        console.log('NotificationDeleted', responses)
-                    })
-                    .catch(e => {
-                        console.log('RESPONSE2222', e)
-                    })
+                // )
+                //     .then(responses => {
+                //         console.log('NotificationDeleted', responses)
+                //     })
+                //     .catch(e => {
+                //         console.log('RESPONSE2222', e)
+                //     })
 
 
                 gateFirebase
@@ -503,7 +505,7 @@ class NotificationPopUp extends React.Component {
                 this.removeNotificationData()
             }
         } catch (error) {
-            console.log('error:', error);
+           console.log('error:11111111111111', error);
             alert("Request already handled")
             // this.refs.toast.show('Request already denied');
             this.removeNotificationData()
