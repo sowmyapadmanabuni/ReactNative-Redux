@@ -175,11 +175,11 @@ class ViewInvoiceList extends React.Component {
                             oSBText={item.item.inPaid === 'YES' ? 'Paid' : 'Pay Now'}
                             oSBTextSize={11}
                         />*/}
-                        <TouchableOpacity onPress={()=>Alert.alert('Payment gateway not implemented')} >
+                        {/* <TouchableOpacity onPress={()=>Alert.alert('Payment gateway not implemented')} >
                             <Text style={{color:item.item.inPaid === "No"
                                     ? base.theme.colors.red
                                     : base.theme.colors.green,fontSize:14}}>{item.item.inPaid === 'Yes' ? 'Paid' : 'Pay Now'}</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </View>
                 </View>
             </TouchableHighlight>
@@ -568,7 +568,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: hp('2%'),
         fontWeight: 'bold',
-        color: '#ff8c00',
+        color: base.theme.colors.themeColor,
         marginBottom: hp('1.6%')
     }
 });

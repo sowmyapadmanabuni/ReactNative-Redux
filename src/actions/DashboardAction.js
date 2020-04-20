@@ -788,48 +788,10 @@ export const fetchAssociationByAccountId = (oyeURL,accountId,callBack) => {
               name:mappedData.unUniName,
               unitId:mappedData.unUnitID,
               myRoleId:data[i].mrmRoleID,
+              acUnit:mappedData
               })
             })
 
-            //   if(unitArray.length !==0){
-            //   let pushedArray=[]
-            //   let j=0;
-            //   let dropDownName=[]; 
-
-            //   for(let i=0; i<unitArray.length;i++){
-                   
-            //        dropDownName[i]=unitArray[i].unUniName; 
-            //     if(unitArray[i].owner.length!==0){
-            //       if(unitArray[i].owner[0].acAccntID ===accountId){
-            //         pushedArray[j]=unitArray[i].owner[0]
-            //         j=j+1
-            //               }
-            //         }
-  
-  
-            //         if(unitArray[i].tenant.length!==0){
-            //           if(unitArray[i].tenant[0].acAccntID ===accountId){
-            //             pushedArray[j]=unitArray[i].tenant[0]
-            //             j=j+1
-            //           }
-            //       }
-  
-            //        }
-            //        console.log('PUSHED UNIT NAMES TO AN ARRRYA',dropDownName,pushedArray)
-            //        pushedArray.map((mappedData)=>{
-            //   units.push({
-            //   value:"Unit"+mappedData.unUnitID,
-            //   name:"Unit"+mappedData.unUnitID,
-            //   unitId:mappedData.unUnitID,
-            //   myRoleId:mappedData.uoRoleID,
-            //   })
-            //      }) 
-  
-                 
-            //      console.log('GET ALL THE UNITS DATA TO SEGRIGATE6666666666',pushedArray)
-  
-  
-            // }
            
            
             

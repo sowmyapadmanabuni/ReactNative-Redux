@@ -81,7 +81,7 @@ public class MainApplication extends Application implements ShareApplication, Re
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
-            new RNGetRandomValuesPackage(),
+                    new RNGetRandomValuesPackage(),
                     new SelectContactPackage(),
                      new RNCWebViewPackage(),
                     new NetInfoPackage(),

@@ -540,7 +540,7 @@ class ViewInvoice extends React.Component {
                                         color: base.theme.colors.black
                                     }}>₹{invoiceData.inTotVal - invoiceData.inDsCVal} Only</Text>
                                 </View>
-                                {invoiceData.payment != undefined && invoiceData.payment.length != 0 ?
+                                {/* {invoiceData.payment != undefined && invoiceData.payment.length != 0 ?
                                     <View/> :
                                     <View style={{
                                         height: hp('4'),
@@ -557,7 +557,7 @@ class ViewInvoice extends React.Component {
                                             color: base.theme.colors.white
                                         }}>Pay Now</Text>
                                     </View>
-                                }
+                                } */}
                             </ElevatedView>
                             <View style={{
                                 height: hp('15'),

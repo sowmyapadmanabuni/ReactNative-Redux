@@ -291,7 +291,7 @@ class App extends React.Component {
         //  top:hp('10')
         }}
       >
-        <View style={{ borderColor: '#707070', borderWidth: wp('0.1%') }} />
+        {/* <View style={{ borderColor: '#707070', borderWidth: wp('0.1%') }} /> */}
         <View style={{ flexDirection: 'row' }}>
           <View style={{ flex: 1 }}>
             <Text
@@ -416,7 +416,7 @@ class App extends React.Component {
           </TouchableOpacity>
           <View style={{ flex: 1, alignItems: 'flex-end', paddingRight: 0 }}>
 
-            <Card style={{ marginTop: 0,height:hp('0') }}>
+            <Card style={{ marginTop: 0,height:hp('0'),top:8 }}>
               <TouchableOpacity
                   style={{
                     justifyContent:'center',
@@ -569,7 +569,7 @@ class App extends React.Component {
     console.log('*******************************',this.state.dataSource);
     console.log('123123123#####', this.props);
     return (
-      <View style={{ flex: 1, marginTop: hp('1%') }}>
+      <View style={{ flex: 1, marginTop: hp('1%') ,backgroundColor:'white'}}>
         {/* <Text style={styles.titleOfScreen}> Visitors </Text> */}
 
         {/* <TextInput

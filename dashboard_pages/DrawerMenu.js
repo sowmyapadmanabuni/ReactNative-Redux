@@ -36,10 +36,27 @@ class DrawerMenu extends Component {
         );
         let dropDown = this.props.dashboardReducer.dropdown1;
         console.log("dropDown_MENU",dropDown);
-        let myRole = roleId;
+        console.log('GET THE DATA TO ROLE CHANGE IN DASHBOARD HEADER',this.props)
+        let myRole = 8;
         for (let i = 0; i < dropDown.length; i++) {
           if (this.props.dashboardReducer.selectedDropdown1 === dropDown[i].name) {
-            myRole = dropDown[i].myRoleId;
+            console.log('GET THE DATA TO ROLE CHANGE IN DASHBOARD HEADER@@@@@@ ',dropDown[i])
+           if(dropDown[i].acUnit.owner.length !==0) 
+           {
+            if(dropDown[i].acUnit.owner[0].acAccntID==this.props.MyAccountID){
+              myRole=dropDown[i].acUnit.owner[0].uoRoleID
+            }
+              
+           }
+           if(dropDown[i].acUnit.tenant.length !==0) 
+           {
+            if(dropDown[i].acUnit.tenant[0].acAccntID==this.props.MyAccountID){
+              myRole=3
+            }
+              
+           }
+          
+            //myRole = dropDown[i].myRoleId;
           }
         }
         try {

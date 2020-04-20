@@ -10,13 +10,14 @@ import axios from 'axios';
 import gateFirebase from 'firebase';
 import moment from 'moment';
 import React from 'react';
-import { Image, Linking, Platform, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
+import { Image, Linking, Platform, StyleSheet, Text, TouchableHighlight, View ,ActivityIndicator} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Modal from 'react-native-modal';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { connect } from 'react-redux';
 import { updateNotificationData, updatePopUpNotification } from '../../actions';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+
 
 
 let key = 0;
@@ -29,6 +30,7 @@ class NotificationPopUp extends React.Component {
         super(props);
         this.state = {
             key: 0,
+            isLoading:false
         }
     }
 
@@ -43,7 +45,7 @@ class NotificationPopUp extends React.Component {
         let isNotification = this.props.isNotificationUnRead;
         let { notificationArray } = this.props;
         console.log('In Notification Pop Up main render:', isNotification, notificationArray[0], this.state.key);
-        return (
+      return (
             <View key={this.state.key}
                 style={{ backgroundColor: 'transparent', position: 'absolute', justifyContent: 'center', alignItems: 'center', flex: 1, alignSelf: 'center' }}
             >
@@ -164,19 +166,20 @@ class NotificationPopUp extends React.Component {
                                 notificationData.visitorlog[0].vlApprStat,
                                 notificationData
                             )}
-                            style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0, left: hp('1') }}>
-                            <View style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0, left: hp('1') }}>
+                            style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0, left: hp('1') , }}>
+                            <View style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0, left: hp('1'),right:30 }}>
                                 <Image
                                     resizeMode={'center'}
                                     style={{
                                         borderWidth: 0,
                                         width: wp('6%'),
                                         height: hp('6%'),
-                                        marginLeft: hp('0')
+                                        marginLeft: hp('0'),
+                                        right:5
                                     }}
                                     source={require('../../../icons/allow.png')}
                                 />
-                                <Text style={{ color: 'green', textAlign: 'center', fontSize: hp('2') }}> Allow</Text>
+                                <Text style={{ color: 'green', textAlign: 'center', fontSize: hp('2') ,right:10}}> Allow</Text>
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity
@@ -191,7 +194,7 @@ class NotificationPopUp extends React.Component {
                                 notificationData.visitorlog[0].vlApprStat
                             )}
                             style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0 }}>
-                            <View style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0, left: hp('1') }}>
+                            <View style={{ flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderWidth: 0, left: hp('1') , }}>
                                 <Image
                                     resizeMode={'center'}
                                     style={{
@@ -199,10 +202,11 @@ class NotificationPopUp extends React.Component {
                                         width: wp('6%'),
                                         height: hp('6%'),
                                         marginLeft: hp('0'),
+                                        right:5
                                     }}
                                     source={require('../../../icons/deny_1.png')}
                                 />
-                                <Text style={{ color: '#B51414', textAlign: 'center', fontSize: hp('2') }}> Deny</Text>
+                                <Text style={{ color: '#B51414', textAlign: 'center', fontSize: hp('2'),right:10 }}> Deny</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -355,6 +359,9 @@ class NotificationPopUp extends React.Component {
             headers: headers
         };
 
+        // this.setState({
+        //     isLoading:true
+        // })
         let currentDate = await axios(currentDateOption);
 
         console.log("Current Time:", currentDate);
@@ -372,6 +379,11 @@ class NotificationPopUp extends React.Component {
             },
             headers: headers
         }
+
+        this.setState({
+            isLoading:false
+        })
+
         try {
             let approvalResponse = await axios(approvalOptions);
 
@@ -446,6 +458,9 @@ class NotificationPopUp extends React.Component {
             url: `http://${this.props.oyeURL}/oyesafe/api/v1/GetCurrentDateTime`,
             headers: headers
         };
+        // this.setState({
+        //     isLoading:true
+        // })
 
         let currentDate = await axios(currentDateOption);
 
@@ -464,6 +479,10 @@ class NotificationPopUp extends React.Component {
             },
             headers: headers
         }
+        this.setState({
+            isLoading:false
+        })
+
         try {
             let approvalResponse = await axios(approvalOptions);
 

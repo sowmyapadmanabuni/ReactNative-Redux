@@ -66,7 +66,7 @@ class DashBoardHeader extends React.Component {
     if (count >= 1) {
       return (
         <BadgedIcon
-          color="#B51414"
+          color='orange'
           type="material"
           name="notifications"
           size={hp('4%')}
@@ -75,7 +75,7 @@ class DashBoardHeader extends React.Component {
     } else
       return (
         <Icon
-          color="#B51414"
+          color='orange'
           type="material"
           name="notifications"
           size={hp('4%')}
@@ -91,7 +91,7 @@ class DashBoardHeader extends React.Component {
       this.props.dashboardReducer.selectedDropdown1
     );
     let dropDown = this.props.dashboardReducer.dropdown1;
-
+   console.log('GET THE DATA TO ROLE CHANGE IN DASHBOARD HEADER',this.props)
     let myRole = roleId;
     for (let i = 0; i < dropDown.length; i++) {
       if (this.props.dashboardReducer.selectedDropdown1 === dropDown[i].name) {

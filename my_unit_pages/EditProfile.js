@@ -132,7 +132,7 @@ class EditProfile extends Component {
             Alert.alert("Please Enter First name")
         } else if (!base.utils.validate.alphabetValidation(this.state.firstName)) {
             Alert.alert("First name should not contain special characters")
-        } else if (this.state.firstName.length < 3) {
+        } else if (this.state.firstName.length < 2) {
             Alert.alert("First name should be minimum 2 characters (eg. OM)")
         } else if (this.state.firstName.length > 20) {
             Alert.alert("Maximum limit should be 20 characters")
@@ -140,7 +140,7 @@ class EditProfile extends Component {
             Alert.alert("Please Enter Last Name")
         } else if (!base.utils.validate.alphabetValidation(this.state.lastName)) {
             Alert.alert("Last name should not contain special characters")
-        } else if (this.state.lastName.length < 3) {
+        } else if (this.state.lastName.length < 2) {
             Alert.alert("Last name should be minimum 2 characters (eg. OM)")
         } else if (this.state.lastName.length > 20) {
             Alert.alert("Maximum limit should be 20 characters")
@@ -382,14 +382,14 @@ class EditProfile extends Component {
         this.setState({
             firstName: "",
             lastName: "",
-            primaryMobNum: "",
-            primeCCode: "",
+           // primaryMobNum: "",
+           // primeCCode: "",
             primeCName: "",
             primaryEmail: "",
             alterEmail: "",
             myProfileImage: "https://mediaupload.oyespace.com/" + base.utils.strings.noImageCapturedPlaceholder,
             imageUrl: "",
-            primeCca: "IN",
+           // primeCca: "IN",
             alterCca: "IN",
             alterCName: "",
             alterMobNum: "",

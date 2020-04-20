@@ -1129,6 +1129,12 @@ class Invoices extends React.Component {
 
         self.setState({isLoading:true})
         let input = {
+            "PYChqNo":"",
+            "PYVoucherNo":"",
+            "PYDDNo":"",
+            "PYChqDate":"",
+            "PYDDDate":"",
+            "PYAmtDue":"",
             "MEMemID"  : "",
             "PYRefNo"  : "",
             "PYBkDet"  : "",
@@ -1137,12 +1143,27 @@ class Invoices extends React.Component {
             "UNUnitID" : selVisit.unUnitID,
             "ASAssnID" : selVisit.asAssnID,
             "PYTax"    : "",
-            "PMID" :self.state.payMethodId,
+            "PMID" : self.state.selPayMode,        //self.state.payMethodId,
             "PYDesc"  : "",
             "PYDate":moment(self.state.selPaymentDate,'DD-MM-YYYY').format('YYYY-MM-DD HH:mm:ss') //yyyy-mm-dd HH:mm:ss
 
         };
-        console.log('Selected dates',input);
+
+       
+          
+        
+        //     "PYBkDet"  : this.expensedataBABName,
+       
+        //     "PYAmtDue" : this.totalAmountDue,
+       
+        //     "PYVoucherNo" : this.receiptVoucherNo,
+        //     "PYChqNo" : this.receiptChequeNo,
+        //     "PYChqDate" :formatDate((this.receiptChequeDate==''?new Date():this.receiptChequeDate),'yyyy/MM/dd', 'en'),
+        //     "PYDDNo"   :this.receiptddNo,
+        //     "PYDDDate":formatDate((this.receiptEXDDDate==''?new Date():this.receiptEXDDDate),'yyyy/MM/dd', 'en')
+           
+        // }
+        console.log('Selected dates',input,self.state.selPayMode);
         let stat = await base.services.OyeLivingApi.createNewReceipt(input);
 
         console.log('data from the stat',stat)

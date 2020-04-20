@@ -669,7 +669,7 @@ class MyGuests extends Component {
     render() {
         console.log('Data Sources', this.state.dataSource);
         return (
-            <View style={{ flex: 1, marginTop: hp('1%') }}>
+            <View style={{ flex: 1, marginTop: hp('1%'),backgroundColor:'white' }}>
 
                 {/* <Header /> */}
                 <NavigationEvents

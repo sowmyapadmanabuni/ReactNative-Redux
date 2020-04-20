@@ -456,9 +456,12 @@ class QRCodeGeneration extends Component {
                 innerEyeStyle="square"
               />*/}
               <QRCode
-                  logo={require('../../../icons/oyesafe_qr_logo.png')}
-                  logoSize={hp('5%')}
-                  size={hp('25%')}
+                   logo={require('../../../icons/OyespaceSafe.png')}
+                   logoSize={hp('6%')}
+                   size={hp('25%')}
+                  // logo={require('../../../icons/oyesafe_qr_logo.png')}
+                  // logoSize={hp('5%')}
+                  // size={hp('25%')}
                   value={params.shareCode}
                   codeStyle="square"
                   outerEyeStyle="square"

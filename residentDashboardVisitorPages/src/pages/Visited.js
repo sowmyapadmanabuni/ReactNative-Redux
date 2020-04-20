@@ -540,7 +540,7 @@ class MyGuests extends Component {
     console.log("this.state.dataSource ",this.state.dataSource);
     console.log("this.props.mediaupload ",this.props.mediaupload);
     return (
-      <View style={{ flex: 1, marginTop: hp('1%') }}>
+      <View style={{ flex: 1, marginTop: hp('1%'),backgroundColor:'white' }}>
         {/* <Header /> */}
         <NavigationEvents
           onDidFocus={payload => this.getInvitationList()}

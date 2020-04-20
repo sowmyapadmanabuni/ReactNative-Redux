@@ -147,8 +147,8 @@ class QRScreen extends React.Component {
                             color={"grey"}
                             logoBackgroundColor='transparent'
                             // getRef={(c) => (this.qrcode = c)}
-                            size={200}
-                            logoSize={70}
+                            size={150}
+                            logoSize={60}
                         />
                     </View>
                     <Text style={{

@@ -1711,7 +1711,7 @@ class Dashboard extends React.Component {
           </View>
           <View style={Style.invoiceSubView}>
             <Text style={Style.dueDate}>Invoice Date {moment(item.item.inGenDate, 'YYYY-MM-DD').format('DD-MMM-YYYY')}</Text>
-            <OSButton
+            {/* <OSButton
               height={'80%'}
               width={'25%'}
               borderRadius={15}
@@ -1722,7 +1722,7 @@ class Dashboard extends React.Component {
               }
               oSBText={item.item.inPaid === 'Yes' ? 'Paid' : 'Pay Now'}
               oSBTextSize={11}
-            />
+            /> */}
           </View>
         </View>
       </TouchableHighlight>
