@@ -2134,8 +2134,8 @@ class NotificationScreen extends PureComponent {
                 <Image
                     resizeMode={'center'}
                     style={{
-                        width: hp('6%'),
-                        height: hp('6%'), marginRight: hp('0'), bottom: hp('2')
+                        width: hp('4%'),
+                        height: hp('4%'), marginRight: hp('0'), bottom: hp('2')
                     }}
                     source={require('../../../icons/search.png')}
                 />
