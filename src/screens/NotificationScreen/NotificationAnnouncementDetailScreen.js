@@ -46,6 +46,8 @@ import { Easing } from 'react-native';
 import { connect } from 'react-redux';
 import strings from "../../base/utils/strings";
 import { storeOpenedNotif, onNotificationOpen } from '../../actions';
+import Modal from 'react-native-modal';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 class NotificationAnnouncementDetailScreen extends Component {
   constructor(props) {
@@ -109,9 +111,11 @@ class NotificationAnnouncementDetailScreen extends Component {
       paused: true,
 
       isPause: true,
+      isModalOpen: false,
+      selectedImage:""
     };
 
-    console.log("Props:",props);
+    console.log("Props:", props);
     this.audioRecorderPlayer = new AudioRecorderPlayer();
     this.audioRecorderPlayer.setSubscriptionDuration(0.09); // optional. Default is 0.1
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
@@ -148,9 +152,9 @@ class NotificationAnnouncementDetailScreen extends Component {
 
   componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
-   if(!this.state.paused){
-     this.pause();
-   }
+    if (!this.state.paused) {
+      this.pause();
+    }
     /*setTimeout(() => {
       BackHandler.removeEventListener('hardwareBackPress', () =>
         this.processBackPress()
@@ -264,7 +268,7 @@ class NotificationAnnouncementDetailScreen extends Component {
     let associationid = params.associationid;
     let accountid = params.accountid;
     let notifyid = params.notifyid;
-    console.log('params', notifyid, accountid, associationid,this.props.oyeURL);
+    console.log('params', notifyid, accountid, associationid, this.props.oyeURL);
     this.setState({
       isLoading: true
     });
@@ -305,19 +309,19 @@ class NotificationAnnouncementDetailScreen extends Component {
               isLoading: false,
               imageData: response.data.data.announcements[0].anImages,
               image1:
-               // 'https://mediaupload.oyespace.com/' +
+                // 'https://mediaupload.oyespace.com/' +
                 response.data.data.announcements[0].anImages.split(',')[0],
               image2:
-              //  'https://mediaupload.oyespace.com/' +
+                //  'https://mediaupload.oyespace.com/' +
                 response.data.data.announcements[0].anImages.split(',')[1],
               image3:
-               // 'https://mediaupload.oyespace.com/' +
+                // 'https://mediaupload.oyespace.com/' +
                 response.data.data.announcements[0].anImages.split(',')[2],
               image4:
                 //'https://mediaupload.oyespace.com/' +
                 response.data.data.announcements[0].anImages.split(',')[3],
               image5:
-               // 'https://mediaupload.oyespace.com/' +
+                // 'https://mediaupload.oyespace.com/' +
                 response.data.data.announcements[0].anImages.split(',')[4],
               voice: response.data.data.announcements[0].anVoice,
               notes: response.data.data.announcements[0].anCmnts
@@ -371,10 +375,11 @@ class NotificationAnnouncementDetailScreen extends Component {
             // );
           });
       }).catch = e => {
-      this.setState({
-        isLoading: false,})
-      console.log("ERROR IN ANNOUNCEMENT",e);
-    };
+        this.setState({
+          isLoading: false,
+        })
+        console.log("ERROR IN ANNOUNCEMENT", e);
+      };
   };
   render() {
     let playWidth =
@@ -382,7 +387,7 @@ class NotificationAnnouncementDetailScreen extends Component {
       (screenWidth - 56 * ratio);
     if (!playWidth) playWidth = 0;
 
-    console.log('imageData',`data:image/png;base64,${this.state.image1}`);
+    console.log('imageData', `data:image/png;base64,${this.state.image1}`);
     return (
       <View style={Styles.container}>
         <SafeAreaView style={{ backgroundColor: '#ff8c00' }}>
@@ -432,66 +437,90 @@ class NotificationAnnouncementDetailScreen extends Component {
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
                   >
-                    <ZoomImage
-                      source={{ uri: `data:image/png;base64,${this.state.image1}`}}
-                      // style={Styles.image}
-                      imgStyle={{
-                        height: hp('10%'),
-                        width: hp('10%'),
-                        borderRadius: hp('1%'),
-                        margin: hp('1%')
-                      }}
-                      duration={200}
-                      enableScaling={false}
-                      easingFunc={Easing.bounce}
-                    />
-                    <ZoomImage
-                      source={{
-                        uri: `data:image/png;base64,${this.state.image2}`
-                      }}
-                      // style={Styles.image}
-                      imgStyle={Styles.image}
-                      duration={200}
-                      enableScaling={false}
-                      easingFunc={Easing.bounce}
-                    />
-                    <ZoomImage
-                      source={{
-                        uri: `data:image/png;base64,${this.state.image3}`
-                      }}
-                      // style={Styles.image}
-                      imgStyle={Styles.image}
-                      duration={200}
-                      enableScaling={false}
-                      easingFunc={Easing.bounce}
-                    />
-                    <ZoomImage
-                      source={{
-                        uri: `data:image/png;base64,${this.state.image4}`
-                      }}
-                      // style={Styles.image}
-                      imgStyle={Styles.image}
-                      duration={200}
-                      enableScaling={false}
-                      easingFunc={Easing.bounce}
-                    />
-                    <ZoomImage
-                      source={{
-                        uri: `data:image/png;base64,${this.state.image5}`
-                      }}
-                      // style={Styles.image}
-                      imgStyle={Styles.image}
-                      duration={200}
-                      enableScaling={false}
-                      easingFunc={Easing.bounce}
-                    />
+                    <TouchableWithoutFeedback onPress={() => this.state.image1 === "" ? null : this.setState({selectedImage:this.state.image1, isModalOpen: true })}>
+                      <Image
+                        source={{ uri: `data:image/png;base64,${this.state.image1}` }}
+                        // style={Styles.image}
+                        style={{
+                          height: hp('10%'),
+                          width: hp('10%'),
+                          borderRadius: hp('1%'),
+                          margin: hp('1%')
+                        }}
+                      // duration={200}
+                      // enableScaling={false}
+                      // easingFunc={Easing.bounce}
+                      />
+                    </TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback onPress={() => this.state.image2 === "" ? null : this.setState({selectedImage:this.state.image2,  isModalOpen: true })}>
+                      <Image
+                        source={{ uri: `data:image/png;base64,${this.state.image2}` }}
+                        // style={Styles.image}
+                        style={{
+                          height: hp('10%'),
+                          width: hp('10%'),
+                          borderRadius: hp('1%'),
+                          margin: hp('1%')
+                        }}
+                      // duration={200}
+                      // enableScaling={false}
+                      // easingFunc={Easing.bounce}
+                      />
+                    </TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback onPress={() => this.state.image3 === "" ? null : this.setState({selectedImage:this.state.image3,  isModalOpen: true })}>
+
+                      <Image
+                        source={{ uri: `data:image/png;base64,${this.state.image3}` }}
+                        // style={Styles.image}
+                        style={{
+                          height: hp('10%'),
+                          width: hp('10%'),
+                          borderRadius: hp('1%'),
+                          margin: hp('1%')
+                        }}
+                      // duration={200}
+                      // enableScaling={false}
+                      // easingFunc={Easing.bounce}
+                      />
+                    </TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback onPress={() => this.state.image4 === "" ? null : this.setState({selectedImage:this.state.image4,  isModalOpen: true })}>
+
+                      <Image
+                        source={{ uri: `data:image/png;base64,${this.state.image4}` }}
+                        // style={Styles.image}
+                        style={{
+                          height: hp('10%'),
+                          width: hp('10%'),
+                          borderRadius: hp('1%'),
+                          margin: hp('1%')
+                        }}
+                      // duration={200}
+                      // enableScaling={false}
+                      // easingFunc={Easing.bounce}
+                      />
+                    </TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback onPress={() => this.state.image5 === "" ? null : this.setState({selectedImage:this.state.image5,  isModalOpen: true })}>
+                      <Image
+                        source={{ uri: `data:image/png;base64,${this.state.image5}` }}
+                        // style={Styles.image}
+                        style={{
+                          height: hp('10%'),
+                          width: hp('10%'),
+                          borderRadius: hp('1%'),
+                          margin: hp('1%')
+                        }}
+                      // duration={200}
+                      // enableScaling={false}
+                      // easingFunc={Easing.bounce}
+                      />
+                    </TouchableWithoutFeedback>
                   </ScrollView>
                 </View>
               ) : (
-                <View style={Styles.textview}>
-                  <Text style={Styles.text}>No image available.</Text>
-                </View>
-              )}
+                  <View style={Styles.textview}>
+                    <Text style={Styles.text}>No image available.</Text>
+                  </View>
+                )}
             </View>
             {/* this.state.voice === '' ? null : (
               <View style={Styles.secondview}>
@@ -556,9 +585,38 @@ class NotificationAnnouncementDetailScreen extends Component {
           color={base.theme.colors.themeColor}
           hudColor={base.theme.colors.white}
         />
+        {this._renderZoomedImage()}
       </View>
     );
   }
+
+
+  _renderZoomedImage() {
+    console.log("Image USIR:", `data:image/png;base64,${this.state.image1}`)
+    return (
+      <Modal
+        onBackdropPress={() => this.setState({ isModalOpen: false })}
+        style={{ height: hp('50'), width: wp('50'), backgroundColor: 'transparent', position: 'absolute', alignSelf: 'center', top: hp('25'), justifyContent: 'center', alignItems: 'center' }}
+        isVisible={this.state.isModalOpen}>
+
+        <Image
+          resizeMode="contain"
+          source={{ uri: `data:image/png;base64,${this.state.selectedImage}` }}
+          style={{
+            width: hp('80%'),
+            height: hp('80%')
+          }}
+        />
+        <TouchableWithoutFeedback style={{ height: hp('10') }} onPress={() => this.setState({ isModalOpen: false })}>
+          <Image
+            style={{ top: hp('2'), tintColor: 'white' }}
+            source={require('../../../icons/close_btn1.png')}
+          />
+        </TouchableWithoutFeedback>
+      </Modal>
+    )
+  }
+
 }
 
 const mapStateToProps = state => {
@@ -566,7 +624,7 @@ const mapStateToProps = state => {
     oyeURL: state.OyespaceReducer.oyeURL,
     dashboardReducer: state.DashboardReducer,
     userReducer: state.UserReducer,
-    assId:state.DashboardReducer.assId ,
+    assId: state.DashboardReducer.assId,
     uniID: state.DashboardReducer.uniID,
   };
 };
