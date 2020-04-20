@@ -56,6 +56,7 @@ import java.util.TimerTask;
 import com.smixx.fabric.FabricPackage;
 import com.crashlytics.android.Crashlytics;
 import io.fabric.sdk.android.Fabric;
+import com.reactnativecommunity.webview.RNCWebViewPackage;
 
 
 import com.heanoria.library.reactnative.locationenabler.RNAndroidLocationEnablerPackage;

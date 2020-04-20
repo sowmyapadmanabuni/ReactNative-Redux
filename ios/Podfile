@@ -147,12 +147,12 @@ target 'OyeSpace' do
 
 
   pod 'react-native-contacts', :path => '../node_modules/react-native-contacts'
-<<<<<<< HEAD
-=======
+
   
   pod 'react-native-webview', :path => '../node_modules/react-native-webview'
 
->>>>>>> bd6fc363f213070e880694f0bf9c8f2cd3e21f08
+
+    pod 'react-native-get-random-values', :path => '../node_modules/react-native-get-random-values'
 
     pod 'react-native-get-random-values', :path => '../node_modules/react-native-get-random-values'
 
